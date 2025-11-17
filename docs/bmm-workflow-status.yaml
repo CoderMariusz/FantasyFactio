@@ -56,8 +56,8 @@ workflow_status:
         name: "Product Requirements Document"
         agent: "pm"
         command: "/bmad:bmm:workflows:2-plan-workflows:prd"
-        status: "required"
-        note: "Enterprise-level requirements with compliance considerations"
+        status: "docs/prd-trade-factory-masters-2025-11-17.md"
+        note: "Complete PRD with 10 Functional Requirements (3,097 lines) - Step-by-step approach"
 
       - id: "validate-prd"
         name: "Validate PRD"
