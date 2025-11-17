@@ -60,7 +60,107 @@
 
 ## Technique Sessions
 
-{{technique_sessions}}
+### 🎯 Session 1: Core Gameplay Mechanics - First Principles Thinking
+
+**Fundamental Truths Identified:**
+
+1. **Mobile ≠ Desktop Players**
+   - Sessions: 30s-2min (short), 5-10min (medium), 30-60min (long)
+   - One-handed gameplay essential
+   - Thumb-reach zone = primary actions
+   - No assumptions from PC games (Factorio)
+
+2. **Complexity as Reward, Not Default**
+   - Start: 5 buildings → End: 30+ buildings over 50h
+   - Conveyors are UNLOCK, not starting feature
+   - Each layer of complexity = achievement/reward
+   - Principle: "Depth ≠ Complexity"
+
+3. **Progressive Unlock Philosophy**
+   - **Tier 1 (0-5h):** Manual collection, fixed prices, 5 buildings
+   - **Tier 2 (5-15h):** Smart conveyors unlock, price fluctuations, 11 buildings
+   - **Tier 3 (15-30h):** Manual optimization, full economy, 19 buildings
+   - **Tier 4 (30-100h):** Endgame, player market, mastery
+
+4. **3-Step Core Loop** (Works in ANY session length)
+   ```
+   COLLECT (10s) → DECIDE (20s) → UPGRADE (30s)
+   ```
+   - Short session completes full loop
+   - Long session = multiple loops + depth layers
+
+5. **Learn by Discovery, Not Tutorials**
+   - ❌ BAD: "Supply and demand is when..."
+   - ✅ GOOD: Dragon attack → supply drops → price spikes → player profits → lesson learned
+   - Economic literacy through gameplay events
+
+6. **Automation Satisfaction Curve**
+   ```
+   Phase 1: Manual tap = pain point (creates desire)
+            ↓
+   Phase 2: Smart auto-routing = relief + satisfaction
+            ↓
+   Phase 3: Manual optimization = mastery (for 10% hardcore)
+   ```
+
+**Key Design Principles:**
+
+- **90% Casual / 10% Hardcore Balance**
+  - Casual: Simple, instant gratification, short sessions sufficient for progress
+  - Hardcore: Optional depth (manual conveyors, optimization, market manipulation)
+
+- **No Punishment for Short Sessions**
+  - 30 second session = valid progress
+  - Never force long engagement
+
+- **Content Gating as Progression**
+  - Every unlock feels earned
+  - Complexity introduced when player ready
+  - Natural tutorial through progressive features
+
+**Revolutionary Conveyor Design:**
+
+```
+Hours 0-5:   NO CONVEYORS (creates pain/desire)
+Hours 5-15:  SMART AUTO-ROUTING (relief/satisfaction)
+Hours 15-30: MANUAL EDITING (mastery/optimization)
+```
+
+This inverts traditional approach - makes automation feel like achievement, not starting point.
+
+**Economic Education Through Events:**
+
+1. Supply & Demand: Plague → wheat scarcity → price spike
+2. Arbitrage: Iron 10g North, 50g South → buy low/sell high
+3. Market Manipulation: Stockpile → dump → price crash → lesson learned
+4. Risk/Reward: Illegal goods (3x profit, 20% confiscation risk)
+
+**Mobile-First Session Design:**
+
+- **Short (30s-2min):** Collect + Quick Sell + One Upgrade
+- **Medium (5-10min):** + Market Analysis + Build + Quest
+- **Long (30-60min):** + Exploration + Major Projects + Multiplayer
+
+All accessible from thumb-reach zone (bottom 1/3 screen).
+
+**MVP Scope Clarity:**
+
+Sprint 1 (Month 1):
+- 5 tier-1 buildings
+- Manual tap collection
+- Fixed prices
+- Basic tutorial (5 steps, 15 min)
+- Target: >70% tutorial completion, >30% D1 retention
+
+**Balancing Guidelines:**
+
+- Building Cost = 2x return of 10 min production
+- Tier value scaling: 1x → 3-5x → 10-20x → 50-100x → 1000x+
+- Price events: Normal ±20%, Minor ±50%, Major ±200%, Catastrophe ±500%
+
+**Total Ideas Generated in This Session:** 50+ specific mechanics, systems, and design decisions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## Idea Categorization
 
