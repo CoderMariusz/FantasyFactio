@@ -63,7 +63,8 @@ workflow_status:
         name: "Validate PRD"
         agent: "pm"
         command: "/bmad:bmm:workflows:2-plan-workflows:validate-prd"
-        status: "recommended"
+        status: "docs/prd-validation-report-2025-11-17.md"
+        note: "95/100 score - Approved for next phase"
 
       - id: "create-epics-and-stories"
         name: "Create Epics and Stories (Early)"
@@ -76,8 +77,8 @@ workflow_status:
         name: "Create UX Design"
         agent: "ux-designer"
         command: "/bmad:bmm:workflows:2-plan-workflows:create-ux-design"
-        status: "recommended"
-        note: "Highly recommended for enterprise - design system and patterns"
+        status: "docs/ux-design-trade-factory-masters-2025-11-17.md"
+        note: "Mobile-first design system, 8 core screens, accessibility (941 lines)"
 
       - id: "create-epics-and-stories-after-ux"
         name: "Create Epics and Stories (After UX)"
