@@ -241,3 +241,416 @@
 
 ## Functional Requirements
 
+### FR-001: Core Gameplay Loop (CRITICAL - P0)
+
+**Description:** The 3-step core gameplay loop (COLLECT → DECIDE → UPGRADE) is the foundation of Trade Factory Masters. This loop must be satisfying in both 30-second commute sessions AND 60-minute deep dives, proving mobile viability for mid-core factory automation.
+
+**Priority:** P0 (Blocker - nothing works without this)
+**Dependencies:** None (foundational feature)
+**Estimated Complexity:** High (affects all other systems)
+
+---
+
+#### User Stories
+
+**US-001.1: Resource Collection (COLLECT - 10 seconds)**
+```
+As a player
+I want to tap buildings to collect resources they produce
+So that I can gather raw materials and start my factory economy
+
+Acceptance Criteria:
+- GIVEN a building is producing resources (Lumbermill with Wood)
+  WHEN I tap the building
+  THEN resources are added to my inventory
+  AND a visual animation shows resources moving from building to inventory
+  AND haptic feedback confirms the tap (mobile best practice)
+  AND a "+X Wood" text appears briefly above the building
+
+- GIVEN a building has NO resources ready
+  WHEN I tap the building
+  THEN no resources are collected
+  AND a "Empty" or production timer is shown
+  AND no haptic feedback occurs (indicates nothing happened)
+
+- GIVEN my inventory is FULL (at capacity limit)
+  WHEN I tap a building with resources ready
+  THEN collection is blocked
+  AND a "Inventory Full!" warning appears
+  AND I must sell/use resources before collecting more
+```
+
+**US-001.2: Economic Decision Making (DECIDE - 20 seconds)**
+```
+As a player
+I want to buy and sell resources at different prices
+So that I can make profit by understanding supply/demand economics
+
+Acceptance Criteria:
+- GIVEN I have resources in my inventory (10 Wood)
+  WHEN I open the NPC Market interface
+  THEN I see current buy/sell prices for all resources
+  AND prices are clearly labeled (Sell: 5 gold, Buy: 8 gold per Wood)
+
+- GIVEN current market prices show profit opportunity
+  WHEN I sell resources
+  THEN gold is added to my wallet
+  AND a profit calculation is shown ("+50 gold profit!")
+  AND resources are removed from inventory
+
+- GIVEN I see a resource is needed for a building recipe
+  WHEN I buy resources from the market
+  THEN gold is deducted from wallet
+  AND resources are added to inventory
+  AND transaction is recorded in game state
+
+- GIVEN prices are FIXED in Tier 1 (no fluctuations)
+  WHEN I check prices multiple times
+  THEN prices remain constant (e.g., Wood always 5 gold)
+  AND this teaches basic economics before complexity increases
+```
+
+**US-001.3: Building Upgrades (UPGRADE - 30 seconds)**
+```
+As a player
+I want to upgrade buildings to increase production rates
+So that I can optimize my factory and progress faster
+
+Acceptance Criteria:
+- GIVEN I have sufficient gold and resources for an upgrade
+  WHEN I select a building and tap "Upgrade"
+  THEN the building level increases (Level 1 → Level 2)
+  AND production rate increases by 20% (e.g., 1 Wood/min → 1.2 Wood/min)
+  AND upgrade cost is deducted (gold + resources)
+  AND building visual changes slightly (level indicator appears)
+
+- GIVEN a building is at MAX level (Level 5 in Tier 1)
+  WHEN I select the building
+  THEN "Upgrade" button is disabled/grayed out
+  AND "MAX LEVEL" indicator is shown
+  AND tooltip suggests unlocking Tier 2 for further upgrades
+
+- GIVEN I don't have enough resources for upgrade
+  WHEN I tap "Upgrade"
+  THEN upgrade is blocked
+  AND missing resources are highlighted in red
+  AND tooltip shows "Need: 10 Wood, 5 Ore"
+```
+
+**US-001.4: Loop Completion & Feedback (Full Cycle)**
+```
+As a player
+I want to complete the COLLECT → DECIDE → UPGRADE loop quickly
+So that I feel productive even in short 30-second sessions
+
+Acceptance Criteria:
+- GIVEN I play for 30 seconds
+  WHEN I tap lumbermill (COLLECT 10s)
+  AND sell wood for profit (DECIDE 10s)
+  AND upgrade lumbermill to Level 2 (UPGRADE 10s)
+  THEN the full loop completes in ≤30 seconds
+  AND I see measurable progress (higher production rate)
+  AND positive feedback reinforces loop ("Factory Improved! +20% production")
+
+- GIVEN I play for 60 minutes (long session)
+  WHEN I repeat the loop 100+ times
+  THEN each loop feels rewarding (progressive unlocks, achievements)
+  AND complexity increases naturally (Tier 2 unlocks at ~5h)
+  AND session doesn't feel repetitive (events, price changes in Tier 2)
+```
+
+---
+
+#### Technical Specifications
+
+**Data Models:**
+
+```dart
+// Resource Model
+class Resource {
+  final String id;           // "wood", "ore", "food", etc.
+  final String displayName;  // "Wood", "Ore", "Food"
+  final int amount;          // Current inventory count
+  final int maxCapacity;     // Inventory limit (e.g., 1000 per resource)
+  final String iconPath;     // Asset path for sprite
+
+  Resource({
+    required this.id,
+    required this.displayName,
+    required this.amount,
+    required this.maxCapacity,
+    required this.iconPath,
+  });
+}
+
+// Building Model
+class Building {
+  final String id;                  // "lumbermill_01"
+  final BuildingType type;          // BuildingType.lumbermill
+  final int level;                  // 1-5 in Tier 1
+  final Point<int> gridPosition;    // (x, y) on 50×50 grid
+  final ProductionConfig production; // What it produces
+  final UpgradeConfig upgradeConfig; // Cost to upgrade
+
+  double get productionRate => production.baseRate * (1 + (level - 1) * 0.2);
+  // Level 1: 1.0x, Level 2: 1.2x, Level 3: 1.4x, etc.
+
+  DateTime lastCollected;    // Timestamp for offline production
+
+  Building({
+    required this.id,
+    required this.type,
+    required this.level,
+    required this.gridPosition,
+    required this.production,
+    required this.upgradeConfig,
+    required this.lastCollected,
+  });
+}
+
+// Production Config
+class ProductionConfig {
+  final Resource outputResource;  // What building produces
+  final double baseRate;          // Units per minute (e.g., 1.0 Wood/min)
+  final int storageCapacity;      // How much building can hold before full
+
+  ProductionConfig({
+    required this.outputResource,
+    required this.baseRate,
+    required this.storageCapacity,
+  });
+}
+
+// Upgrade Config
+class UpgradeConfig {
+  final int goldCost;                    // Base gold cost
+  final Map<String, int> resourceCosts;  // Required resources (e.g., {"wood": 10, "ore": 5})
+  final int maxLevel;                    // Max level for this tier (5 in Tier 1)
+
+  int calculateCost(int currentLevel) {
+    // Linear scaling in Tier 1
+    return goldCost * currentLevel;
+  }
+
+  UpgradeConfig({
+    required this.goldCost,
+    required this.resourceCosts,
+    required this.maxLevel,
+  });
+}
+
+// Player Economy State
+class PlayerEconomy {
+  int gold;                              // Current gold balance
+  Map<String, Resource> inventory;       // All resources player owns
+  List<Building> buildings;              // All placed buildings
+
+  PlayerEconomy({
+    required this.gold,
+    required this.inventory,
+    required this.buildings,
+  });
+}
+```
+
+**Core Calculations:**
+
+```dart
+// Resource collection calculation
+int calculateResourcesReady(Building building, DateTime now) {
+  final elapsed = now.difference(building.lastCollected);
+  final minutesElapsed = elapsed.inSeconds / 60.0;
+  final produced = (building.productionRate * minutesElapsed).floor();
+
+  return min(produced, building.production.storageCapacity);
+}
+
+// Profit calculation (for UI feedback)
+int calculateProfit(String resourceId, int amount, int sellPrice) {
+  // In Tier 1, profit is simple: sell price × amount
+  return sellPrice * amount;
+}
+
+// Upgrade cost scaling (Tier 1 linear)
+UpgradeCost calculateUpgradeCost(Building building) {
+  final baseCost = building.upgradeConfig.goldCost;
+  final currentLevel = building.level;
+
+  return UpgradeCost(
+    gold: baseCost * currentLevel,
+    resources: building.upgradeConfig.resourceCosts.map(
+      (resourceId, baseAmount) => MapEntry(
+        resourceId,
+        baseAmount * currentLevel, // Linear scaling
+      ),
+    ),
+  );
+}
+```
+
+**State Management (Riverpod):**
+
+```dart
+// Game state provider
+@riverpod
+class GameState extends _$GameState {
+  @override
+  PlayerEconomy build() {
+    return PlayerEconomy.initial(); // Load from Firestore or create new
+  }
+
+  void collectResources(Building building) {
+    final now = DateTime.now();
+    final resourcesReady = calculateResourcesReady(building, now);
+
+    if (resourcesReady > 0) {
+      // Add to inventory
+      final resource = building.production.outputResource;
+      state = state.copyWith(
+        inventory: {
+          ...state.inventory,
+          resource.id: resource.copyWith(amount: resource.amount + resourcesReady),
+        },
+      );
+
+      // Update building's lastCollected timestamp
+      final updatedBuilding = building.copyWith(lastCollected: now);
+      state = state.copyWith(
+        buildings: state.buildings.map((b) =>
+          b.id == building.id ? updatedBuilding : b
+        ).toList(),
+      );
+
+      // Trigger haptic feedback & UI animation
+      HapticFeedback.lightImpact();
+      _showFloatingText("+$resourcesReady ${resource.displayName}");
+    }
+  }
+
+  void sellResources(String resourceId, int amount) {
+    final resource = state.inventory[resourceId]!;
+    final price = MarketPrices.getSellPrice(resourceId); // Fixed in Tier 1
+    final profit = price * amount;
+
+    state = state.copyWith(
+      gold: state.gold + profit,
+      inventory: {
+        ...state.inventory,
+        resourceId: resource.copyWith(amount: resource.amount - amount),
+      },
+    );
+
+    _showFloatingText("+$profit gold profit!");
+  }
+
+  void upgradeBuilding(String buildingId) {
+    final building = state.buildings.firstWhere((b) => b.id == buildingId);
+    final cost = calculateUpgradeCost(building);
+
+    // Check if player can afford
+    if (state.gold >= cost.gold && _hasResources(cost.resources)) {
+      // Deduct costs
+      state = state.copyWith(
+        gold: state.gold - cost.gold,
+        inventory: _deductResources(state.inventory, cost.resources),
+      );
+
+      // Upgrade building
+      final upgraded = building.copyWith(level: building.level + 1);
+      state = state.copyWith(
+        buildings: state.buildings.map((b) =>
+          b.id == buildingId ? upgraded : b
+        ).toList(),
+      );
+
+      _showFloatingText("Factory Improved! +20% production");
+
+      // Track analytics
+      FirebaseAnalytics.logEvent('building_upgraded', {
+        'building_type': building.type.name,
+        'level': upgraded.level,
+      });
+    } else {
+      _showWarning("Insufficient resources");
+    }
+  }
+}
+```
+
+**Performance Requirements:**
+
+- **Tap Response Time:** <50ms from tap to haptic feedback
+- **Collection Animation:** 200-400ms smooth animation (resource → inventory)
+- **State Update:** <16ms (maintain 60 FPS during collection/upgrade)
+- **UI Feedback:** Floating text appears within 100ms of action
+
+**UI/UX Specifications:**
+
+- **Tap Target Size:** Minimum 44×44 pixels (Apple HIG, mobile best practice)
+- **Visual Feedback:**
+  - Tappable buildings pulse subtly when resources ready
+  - Collected resources animate from building to inventory bar
+  - Upgrade button glows green when affordable, gray when locked
+- **Haptic Feedback:**
+  - Light impact on successful tap
+  - Medium impact on upgrade completion
+  - No haptic on blocked actions (empty building, full inventory)
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **Loop Completion Time:**
+- 30-second session completes full COLLECT → DECIDE → UPGRADE cycle
+- Player sees measurable progress (gold increases, building upgrades)
+
+✅ **Performance:**
+- 60 FPS maintained during resource collection (tested with 10 buildings)
+- <50ms tap response time on budget Android (Snapdragon 660)
+
+✅ **Economic Learning:**
+- Players understand "buy low, sell high" within first 5 minutes
+- Profit calculation is visible and clear ("+50 gold profit!")
+
+✅ **Progression Feel:**
+- Each upgrade provides noticeable benefit (+20% visible in production)
+- Loop doesn't feel repetitive in 60-minute session (tested with playtesters)
+
+**Analytics to Track:**
+- Average loop completion time (target: 30-60 seconds)
+- Session length distribution (40% <2min, 40% 5-10min, 20% >30min)
+- Upgrade frequency (how often players upgrade vs save gold)
+- D1 retention (target: 45%+ if loop is engaging)
+
+---
+
+#### Dependencies
+
+**Required Before FR-001:**
+- None (this is the foundational feature)
+
+**Required After FR-001:**
+- FR-002: Tier 1 Economy System (buildings, resources, market prices)
+- FR-005: Mobile-First UX (touch controls, haptics, animations)
+- FR-010: Analytics Tracking (measure loop engagement metrics)
+
+---
+
+#### Open Questions
+
+1. **Inventory capacity:** Should be per-resource (1000 Wood, 1000 Ore) or total (1000 total across all resources)?
+   - **Recommendation:** Per-resource (simpler UX, less frustrating)
+
+2. **Upgrade cost scaling:** Linear in Tier 1, exponential in Tier 2+?
+   - **Recommendation:** Linear Tier 1 (accessible), exponential Tier 2+ (longevity)
+
+3. **Building storage capacity:** Should buildings hold more resources as they level up?
+   - **Recommendation:** Yes, +10% per level (incentivizes upgrades for offline players)
+
+---
+
+**Status:** ✅ FR-001 Specification Complete
+**Next:** FR-002 Tier 1 Economy System
+
