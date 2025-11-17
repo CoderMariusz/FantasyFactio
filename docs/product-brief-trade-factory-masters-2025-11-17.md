@@ -356,3 +356,713 @@ Instead of overwhelming players with complexity upfront (Factorio's problem), Tr
 
 **These features define the product - without them, it's not Trade Factory Masters:**
 
+**MVP Scope: Tier 1-2 ONLY (0-7 hours gameplay)**
+
+#### 1. Core Gameplay Loop (CRITICAL)
+
+**3-Step Loop:** COLLECT (10s) → DECIDE (20s) → UPGRADE (30s)
+
+- **COLLECT:** Tap resources on buildings (wood, ore, food)
+- **DECIDE:** Choose what to buy/sell based on prices
+- **UPGRADE:** Improve buildings or unlock new ones
+
+**Why Critical:** This loop must work in 30s sessions AND 60min sessions - proves mobile viability
+
+**Implementation:**
+- Manual tap collection (Tier 1)
+- Resource inventory system
+- Price display (fixed in Tier 1, dynamic in Tier 2)
+- Building upgrade system
+
+#### 2. Tier 1 Economy System (0-5h)
+
+**Buildings (5 total):**
+1. Lumbermill → Wood
+2. Mine → Ore
+3. Farm → Food
+4. Smelter → Bars (Wood + Ore)
+5. Workshop → Tools (Bars + Wood)
+
+**Resources (7 types):**
+- Raw: Wood, Ore, Food
+- Processed: Bars, Tools
+- Advanced: Circuits, Machines (unlock in Tier 2)
+
+**Economy Mechanics:**
+- **Fixed prices** (no fluctuations in Tier 1)
+- Buy/sell resources to NPC market
+- Profit = buying cheap inputs, selling expensive outputs
+- Simple supply chains (2-3 steps max)
+
+**Why Critical:** Teaches core economic concepts without overwhelming - discovery-based learning
+
+#### 3. Tier 2 Automation System (5-7h)
+
+**Smart Conveyor Routing (THE "aha moment"):**
+- Player places START and END points
+- **AI suggests optimal path** (A* pathfinding)
+- Player confirms or adjusts
+- Conveyor auto-transports resources
+
+**Why Critical:** This is the automation unlock - proves we're NOT just another clicker
+
+**Additional Tier 2 Buildings (+4 new):**
+- Factory → Circuits (Bars + Tools)
+- Laboratory → Research points
+- Market Hub → Better prices
+- Storage Depot → Bigger inventory
+
+**Price Fluctuations Introduced:**
+- Dragon attack → Wood supply drops → prices spike
+- Harvest festival → Food surplus → prices crash
+- Players learn supply/demand through events
+
+#### 4. Offline Production System
+
+**O(1) Calculation (NOT simulation):**
+```
+Offline production = Production_rate × Time_elapsed × Efficiency_multiplier
+```
+
+**Why O(1) matters:**
+- 1 week offline = 1ms calculation (not simulating every second)
+- Respects player time
+- Battery-friendly
+
+**Implementation:**
+- Calculate production when app reopens
+- Cap at 8 hours max (prevents infinite idle growth)
+- 2x multiplier available via rewarded ads (optional)
+
+**Why Critical:** Mobile players expect offline progress - differentiates from web idle games
+
+#### 5. Mobile-First UX
+
+**One-Handed Gameplay:**
+- Thumb-reach zone = primary actions
+- Tap to collect resources
+- Drag to place buildings
+- Swipe to pan map
+
+**Performance Target:**
+- **60 FPS on Snapdragon 660** (2-3 year old budget Android)
+- Sprite batching for 50+ conveyors
+- <300MB RAM usage
+
+**UI Requirements:**
+- Large tap targets (minimum 44×44 pixels)
+- Clear visual feedback (haptics, animations)
+- Progress indicators (resource production, offline gains)
+- Settings: Graphics quality (low/medium/high)
+
+#### 6. Progression System (Tier 1-2)
+
+**Unlock Progression:**
+- Start: 5 Tier 1 buildings
+- Unlock Tier 2: Complete 10 Tier 1 trades
+- Unlock conveyors: Build all 5 Tier 1 buildings to Level 3
+- Unlock price fluctuations: First dragon attack event (scripted at 3h mark)
+
+**Upgrade System:**
+- Buildings have 5 levels (Level 1-5)
+- Each level: +20% production rate, +cost
+- Cost scaling: Linear in Tier 1, exponential in Tier 2
+
+**Achievement System (Basic):**
+- "First Trade" - Complete 1 buy/sell
+- "Factory Worker" - Build all 5 Tier 1 buildings
+- "Automation Master" - Place first conveyor
+- "Economist" - Profit from price fluctuation event
+
+#### 7. Tutorial & Onboarding
+
+**Discovery-Based Learning (NO text tutorials):**
+
+- **First 30 seconds:**
+  - Tap lumbermill → get wood
+  - Sell wood → get gold
+  - "You made a profit!" (positive feedback)
+
+- **First 5 minutes:**
+  - Unlock mine, farm
+  - Build smelter (requires wood + ore)
+  - First supply chain created
+
+- **First 30 minutes:**
+  - Dragon attack event (scripted)
+  - Wood supply drops → price spikes
+  - Player profits from selling wood stockpile
+  - **Lesson learned:** Buy low, sell high
+
+**Why No Text Tutorials:** Players learn by doing - economic literacy through gameplay events
+
+#### 8. Monetization (Ethical F2P)
+
+**Free Experience:**
+- Tier 1-2 100% playable for $0
+- Rewarded ads for 2x offline production (optional)
+- No energy system, no timers
+
+**Paid Options (Optional):**
+- **Ad Removal: $2.99** - Remove all banner ads
+- **DLC Access: $2.99** - Unlock Tier 3-4 buildings (future update)
+- **Cosmetic Pack: $1.99** - Building skins, factory themes
+
+**Total Cost: $10 max** for "complete game" experience
+
+**Why Ethical:** Transparent pricing, NO dark patterns, NO loot boxes
+
+#### 9. Backend Infrastructure (Firebase)
+
+**Authentication:**
+- Guest login (anonymous)
+- Google Sign-In
+- Email/password (optional)
+
+**Cloud Saves:**
+- Factory state synced to Firestore
+- Save frequency: Every 5 minutes OR on app close
+- Automatic conflict resolution (latest timestamp wins)
+
+**Leaderboards (Basic):**
+- Top 100 by total profit
+- Top 100 by factory efficiency
+- Updated every 5 minutes (not real-time)
+
+**Why Firebase:**
+- FREE for <50k MAU
+- Scales to 100k for $45/month
+- Zero DevOps overhead
+
+#### 10. Analytics & Metrics Tracking
+
+**Critical Metrics to Track:**
+- D1, D7, D30 retention
+- Session length distribution
+- Tutorial completion rate (Tier 1 → Tier 2 progression)
+- Conveyor unlock rate (% reaching automation)
+- Crash rate, performance (FPS, load times)
+
+**Tools:**
+- Firebase Analytics (built-in)
+- Crashlytics (crash reporting)
+- Performance Monitoring
+
+### Out of Scope for MVP
+
+**These features are valuable but NOT required for initial launch:**
+
+#### Tier 3-4 Content (Post-Launch DLC)
+
+- **Tier 3 (15-30h):** 8 additional buildings, manual optimization, full economy
+- **Tier 4 (30-100h):** Endgame content, player market, advanced chains
+
+**Why Deferred:**
+- Prove core loop works FIRST (Tier 1-2)
+- Tier 3-4 becomes paid DLC ($2.99)
+- Reduces MVP development scope by 60%
+
+#### Multiplayer & Social Features
+
+- **Guilds:** Cooperative factory projects
+- **PvP:** Factory efficiency competitions
+- **Blueprint Sharing:** Export/import factory layouts
+- **Guild Raids:** Team-based challenges
+
+**Why Deferred:**
+- MVP focuses on solo gameplay (60% of players per brainstorming)
+- Multiplayer adds 4-6 weeks development complexity
+- Can launch as Update 1.2-1.3 (Month 3-4 post-launch)
+
+#### Advanced Features
+
+- **Ranked Seasons:** Competitive leaderboards with rewards
+- **Daily Challenges:** Rotating objectives
+- **Modding Support:** Custom buildings, resources
+- **Desktop Port:** Windows/Mac/Linux version
+
+**Why Deferred:**
+- Adds complexity without validating core concept
+- Desktop port planned for Month 6-7 (after mobile proven)
+
+#### Polish & Nice-to-Haves
+
+- **Advanced Tutorials:** Interactive guides
+- **Story Mode:** Narrative campaign
+- **Achievements (Full):** 50+ achievements (MVP has 4 basic ones)
+- **Sound Design:** Full music score (MVP has basic SFX only)
+- **Localization:** Multi-language support (MVP English-only)
+
+### MVP Success Criteria
+
+**Launch is successful if we achieve within 30 days:**
+
+✅ **10,000 organic downloads** (Reddit, YouTube, ASO)
+✅ **D7 Retention: 30-35%** (above 20% industry average)
+✅ **60 FPS on Snapdragon 660** (budget device target)
+✅ **<1% crash rate** (stability)
+✅ **Tier 2 unlock rate: 60%+** (players reaching automation)
+✅ **4.0+ star rating** (App Store/Google Play)
+
+**If ANY of these fail:**
+- <30% D7 = Core loop problem → iterate before scaling
+- <60 FPS = Performance optimization needed
+- <60% Tier 2 unlock = Onboarding or difficulty issue
+
+**Do NOT scale marketing until metrics hit targets.**
+
+### Future Vision Features
+
+**These define the long-term roadmap (Year 1+):**
+
+#### Update 1.1 (Month 2) - Polish & Balance
+- Performance optimizations based on analytics
+- Balance tweaks (building costs, prices)
+- Bug fixes, crash resolution
+- QoL improvements (UI feedback, tutorials)
+
+#### Update 1.2 (Month 3) - Social Features
+- Leaderboards expansion (regional, friend-based)
+- Basic guilds (join, chat, shared goals)
+- Friend codes (invite system)
+- Blueprint sharing (export/import factory layouts)
+
+#### Update 1.3 (Month 4) - Tier 3 DLC
+- **Paid DLC: $2.99** unlocks Tier 3 content
+- 8 new buildings, 3 new resources
+- Manual optimization mechanics
+- Full dynamic economy
+
+#### Update 2.0 (Month 6) - Desktop Port
+- Windows/Mac/Linux version (Flutter native)
+- Cross-platform cloud saves
+- Mouse + keyboard controls optimized
+- Same codebase (85% code reuse)
+
+**Why Desktop Port:**
+- Factorio audience familiar with desktop
+- 3-4 weeks development (Flutter cross-platform)
+- Premium pricing option: $9.99 desktop, free mobile with ads
+- Total addressable market expansion
+
+#### Update 2.1 (Month 7) - Competitive Features
+- Ranked seasons (monthly leaderboards)
+- Guild competitions (team efficiency challenges)
+- Spectator mode (watch top factories)
+- Rewards (cosmetics, titles)
+
+#### Year 2+ Vision
+- **Tier 4 Endgame:** Player market, advanced automation
+- **Modding Support:** Custom buildings via JSON
+- **Cross-Platform Multiplayer:** Shared factories (mobile + desktop)
+- **Educational Partnerships:** Schools, economics courses
+- **Localization:** 10+ languages (EU, Asia markets)
+
+**Revenue Model Evolution:**
+- Year 1: Ad-driven (96% of revenue)
+- Year 2: DLC + cosmetics balance (50/50 with ads)
+- Year 3: Desktop premium + mobile DLC (sustainable long-term)
+
+---
+
+## Technical Preferences
+
+### Validated Tech Stack (from Technical Research 2025-11-17)
+
+**Frontend Framework:**
+- **Flutter 5.0** - Cross-platform (Android, iOS, Desktop, Web)
+- **Flame 3.0** - 2D game engine, 60 FPS on mid-range devices
+- **Dart 3.5** - AOT compilation, near-native performance
+
+**State Management:**
+- **Riverpod 3.0** with @riverpod macros
+- Fine-grained reactivity (minimal rebuilds = 60 FPS)
+- Compile-time safety (fewer runtime errors)
+- Industry leader in 2025 for Flutter games
+
+**Backend (BaaS):**
+- **Firebase Authentication** - FREE for <50k MAU
+- **Firebase Firestore** - Structured data, offline support
+- **Firebase Cloud Functions** - Scheduled tasks (leaderboard updates)
+- **Cost:** $3/month (10k MAU), $45/month (100k MAU)
+
+**Pathfinding:**
+- **A* algorithm** (grid-based, optimal)
+- **Hierarchical A*** if needed (10x speedup for large factories)
+- **Diagonal heuristic** (fast, optimal for 8-direction conveyors)
+
+**Performance Optimizations:**
+- **Sprite batching** (Canvas.drawAtlas) - 3-5x draw call reduction
+- **ListView.builder** - Efficient UI lists (no jank)
+- **Const widgets** - Reduce rebuilds by 50%
+- **Image atlases** - All sprites in texture atlas
+- **Audio pooling** - Preload SFX with FlameAudioPool
+
+**Target Devices:**
+- **Primary:** Budget Android (2GB RAM, Snapdragon 660-class)
+- **Target FPS:** 60 on budget, 60-120 on high-end
+- **Max Complexity:** 50 conveyors + 10 buildings + 20 moving resources
+
+### Why This Stack?
+
+**Flutter/Flame:**
+✅ 60 FPS achievable on budget Android (validated via benchmarks)
+✅ Cross-platform: Mobile MVP → Desktop in 3-4 weeks (85% code reuse)
+✅ 2025 improvements: Flutter 5.0 + Flame 3.0 performance gains
+✅ Good enough for mid-complexity games (Factorio lite is mid-complexity)
+
+**Firebase:**
+✅ FREE for 10k users ($0 authentication + $3 Firestore)
+✅ 50-75% cheaper than dedicated servers at target scale
+✅ Zero DevOps overhead (solo indie friendly)
+✅ Proven scalability (handles 100k+ MAU if viral)
+
+**Riverpod:**
+✅ Best performance for game state (fine-grained rebuilds)
+✅ Industry leader in 2025 (overtook Bloc, Provider)
+✅ Low boilerplate with @riverpod macros
+
+### Technical Risks & Mitigations
+
+**Risk 1: Performance with 50+ Conveyors**
+- **Mitigation:** Sprite batching (Canvas.drawAtlas) validated in research
+- **Fallback:** Reduce max factory size to 40×40 if needed
+- **Testing:** Week 2 prototype on Snapdragon 660
+
+**Risk 2: Firebase Costs Exceed Budget**
+- **Mitigation:** Batch writes (save every 5 min, not per action)
+- **Mitigation:** Cache leaderboards (update every 5 min, not real-time)
+- **Reality Check:** Even at 100k MAU = $45/month (well within revenue)
+
+**Risk 3: Pathfinding Latency**
+- **Mitigation:** Naive A* sufficient for 50×50 grid (20-50ms)
+- **Fallback:** Hierarchical A* if >50ms detected
+- **Timeslicing:** Spread calculation over 2-3 frames if needed
+
+**Risk 4: Cross-Platform Complexity**
+- **Mitigation:** Flutter native support (not a port)
+- **Reality:** Desktop = 3-4 weeks (85% code reuse validated)
+- **Strategy:** Launch mobile FIRST, desktop only if mobile succeeds
+
+### Development Environment
+
+**Tools:**
+- **IDE:** VS Code with Flutter/Dart extensions
+- **Version Control:** Git + GitHub
+- **Testing:** Real devices (Snapdragon 660 equivalent)
+- **Performance:** Flame performance overlay, Flutter DevTools
+- **Analytics:** Firebase Analytics, Crashlytics
+
+**Testing Strategy:**
+- Test on real budget devices (NOT just emulators)
+- Target: Snapdragon 660, 2GB RAM, 2-3 years old
+- Performance threshold: 60 FPS with max complexity
+- If <45 FPS: Optimize before launch
+
+---
+
+## Risks and Assumptions
+
+### Critical Assumptions
+
+**Assumption 1: Factorio Fans Want Mobile Version**
+- **Evidence:** 3.5M+ Steam players, no official mobile port planned
+- **Validation:** Reddit sentiment, community forums ("why no mobile?")
+- **Risk:** LOW - demand clearly exists
+
+**Assumption 2: Mobile Can Handle Complexity**
+- **Evidence:** Technical research validates 60 FPS with 50+ conveyors
+- **Validation:** Flutter/Flame benchmarks, sprite batching proven
+- **Risk:** LOW - tech stack validated
+
+**Assumption 3: D7 Retention of 35-40% Achievable**
+- **Evidence:** Top 10% mid-core games hit 40%+ D7
+- **Drivers:** Offline production, no dark patterns, progressive complexity
+- **Risk:** MEDIUM - requires excellent execution on core loop
+
+**Assumption 4: Ethical F2P Resonates**
+- **Evidence:** EU regulations favor transparency, Wild Rift success
+- **Validation:** $10 total vs $50-200 industry is clear differentiator
+- **Risk:** LOW - regulatory tailwind + player sentiment
+
+**Assumption 5: 10k Downloads Achievable Organically**
+- **Evidence:** Modest ASO + Reddit community + niche targeting
+- **Risk:** MEDIUM - depends on marketing execution, timing
+
+### Key Risks
+
+**Risk 1: Core Loop Doesn't Engage (HIGH IMPACT)**
+- **Probability:** MEDIUM
+- **Impact:** If players don't find COLLECT→DECIDE→UPGRADE fun, game fails
+- **Mitigation:** Playtest Tier 1 extensively, iterate before scaling
+- **Early Warning:** D1 retention <40%, session length <2min average
+
+**Risk 2: Tier 1 Too Boring / Tier 2 Too Complex (MEDIUM IMPACT)**
+- **Probability:** MEDIUM
+- **Impact:** <60% players reach Tier 2 = lose "aha moment"
+- **Mitigation:** Balance testing, tutorial iteration
+- **Early Warning:** Tier 2 unlock rate <50% in first week
+
+**Risk 3: Technology Doesn't Scale (HIGH IMPACT)**
+- **Probability:** LOW (validated in research)
+- **Impact:** <60 FPS on budget devices = negative reviews, uninstalls
+- **Mitigation:** Test on Snapdragon 660 from Week 2, optimize early
+- **Early Warning:** Performance complaints in first 100 reviews
+
+**Risk 4: Market Saturation / Competition (LOW IMPACT)**
+- **Probability:** LOW
+- **Impact:** If Factorio launches mobile OR competitor fills gap
+- **Mitigation:** Speed to market, niche positioning (economics education)
+- **Monitoring:** Watch Factorio dev blogs, competitor landscape
+
+**Risk 5: Monetization Doesn't Convert (MEDIUM IMPACT)**
+- **Probability:** MEDIUM
+- **Impact:** <2% conversion = revenue miss
+- **Mitigation:** A/B test pricing, offer bundles, iterate
+- **Early Warning:** Conversion <1% in first month
+
+**Risk 6: Firebase Costs Spike Unexpectedly (LOW IMPACT)**
+- **Probability:** LOW
+- **Impact:** If costs exceed $100/month at 50k MAU
+- **Mitigation:** Monitor Firebase console, set alerts, optimize queries
+- **Fallback:** Migrate to dedicated server if truly necessary (only if 200k+ MAU)
+
+### Success Dependencies
+
+**Must-Haves for Success:**
+1. **Core loop is engaging** - Players find COLLECT→DECIDE→UPGRADE satisfying
+2. **Performance hits 60 FPS** - No lag, smooth on budget devices
+3. **Tier 2 unlock rate >60%** - Players reach automation "aha moment"
+4. **D7 Retention >30%** - Above industry average, ideally 35-40%
+5. **Factorio community endorsement** - Reddit, YouTube creators validate
+
+**Nice-to-Haves (Accelerators):**
+- App Store / Google Play featuring
+- Influencer coverage (YouTube, Twitch)
+- Viral moment (e.g., "Factorio on mobile!" Reddit post)
+- Parent/educator recommendations (economics angle)
+
+**Red Flags (Kill Switches):**
+- D7 Retention <20% after Month 1 → Core loop broken, pivot or abandon
+- <45 FPS on Snapdragon 660 → Tech debt unsolvable, reevaluate
+- Factorio official mobile announced → Market evaporates, pivot niche
+
+---
+
+## Financial Considerations
+
+### Development Investment
+
+**Solo Indie Developer:**
+- Development cost: $0 (sweat equity)
+- Tools: Free (Flutter, Firebase Spark tier, VS Code)
+- Test devices: $200 (budget Android for testing)
+- **Total upfront: ~$200**
+
+**Firebase Costs (MVP Launch):**
+- First 1,000 users: $0 (free tier)
+- 1k-10k users: ~$3/month
+- 10k-50k users: $10-30/month
+- **Year 1 estimate:** <$360 total ($30/month avg)
+
+**Marketing (Organic-First):**
+- Reddit posts: $0
+- YouTube outreach: $0
+- ASO optimization: $0 (DIY)
+- Optional: Google Ads test ($100-500 budget)
+
+**Total Year 1 Investment: $500-1,000** (mostly optional marketing)
+
+### Revenue Projections
+
+**Conservative Scenario (10k downloads, 35% D7):**
+- Ad revenue: $18k/year (60% ad watch rate, $20 eCPM)
+- IAP revenue: $8k/year (2% conversion, $10 ARPPU)
+- **Total: $26k Year 1**
+- **ROI:** 26x-52x (on $500-1k investment)
+
+**Realistic Scenario (25k downloads, 38% D7):**
+- Ad revenue: $45k/year
+- IAP revenue: $20k/year
+- **Total: $65k Year 1**
+
+**Optimistic Scenario (100k downloads, 40% D7):**
+- Ad revenue: $180k/year
+- IAP revenue: $80k/year
+- **Total: $260k Year 1**
+- Transition to full-time indie dev viable
+
+### Profitability Timeline
+
+**Month 1-2:** Costs exceed revenue (~$200 investment, ~$100 revenue)
+**Month 3-4:** Break-even (~$500 total costs, ~$500 revenue)
+**Month 5-6:** Profitable (~$1k costs, ~$3-5k revenue)
+**Month 7-12:** Sustainable (~$1k costs, ~$10-20k revenue)
+
+**Sensitivity Analysis:**
+
+| Metric | Impact on Revenue | Mitigation |
+|--------|-------------------|------------|
+| D7 -10% (30% vs 40%) | -40% revenue | Improve onboarding, core loop |
+| eCPM -$10 ($10 vs $20) | -50% ad revenue | Focus US/EU markets, optimize ad UX |
+| Downloads -50% (5k vs 10k) | -50% total revenue | Increase marketing, ASO iteration |
+| Conversion -1% (1% vs 2%) | -50% IAP revenue | A/B test pricing, bundles |
+
+**Break-Even Point:** 5,000 downloads with 30% D7 retention = ~$10k/year revenue (covers costs)
+
+### Business Model Viability
+
+**Why This Model Works:**
+
+1. **Low Development Cost** - Solo indie, free tools, Firebase free tier
+2. **High Margin** - 95%+ margin (Firebase costs <$500/year even at 50k MAU)
+3. **Scalable** - Revenue scales linearly with downloads, costs scale logarithmically
+4. **Ethical** - $10 cap builds trust, drives word-of-mouth, regulatory-friendly
+5. **Cross-Platform Leverage** - Desktop port expands TAM with 85% code reuse
+
+**Comparison to Traditional F2P:**
+
+| Metric | Traditional F2P | Trade Factory Masters |
+|--------|-----------------|----------------------|
+| Complete Game Cost | $50-200 | $10 |
+| Conversion Rate | 2-3% | 2% (similar) |
+| ARPPU | $30-70 | $5-10 (lower) |
+| D7 Retention | 20% avg | 35-40% target (higher) |
+| LTV | $4-6 | $10+ (if 40% D7) |
+| Player Trust | Low (P2W) | High (ethical) |
+
+**Key Insight:** Lower ARPPU but HIGHER retention = similar/better LTV
+
+---
+
+## Supporting Materials
+
+This Product Brief synthesizes insights from comprehensive research and brainstorming:
+
+### Research Documents (2025-11-17)
+
+**1. Domain Research: Mobile Gaming Industry 2025**
+- File: `docs/domain-research-mobile-gaming-2025.md` (510 lines)
+- Key Findings:
+  - $135B mobile gaming market (2025)
+  - Mid-core segment rising (10 vs 5 in top 200 grossers)
+  - Ethical F2P movement validated (EU regulations, player sentiment)
+  - Factory automation gap confirmed (no desktop-quality mobile option)
+  - Cross-platform trends (+45% retention boost)
+
+**2. Market Research: Competitive Analysis & Revenue Validation**
+- File: `docs/market-research-competitive-analysis-2025.md` (677 lines)
+- Key Findings:
+  - Builderment (primary competitor): 1.5M downloads, casual positioning
+  - Pricing validated: $2.99-$1.99 IAPs align with industry
+  - Revenue projections achievable (requires 40% D7 retention)
+  - Conversion rate (2%) matches mid-core standard
+  - TAM/SAM/SOM: $400M addressable market
+
+**3. Technical Research: Flutter/Flame Stack Validation**
+- File: `docs/technical-research-flutter-flame-2025.md` (1,143 lines)
+- Key Findings:
+  - Flutter/Flame 60 FPS achievable on budget Android
+  - Sprite batching provides 3-5x performance boost
+  - Firebase costs: $3/month (10k MAU), $45/month (100k MAU)
+  - Riverpod 3.0 recommended (industry leader 2025)
+  - A* pathfinding sufficient (20-50ms on 50×50 grid)
+  - Cross-platform validated (85% code reuse mobile → desktop)
+
+### Brainstorming Session (2025-11-17)
+
+**File:** `docs/brainstorming-session-results-2025-11-17.md`
+
+**6 Technique-Based Sessions:**
+1. Core Gameplay Mechanics (First Principles)
+2. Technical Challenges (Five Whys + Assumption Reversal)
+3. MVP Scope (Resource Constraints + Mind Mapping)
+4. Progression & Retention (What If + Time Shifting)
+5. Monetization (SCAMPER + Analogical Thinking)
+6. Multiplayer & Social (Role Playing + Yes And Building)
+
+**Key Insights Incorporated:**
+- Progressive complexity unlock (conveyors = reward)
+- 3-step core loop (COLLECT→DECIDE→UPGRADE)
+- Ruthless MVP scope (Tier 1-2 only, 0-7h gameplay)
+- Offline production O(1) calculation
+- Smart conveyor AI-assisted routing
+- Ethical F2P ($10 total complete game)
+
+### Methodology
+
+**Anti-Hallucination Protocol Applied:**
+- Every statistic cited with source
+- Multiple sources for critical claims
+- Confidence levels marked (Verified / Single Source / Estimated)
+- 30+ sources across 3 research documents
+- 2,330 lines of research documentation
+
+**Workflow:**
+- Enterprise BMAD Method (greenfield project)
+- Phase 0: Discovery completed (Brainstorm → Research → Product Brief)
+- Next: Phase 1 Planning (PRD, UX Design, Epics/Stories)
+
+---
+
+## Next Steps
+
+This Product Brief captures the strategic vision for **Trade Factory Masters** - a mobile factory automation game that fills the gap between Factorio (desktop complexity) and Builderment (mobile casual).
+
+### Immediate Next Steps (Phase 1: Planning)
+
+**1. Product Requirements Document (PRD)**
+- Detailed feature specifications
+- User stories for each feature
+- Acceptance criteria
+- Technical requirements
+
+**2. UX Design Workshop**
+- Mobile-first UI mockups
+- Touch interaction patterns
+- Onboarding flow design
+- Factory grid UX
+
+**3. Architecture Design**
+- Flutter/Flame project structure
+- Riverpod state management architecture
+- Firebase backend schema
+- Pathfinding system design
+
+**4. Create Epics and Stories**
+- Break down features into implementable units
+- Estimate complexity
+- Prioritize sprint planning
+
+### Success Criteria Reminder
+
+**This project is viable if we achieve:**
+- ✅ 60 FPS on budget Android (Snapdragon 660)
+- ✅ D7 Retention: 35-40% (top 10% of mid-core)
+- ✅ 10k downloads Month 1 (organic + ASO)
+- ✅ Tier 2 unlock rate >60% (automation "aha moment")
+- ✅ $20-30k Year 1 revenue (conservative, 10k downloads)
+
+**If metrics don't hit targets:**
+- Iterate core loop BEFORE scaling marketing
+- Test rigorously on budget devices
+- Optimize onboarding for Tier 2 progression
+
+### Vision Summary
+
+**Trade Factory Masters proves that mobile can handle mid-core complexity.**
+
+By progressive unlocking conveyors (automation as reward), embedding economic education in gameplay, and respecting player time (offline production, ethical F2P), we fill a massive market gap:
+
+**3.5M+ Factorio fans want a mobile version. We're building it.**
+
+---
+
+_This Product Brief was created through collaborative discovery, synthesizing:_
+- _Brainstorming session (6 techniques, 2+ hours)_
+- _Domain research (510 lines, 30+ sources)_
+- _Market research (677 lines, competitive analysis)_
+- _Technical research (1,143 lines, stack validation)_
+
+_Next: PRD (Product Requirements Document) will transform this brief into detailed implementation specifications._
+
