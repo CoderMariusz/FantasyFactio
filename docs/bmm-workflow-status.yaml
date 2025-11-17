@@ -1,0 +1,136 @@
+# Workflow Status Template
+
+# This tracks progress through BMM methodology Analysis, Planning, and Solutioning phases.
+# Implementation phase is tracked separately in sprint-status.yaml
+
+# STATUS DEFINITIONS:
+# ==================
+# Initial Status (before completion):
+#   - required: Must be completed to progress
+#   - optional: Can be completed but not required
+#   - recommended: Strongly suggested but not required
+#   - conditional: Required only if certain conditions met (e.g., if_has_ui)
+#
+# Completion Status:
+#   - {file-path}: File created/found (e.g., "docs/product-brief.md")
+#   - skipped: Optional/conditional workflow that was skipped
+
+generated: "2025-11-17"
+project: "FantasyFactio"
+project_type: "game"
+selected_track: "enterprise-bmad-method"
+field_type: "greenfield"
+workflow_path: ".bmad/bmm/workflows/workflow-status/paths/enterprise-greenfield.yaml"
+
+workflow_status:
+  # Phase 0: Discovery (Required for Enterprise)
+  - phase: 0
+    name: "Discovery"
+    workflows:
+      - id: "brainstorm-project"
+        name: "Brainstorm Project"
+        agent: "analyst"
+        command: "/bmad:bmm:workflows:1-analysis:brainstorm-project"
+        status: "optional"
+        note: "Creative exploration and ideation - INCLUDED by user choice"
+
+      - id: "research"
+        name: "Research"
+        agent: "analyst"
+        command: "/bmad:bmm:workflows:1-analysis:research"
+        status: "recommended"
+        note: "Market/technical research - INCLUDED by user choice"
+
+      - id: "product-brief"
+        name: "Product Brief"
+        agent: "analyst"
+        command: "/bmad:bmm:workflows:1-analysis:product-brief"
+        status: "recommended"
+        note: "Strategic product planning - INCLUDED by user choice"
+
+  # Phase 1: Planning
+  - phase: 1
+    name: "Planning"
+    workflows:
+      - id: "prd"
+        name: "Product Requirements Document"
+        agent: "pm"
+        command: "/bmad:bmm:workflows:2-plan-workflows:prd"
+        status: "required"
+        note: "Enterprise-level requirements with compliance considerations"
+
+      - id: "validate-prd"
+        name: "Validate PRD"
+        agent: "pm"
+        command: "/bmad:bmm:workflows:2-plan-workflows:validate-prd"
+        status: "recommended"
+
+      - id: "create-epics-and-stories"
+        name: "Create Epics and Stories (Early)"
+        agent: "pm"
+        command: "/bmad:bmm:workflows:2-plan-workflows:create-epics-and-stories"
+        status: "optional"
+        note: "Optional: Create epic breakdown early (basic structure only)"
+
+      - id: "create-design"
+        name: "Create UX Design"
+        agent: "ux-designer"
+        command: "/bmad:bmm:workflows:2-plan-workflows:create-ux-design"
+        status: "recommended"
+        note: "Highly recommended for enterprise - design system and patterns"
+
+      - id: "create-epics-and-stories-after-ux"
+        name: "Create Epics and Stories (After UX)"
+        agent: "pm"
+        command: "/bmad:bmm:workflows:2-plan-workflows:create-epics-and-stories"
+        status: "optional"
+        note: "Optional: Create epic breakdown with UX context"
+
+  # Phase 2: Solutioning
+  - phase: 2
+    name: "Solutioning"
+    workflows:
+      - id: "create-architecture"
+        name: "Create Architecture"
+        agent: "architect"
+        command: "/bmad:bmm:workflows:3-solutioning:architecture"
+        status: "required"
+        note: "Enterprise-grade system architecture - scalability, multi-tenancy, integrations"
+
+      - id: "test-design"
+        name: "Test Design"
+        agent: "tea"
+        command: "/bmad:bmm:workflows:testing:test-design"
+        status: "required"
+        note: "Enterprise requires testability validation - auto-detects system-level mode"
+
+      - id: "validate-architecture"
+        name: "Validate Architecture"
+        agent: "architect"
+        command: "/bmad:bmm:workflows:3-solutioning:validate-architecture"
+        status: "recommended"
+
+      - id: "create-epics-and-stories-final"
+        name: "Create Epics and Stories (Final)"
+        agent: "pm"
+        command: "/bmad:bmm:workflows:2-plan-workflows:create-epics-and-stories"
+        status: "required"
+        note: "Required: Create final epic breakdown with full context (PRD + UX + Architecture)"
+
+      - id: "implementation-readiness"
+        name: "Implementation Readiness"
+        agent: "architect"
+        command: "/bmad:bmm:workflows:3-solutioning:implementation-readiness"
+        status: "required"
+        note: "Validates all planning artifacts + Epics + testability align before implementation"
+
+  # Phase 3: Implementation
+  - phase: 3
+    name: "Implementation"
+    workflows:
+      - id: "sprint-planning"
+        name: "Sprint Planning"
+        agent: "sm"
+        command: "/bmad:bmm:workflows:4-implementation:sprint-planning"
+        status: "required"
+        note: "Creates sprint plan - enterprise projects may require phased rollout"
