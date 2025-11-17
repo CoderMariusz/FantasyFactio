@@ -2138,3 +2138,635 @@ class MarketEvent {
 
 **Status:** ✅ FR-003 Specification Complete
 **Next:** FR-004 Offline Production System
+
+---
+
+### FR-004: Offline Production System (HIGH - P1)
+
+**Description:** The Offline Production System calculates resources produced while the player is away using an **O(1) constant-time algorithm** (not simulating every second). This respects player time, prevents battery drain, and differentiates TFM from web-based idle games that require constant connection. Players return to see progress, encouraging daily engagement.
+
+**Priority:** P1 (High - Critical retention feature, industry standard for mobile games)
+**Dependencies:** FR-001 (Core Loop), FR-002 (Economy), FR-003 (Automation for Tier 2 offline)
+**Estimated Complexity:** Medium-High (complex math for O(1) calculation, edge cases with storage limits)
+
+---
+
+#### User Stories
+
+**US-004.1: Short Offline Session (1 Hour Away)**
+```
+As a mobile player
+I want my factory to keep producing resources while I'm away for 1 hour
+So that I feel rewarded for returning and don't fall behind
+
+Acceptance Criteria:
+- GIVEN I close the app with 2 buildings producing (Lumbermill Level 3, Mine Level 2)
+  AND I'm away for exactly 1 hour
+  WHEN I reopen the app
+  THEN offline production is calculated instantly (O(1), <50ms)
+  AND I see results:
+    - Lumbermill: +60 Wood (1 Wood/min × 60 min × 1.4x Level 3 bonus = 84 Wood)
+    - Mine: +60 Ore (1 Ore/min × 60 min × 1.2x Level 2 bonus = 72 Ore)
+    - Capped by storage: Lumbermill storage = 14 capacity (10 base + 40% from 4 levels)
+
+- GIVEN I return after 1 hour
+  WHEN app opens
+  THEN "Welcome Back!" modal appears showing:
+    - Time away: "1 hour 3 minutes"
+    - Resources produced: "+84 Wood, +72 Ore"
+    - Gold earned (if I sold automatically): "+420 gold"
+    - "Collect" button (large, green)
+  AND this positive feedback encourages return visits
+
+- GIVEN I see offline production results
+  WHEN I tap "Collect"
+  THEN resources are added to inventory
+  AND celebration animation plays (sparkles, +numbers floating)
+  AND I immediately feel progress was made during absence
+```
+
+**US-004.2: Long Offline Session (1 Week Away)**
+```
+As a casual player who returns after a long absence
+I want to receive meaningful rewards (but not break game economy)
+So that I'm motivated to continue playing, not overwhelmed
+
+Acceptance Criteria:
+- GIVEN I'm away for 7 days (168 hours)
+  AND my buildings have 10-hour storage capacity
+  WHEN I return
+  THEN production is capped at storage limits:
+    - Lumbermill produces for 10 hours, then stops (full)
+    - Total: 840 Wood (capped at storage limit, not 168h × rate)
+  AND I don't receive 7 days worth (would break economy)
+
+- GIVEN I return after 7 days
+  WHEN app opens
+  THEN "Welcome Back!" modal shows:
+    - "Away for 7 days"
+    - "Your factory ran for 10 hours before storage filled up"
+    - "Upgrade storage to earn more offline!"
+    - Resources capped at storage limits
+  AND this teaches storage upgrade value
+
+- GIVEN long absence (7+ days)
+  WHEN I return
+  THEN I also see:
+    - "Daily Bonus: +500 gold!" (comeback incentive)
+    - "Watch ad for 2x offline production?" (optional, ethical)
+  AND I feel welcomed back, not punished for absence
+```
+
+**US-004.3: Offline Production with Conveyors (Tier 2)**
+```
+As a Tier 2 player with automated supply chains
+I want conveyors to continue working offline
+So that complex production chains complete while I'm away
+
+Acceptance Criteria:
+- GIVEN I have supply chain: Lumbermill → Smelter → Workshop (via conveyors)
+  AND I'm away for 2 hours
+  WHEN I return
+  THEN O(1) calculation determines:
+    1. Lumbermill produces 120 Wood (60/hour × 2 hours)
+    2. Conveyor delivers Wood to Smelter automatically (offline)
+    3. Smelter produces Bars (limited by Wood input availability)
+    4. Conveyor delivers Bars to Workshop
+    5. Workshop produces Tools (limited by Bars + Ore inputs)
+
+- GIVEN complex supply chain offline
+  WHEN calculation completes
+  THEN I see breakdown:
+    - "Lumbermill → Smelter: 120 Wood transported"
+    - "Smelter produced: 60 Bars (limited by Ore availability)"
+    - "Workshop produced: 20 Tools (limited by Bars input)"
+  AND I understand bottlenecks in my supply chain
+
+- GIVEN offline production with conveyors
+  WHEN resources were limited (e.g., Smelter ran out of Ore)
+  THEN modal shows:
+    - "Smelter stopped after 30 minutes (ran out of Ore)"
+    - "Upgrade Mine or adjust conveyors to fix!"
+  AND this encourages factory optimization
+```
+
+**US-004.4: Offline Production Bonus (Ad Reward)**
+```
+As a player who watches ads voluntarily
+I want to boost offline production by 2x
+So that I earn rewards for engaging with monetization
+
+Acceptance Criteria:
+- GIVEN I return after 3 hours away
+  AND I see "Welcome Back!" modal with results
+  WHEN I'm offered "Watch ad for 2x offline production?"
+  AND I tap "Watch Ad"
+  THEN 30-second rewarded video plays (Google AdMob)
+  AND upon completion, my offline earnings double:
+    - Wood: 180 → 360
+    - Ore: 150 → 300
+    - Gold: 500 → 1000
+
+- GIVEN I choose not to watch ad
+  WHEN I tap "No Thanks"
+  THEN I receive standard offline production (1x)
+  AND no negative consequences (ethical F2P)
+  AND option remains for next session
+
+- GIVEN I watch ad for 2x boost
+  WHEN boost is applied
+  THEN analytics tracks:
+    - 'offline_ad_watched' event
+    - Offline duration (to measure when players watch ads)
+    - Boost value (to prevent economy breaking)
+  AND this data informs ad placement strategy
+```
+
+**US-004.5: Offline Production Caps & Limits**
+```
+As a game designer
+I want offline production to have smart limits
+So that economy stays balanced and storage upgrades feel valuable
+
+Acceptance Criteria:
+- GIVEN building has storage capacity = 14 units
+  AND building produces 1 unit/min
+  WHEN player is away for 30 minutes
+  THEN production stops at 14 units (storage full)
+  AND building shows "FULL" indicator when player returns
+
+- GIVEN player has NOT unlocked Tier 2
+  WHEN offline production is calculated
+  THEN manual buildings (Tier 1) produce normally
+  BUT conveyors don't exist yet (no complex chains)
+  AND calculation is simple (just building rates × time)
+
+- GIVEN player HAS unlocked Tier 2
+  WHEN offline production is calculated
+  THEN conveyors are simulated (O(1) algorithm)
+  AND supply chains complete automatically
+  AND bottlenecks are detected and reported
+
+- GIVEN player returns after 24+ hours
+  WHEN production exceeds reasonable limits
+  THEN maximum offline cap applies:
+    - Tier 1: 12 hours max production
+    - Tier 2: 24 hours max production (conveyors extend cap)
+  AND this prevents exploits (setting up factory, leaving for months)
+```
+
+---
+
+#### Technical Specifications
+
+**O(1) Offline Production Algorithm:**
+
+```dart
+// Offline Production Calculator
+class OfflineProductionCalculator {
+  // Calculate production for single building (O(1) - constant time)
+  ProductionResult calculateBuildingProduction(
+    Building building,
+    DateTime lastCollected,
+    DateTime now,
+  ) {
+    final elapsed = now.difference(lastCollected);
+    final minutesElapsed = elapsed.inSeconds / 60.0;
+
+    // Calculate total production (rate × time × level bonus)
+    final productionRate = building.productionRate; // Already includes level bonus
+    final totalProduced = (productionRate * minutesElapsed).floor();
+
+    // Apply storage cap
+    final storageCap = building.production.storageCapacity *
+                       (1 + (building.level - 1) * 0.10); // +10% per level
+    final cappedProduction = min(totalProduced, storageCap.floor());
+
+    // Calculate when storage filled up (for UI feedback)
+    final minutesToFill = storageCap / productionRate;
+    final filledAt = minutesElapsed > minutesToFill
+        ? lastCollected.add(Duration(minutes: minutesToFill.round()))
+        : null;
+
+    return ProductionResult(
+      resource: building.production.outputResource,
+      amount: cappedProduction,
+      wasCapped: totalProduced > cappedProduction,
+      cappedAt: filledAt,
+    );
+  }
+
+  // Calculate production for entire factory (O(n) where n = building count)
+  FactoryProductionResult calculateFactoryProduction(
+    List<Building> buildings,
+    DateTime lastSeen,
+    DateTime now,
+  ) {
+    final results = <Building, ProductionResult>{};
+    final elapsed = now.difference(lastSeen);
+
+    // Apply offline production cap (prevent infinite production)
+    final maxOfflineHours = buildings.any((b) => b.level > 5) ? 24.0 : 12.0;
+    final cappedElapsed = min(elapsed.inMinutes / 60.0, maxOfflineHours);
+    final cappedNow = lastSeen.add(Duration(minutes: (cappedElapsed * 60).round()));
+
+    for (final building in buildings) {
+      results[building] = calculateBuildingProduction(
+        building,
+        building.lastCollected,
+        cappedNow,
+      );
+    }
+
+    return FactoryProductionResult(
+      buildingResults: results,
+      offlineDuration: elapsed,
+      effectiveDuration: Duration(minutes: (cappedElapsed * 60).round()),
+      wasCapped: elapsed.inHours > maxOfflineHours,
+    );
+  }
+
+  // Calculate conveyor-based production (Tier 2) - Still O(n) for n buildings
+  FactoryProductionResult calculateAutomatedProduction(
+    List<Building> buildings,
+    List<ConveyorRoute> conveyors,
+    DateTime lastSeen,
+    DateTime now,
+  ) {
+    final elapsed = now.difference(lastSeen);
+    final maxOfflineHours = 24.0; // Tier 2 extended cap
+    final cappedElapsed = min(elapsed.inMinutes / 60.0, maxOfflineHours);
+
+    // Build dependency graph of production chains
+    final dependencyGraph = _buildDependencyGraph(buildings, conveyors);
+
+    // Topologically sort to process in correct order
+    final sortedBuildings = _topologicalSort(dependencyGraph);
+
+    final results = <Building, ProductionResult>{};
+    final resourceBuffer = <String, int>{}; // Simulated conveyor buffer
+
+    // Process buildings in dependency order
+    for (final building in sortedBuildings) {
+      // Check if inputs are available (from conveyors)
+      final inputs = building.production.recipe.inputs;
+      var limitingFactor = double.infinity;
+
+      for (final entry in inputs.entries) {
+        final available = resourceBuffer[entry.key] ?? 0;
+        final required = entry.value;
+        final possibleCycles = available / required;
+        limitingFactor = min(limitingFactor, possibleCycles);
+      }
+
+      // Calculate actual production (limited by inputs or time)
+      final timeBasedProduction = (building.productionRate * cappedElapsed * 60).floor();
+      final actualProduction = min(timeBasedProduction, limitingFactor.floor());
+
+      // Consume inputs from buffer
+      for (final entry in inputs.entries) {
+        resourceBuffer[entry.key] =
+          (resourceBuffer[entry.key] ?? 0) - (entry.value * actualProduction);
+      }
+
+      // Add outputs to buffer
+      final output = building.production.recipe.outputs.entries.first;
+      resourceBuffer[output.key] =
+        (resourceBuffer[output.key] ?? 0) + (output.value * actualProduction);
+
+      results[building] = ProductionResult(
+        resource: building.production.outputResource,
+        amount: actualProduction,
+        wasCapped: actualProduction < timeBasedProduction,
+        limitedBy: limitingFactor.isFinite ? 'inputs' : null,
+      );
+    }
+
+    return FactoryProductionResult(
+      buildingResults: results,
+      offlineDuration: elapsed,
+      effectiveDuration: Duration(minutes: (cappedElapsed * 60).round()),
+      wasCapped: elapsed.inHours > maxOfflineHours,
+    );
+  }
+
+  // Helper: Build dependency graph from conveyor routes
+  Map<Building, List<Building>> _buildDependencyGraph(
+    List<Building> buildings,
+    List<ConveyorRoute> conveyors,
+  ) {
+    final graph = <Building, List<Building>>{};
+
+    for (final conveyor in conveyors) {
+      if (!graph.containsKey(conveyor.endBuilding)) {
+        graph[conveyor.endBuilding] = [];
+      }
+      graph[conveyor.endBuilding]!.add(conveyor.startBuilding);
+    }
+
+    return graph;
+  }
+
+  // Helper: Topological sort for correct processing order
+  List<Building> _topologicalSort(Map<Building, List<Building>> graph) {
+    // Kahn's algorithm for topological sorting
+    // Returns buildings in order: producers first, consumers last
+    // Implementation details omitted for brevity
+    return []; // Placeholder
+  }
+}
+
+class ProductionResult {
+  final Resource resource;
+  final int amount;
+  final bool wasCapped;
+  final DateTime? cappedAt;
+  final String? limitedBy; // 'storage', 'inputs', null
+
+  ProductionResult({
+    required this.resource,
+    required this.amount,
+    required this.wasCapped,
+    this.cappedAt,
+    this.limitedBy,
+  });
+}
+
+class FactoryProductionResult {
+  final Map<Building, ProductionResult> buildingResults;
+  final Duration offlineDuration;
+  final Duration effectiveDuration;
+  final bool wasCapped;
+
+  FactoryProductionResult({
+    required this.buildingResults,
+    required this.offlineDuration,
+    required this.effectiveDuration,
+    required this.wasCapped,
+  });
+
+  int getTotalProduced(ResourceType type) {
+    return buildingResults.values
+        .where((r) => r.resource.id == type.toString())
+        .fold(0, (sum, r) => sum + r.amount);
+  }
+}
+```
+
+**Welcome Back UI System:**
+
+```dart
+// Welcome Back Modal
+class WelcomeBackModal extends StatelessWidget {
+  final FactoryProductionResult productionResult;
+  final bool showAdOffer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Column(
+        children: [
+          // Header
+          Text(
+            'Welcome Back!',
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+
+          // Offline duration
+          Text(
+            'Away for ${_formatDuration(productionResult.offlineDuration)}',
+            style: TextStyle(fontSize: 18, color: Colors.grey),
+          ),
+
+          // Production summary
+          _buildProductionSummary(),
+
+          // Storage cap warning (if applicable)
+          if (productionResult.wasCapped)
+            _buildStorageWarning(),
+
+          // Ad offer (optional)
+          if (showAdOffer)
+            _buildAdOffer(),
+
+          // Collect button
+          ElevatedButton(
+            onPressed: _collectOfflineProduction,
+            child: Text('Collect', style: TextStyle(fontSize: 24)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              minimumSize: Size(200, 60),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductionSummary() {
+    return Column(
+      children: productionResult.buildingResults.entries.map((entry) {
+        final building = entry.key;
+        final result = entry.value;
+
+        return Row(
+          children: [
+            Image.asset(result.resource.iconPath, width: 32, height: 32),
+            Text('+${result.amount} ${result.resource.displayName}'),
+            if (result.wasCapped)
+              Icon(Icons.warning, color: Colors.orange, size: 16),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildStorageWarning() {
+    return Container(
+      color: Colors.orange.withOpacity(0.2),
+      padding: EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Icon(Icons.info, color: Colors.orange),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Some buildings filled storage and stopped producing. Upgrade storage for more offline earnings!',
+              style: TextStyle(color: Colors.orange[900]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdOffer() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.purple[700]!, Colors.purple[400]!],
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Icon(Icons.play_circle, size: 48, color: Colors.white),
+          SizedBox(height: 8),
+          Text(
+            'Watch ad for 2× offline production?',
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text('No Thanks', style: TextStyle(color: Colors.white70)),
+              ),
+              ElevatedButton(
+                onPressed: () => _watchAdForBoost(context),
+                child: Text('Watch Ad', style: TextStyle(fontSize: 18)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.purple[700],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _watchAdForBoost(BuildContext context) async {
+    // Load rewarded ad
+    final adLoaded = await AdManager.loadRewardedAd();
+
+    if (adLoaded) {
+      final watched = await AdManager.showRewardedAd();
+
+      if (watched) {
+        // Double offline production
+        _applyOfflineBoost(2.0);
+
+        // Track analytics
+        FirebaseAnalytics.logEvent('offline_ad_watched', {
+          'offline_duration_minutes': productionResult.offlineDuration.inMinutes,
+          'boost_multiplier': 2.0,
+        });
+
+        Navigator.pop(context, true);
+      }
+    } else {
+      // Ad failed to load, give reward anyway (ethical F2P)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ad unavailable. Bonus applied anyway!')),
+      );
+      _applyOfflineBoost(2.0);
+    }
+  }
+}
+```
+
+---
+
+#### Performance Requirements
+
+- **Calculation Speed:** <50ms to calculate offline production for 20 buildings
+- **UI Load Time:** <200ms to show "Welcome Back!" modal after launch
+- **Storage Check:** O(1) per building (constant time, no loops)
+- **Conveyor Simulation:** O(n) where n = building count (topological sort acceptable)
+
+---
+
+#### UI/UX Specifications
+
+**Welcome Back Modal Design:**
+- **Full-screen modal** (blocks gameplay until acknowledged)
+- **Celebration particles** (sparkles, floating +numbers)
+- **Production breakdown** (each resource with icon + amount)
+- **Storage warnings** (orange alert if any building capped)
+- **Ad offer** (optional, purple gradient box, "Watch Ad" button prominent)
+- **Collect button** (large, green, bottom-center)
+
+**Edge Case Handling:**
+- **Short absence (<5 min):** No modal, silent collection in background
+- **Very long absence (30+ days):** Special "Welcome back after a long time!" message + 1000 gold bonus
+- **First-time return:** Tutorial tooltip explains offline production system
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **O(1) Performance:**
+- Offline production calculates in <50ms for 20 buildings
+- No frame drops when "Welcome Back!" modal appears
+
+✅ **Storage Cap System:**
+- Buildings stop producing when storage full
+- UI clearly indicates which buildings capped
+- Storage upgrade value is obvious to player
+
+✅ **Conveyor Offline Simulation:**
+- Tier 2 supply chains work correctly offline
+- Bottlenecks are detected and reported
+- Complex chains (3+ buildings) calculate correctly
+
+✅ **Ad Reward System:**
+- 2x boost applies correctly to all offline production
+- Ad failure doesn't punish player (ethical F2P)
+- 60-80% of players who see offer watch ad (engagement metric)
+
+✅ **Economy Balance:**
+- Offline caps prevent exploit (12h Tier 1, 24h Tier 2)
+- Long absences don't break economy
+- Returning feels rewarding, not overwhelming
+
+**Analytics to Track:**
+- Average offline duration per session
+- Offline ad watch rate (target: 60%+)
+- Storage cap hit frequency (indicates upgrade need)
+- Return rate after 1 day, 3 days, 7 days (retention)
+- Offline production as % of total economy (balance check)
+
+---
+
+#### Dependencies
+
+**Required Before FR-004:**
+- ✅ FR-001: Core Gameplay Loop (building production must work)
+- ✅ FR-002: Tier 1 Economy (building definitions, storage)
+- ✅ FR-003: Tier 2 Automation (conveyor simulation offline)
+
+**Required After FR-004:**
+- FR-008: Ethical F2P Monetization (ad integration for 2x boost)
+- FR-009: Firebase Backend (sync last_seen timestamp)
+- FR-010: Analytics Tracking (measure offline behavior)
+
+---
+
+#### Open Questions
+
+1. **Offline cap duration:** 12h Tier 1 / 24h Tier 2, or longer (48h)?
+   - **Recommendation:** 12h/24h (prevents exploits, encourages daily engagement)
+
+2. **Ad boost multiplier:** 2x or 3x offline production?
+   - **Recommendation:** 2x (generous but not economy-breaking)
+
+3. **Storage upgrades:** Should be purchasable with gold, or require resources?
+   - **Recommendation:** Gold + Resources (creates resource sink, encourages economy)
+
+4. **Offline production notification:** Push notification after 8 hours "Your factory is full!"?
+   - **Recommendation:** Optional setting, default OFF (respect user preferences)
+
+5. **Conveyor offline behavior:** Should conveyors "transport" resources instantly offline, or simulate 1 tile/second?
+   - **Recommendation:** Instant transport offline (simplifies calculation, players don't care about realism when away)
+
+---
+
+**Status:** ✅ FR-004 Specification Complete
+**Next:** FR-005 Mobile-First UX
