@@ -577,24 +577,175 @@ class GameState extends _$GameState {
 }
 ```
 
+**Grid & Camera System (CRITICAL for conveyor planning):**
+
+```dart
+// Grid Camera with dual zoom modes
+class GridCamera {
+  Point<double> position;          // Camera center (x, y in grid coordinates)
+  ZoomMode currentMode;            // Planning vs Build mode
+  double zoomLevel;                // Current zoom (0.5x - 2.0x)
+
+  Size viewportSize;               // Screen size in pixels
+  Rect gridBounds;                 // 50×50 grid bounds
+
+  // Zoom mode configuration
+  static const Map<ZoomMode, CameraConfig> modeConfigs = {
+    ZoomMode.planning: CameraConfig(
+      zoom: 0.5,                   // See entire 50×50 grid
+      description: "Plan conveyors, view whole factory",
+      icon: Icons.map,
+    ),
+    ZoomMode.build: CameraConfig(
+      zoom: 1.5,                   // Focus on ~15×15 area
+      description: "Tap buildings, collect resources",
+      icon: Icons.build,
+    ),
+  };
+}
+
+enum ZoomMode {
+  planning,  // 0.5x zoom - entire factory visible
+  build,     // 1.5x zoom - interact with buildings
+}
+
+// Camera Controls
+class CameraController {
+  void onSwipe(Offset delta) {
+    // Pan camera (any zoom level)
+    camera.position += delta / camera.zoomLevel;
+    camera.position = camera.position.clamp(gridBounds);
+  }
+
+  void onPinchZoom(double scale) {
+    // Pinch to zoom (0.5x - 2.0x continuous)
+    camera.zoomLevel = (camera.zoomLevel * scale).clamp(0.5, 2.0);
+  }
+
+  void toggleZoomMode() {
+    // Quick toggle button (UI button or double-tap)
+    camera.currentMode = camera.currentMode == ZoomMode.planning
+        ? ZoomMode.build
+        : ZoomMode.planning;
+
+    // Animate to new zoom level
+    animateZoom(
+      from: camera.zoomLevel,
+      to: modeConfigs[camera.currentMode].zoom,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+
+  void doubleTapRecenter() {
+    // Double tap to recenter on factory center
+    animateTo(
+      position: Point(25, 25), // Center of 50×50 grid
+      duration: Duration(milliseconds: 400),
+    );
+  }
+}
+```
+
+**Camera UX Specifications:**
+
+**Gesture Controls:**
+- **Swipe (1 finger):** Pan camera across grid
+  - Works at any zoom level
+  - Smooth momentum/inertia on release
+  - Bounds: Cannot pan outside 50×50 grid
+
+- **Pinch (2 fingers):** Continuous zoom 0.5x - 2.0x
+  - Zoom centered on pinch midpoint
+  - Smooth interpolation (no jitter)
+
+- **Double Tap:** Recenter to factory center (25, 25)
+  - 400ms smooth animation
+  - Helpful when player gets lost in grid
+
+**Zoom Mode Toggle:**
+- **UI Button:** Bottom-right corner toggle
+  - Icon changes: Map icon (Planning) ↔ Build icon (Build)
+  - Shows current mode ("Planning Mode" / "Build Mode")
+  - 300ms zoom animation on toggle
+
+**Planning Mode (0.5x zoom):**
+- **Purpose:** View entire 50×50 grid, plan conveyor layouts
+- **Visible Area:** Full factory (all buildings visible)
+- **Interaction:** Limited to viewing + conveyor planning
+  - CAN place conveyor START/END points
+  - CAN see AI-suggested paths
+  - CANNOT tap buildings to collect (too small tap targets)
+- **UI Elements:** Minimap hidden (redundant at 0.5x)
+
+**Build Mode (1.5x zoom - DEFAULT):**
+- **Purpose:** Tap buildings, collect resources, interact
+- **Visible Area:** ~15×15 tiles (enough to see local area)
+- **Interaction:** Full gameplay
+  - CAN tap buildings to collect
+  - CAN upgrade buildings
+  - CAN place new buildings
+- **UI Elements:** Minimap visible (corner, shows full 50×50 grid)
+
+**Minimap (Build Mode only):**
+- **Location:** Top-right corner, 80×80 pixels
+- **Shows:** Full 50×50 grid overview
+  - Buildings as colored dots
+  - Player camera viewport as white rectangle
+  - Conveyors as thin lines
+- **Tap to Jump:** Tap minimap to pan camera to that location
+
+**Performance Requirements:**
+- **Pan/Zoom Performance:** 60 FPS during camera movement
+- **Zoom Animation:** 300ms smooth interpolation (Planning ↔ Build toggle)
+- **Sprite Batching:** All tiles rendered in single draw call (regardless of zoom)
+- **Culling:** Only render visible tiles + 1-tile buffer (performance optimization)
+
+**Acceptance Criteria:**
+
+✅ **Camera Navigation:**
+- Player can swipe to pan entire 50×50 grid smoothly (60 FPS)
+- Pinch zoom works intuitively (0.5x - 2.0x range)
+- Double tap recenters to factory center
+
+✅ **Zoom Mode Toggle:**
+- Toggle button clearly indicates current mode
+- Transition animates smoothly in 300ms
+- Player understands difference (tested with playtesters)
+
+✅ **Planning Mode Use Case:**
+- Player can see entire factory to plan conveyor routes
+- Conveyor START/END placement works at 0.5x zoom
+- AI pathfinding suggestions are visible
+
+✅ **Build Mode Use Case:**
+- Buildings are large enough to tap (44×44px minimum)
+- Minimap provides overview without zooming out
+- All core loop actions (COLLECT/DECIDE/UPGRADE) work smoothly
+
 **Performance Requirements:**
 
 - **Tap Response Time:** <50ms from tap to haptic feedback
 - **Collection Animation:** 200-400ms smooth animation (resource → inventory)
 - **State Update:** <16ms (maintain 60 FPS during collection/upgrade)
 - **UI Feedback:** Floating text appears within 100ms of action
+- **Camera Pan:** 60 FPS during swipe gestures
+- **Zoom Animation:** 300ms smooth transition (Planning ↔ Build)
 
 **UI/UX Specifications:**
 
 - **Tap Target Size:** Minimum 44×44 pixels (Apple HIG, mobile best practice)
+  - **Build Mode (1.5x zoom):** Buildings are 60×60px = easy to tap
+  - **Planning Mode (0.5x zoom):** Buildings are 20×20px = too small for tap, conveyor planning only
 - **Visual Feedback:**
-  - Tappable buildings pulse subtly when resources ready
+  - Tappable buildings pulse subtly when resources ready (Build Mode only)
   - Collected resources animate from building to inventory bar
   - Upgrade button glows green when affordable, gray when locked
+  - Zoom mode indicator shows current state (Map icon or Build icon)
 - **Haptic Feedback:**
   - Light impact on successful tap
   - Medium impact on upgrade completion
   - No haptic on blocked actions (empty building, full inventory)
+  - Light haptic on zoom mode toggle
 
 ---
 
