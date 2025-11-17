@@ -805,3 +805,664 @@ class CameraController {
 **Status:** ✅ FR-001 Specification Complete
 **Next:** FR-002 Tier 1 Economy System
 
+---
+
+### FR-002: Tier 1 Economy System (HIGH - P1)
+
+**Description:** The Tier 1 Economy System establishes the foundational economic gameplay (0-5 hours content) with 5 building types, 7 resources, and fixed market prices. This tier teaches basic factory automation and supply chain management without overwhelming complexity (no price fluctuations, no automation). Players manually collect resources, learn supply chains, and prepare for Tier 2's automation unlock.
+
+**Priority:** P1 (High - Core content, blocks Tier 2 unlock)
+**Dependencies:** FR-001 (Core Gameplay Loop must exist first)
+**Estimated Complexity:** High (defines all Tier 1 content balance, progression pacing)
+
+---
+
+#### User Stories
+
+**US-002.1: Building Types & Placement**
+```
+As a player
+I want to build 5 different building types on the grid
+So that I can create a diverse factory producing multiple resources
+
+Acceptance Criteria:
+- GIVEN I'm in Build Mode
+  WHEN I open the "Build Menu"
+  THEN I see 5 available building types:
+    1. Lumbermill (produces Wood from nothing - basic resource)
+    2. Mine (produces Ore from nothing - basic resource)
+    3. Farm (produces Food from nothing - basic resource)
+    4. Smelter (converts Wood + Ore → Bars - intermediate resource)
+    5. Workshop (converts Bars + Ore → Tools - advanced resource)
+
+- GIVEN I select a building to place (e.g., Lumbermill)
+  WHEN I tap an empty grid tile
+  THEN the building is placed at that location
+  AND construction cost is deducted (Gold: 100, Resources: none for Tier 1)
+  AND building starts producing immediately
+  AND building shows "Level 1" indicator
+
+- GIVEN I try to place a building on occupied tile
+  WHEN I tap the tile
+  THEN placement is blocked
+  AND error message shows "Tile Occupied!"
+  AND I must choose a different location
+
+- GIVEN I reach 10 buildings placed (Tier 1 limit)
+  WHEN I try to place another building
+  THEN placement is blocked
+  AND message shows "Max Buildings! Upgrade to Tier 2 to build more"
+```
+
+**US-002.2: Resource Production Chains**
+```
+As a player
+I want to understand which buildings produce which resources
+So that I can plan supply chains and optimize my factory
+
+Acceptance Criteria:
+- GIVEN I have basic resource buildings (Lumbermill/Mine/Farm)
+  WHEN they produce resources
+  THEN they require NO input (produce from nothing)
+  AND production is simple (1 Wood/min, 1 Ore/min, 1 Food/min base rate)
+
+- GIVEN I build a Smelter (intermediate building)
+  WHEN it produces Bars
+  THEN it requires input resources (1 Wood + 1 Ore → 1 Bar)
+  AND I must manually provide input by tapping "Add Resources"
+  AND production happens after resources are provided
+
+- GIVEN I build a Workshop (advanced building)
+  WHEN it produces Tools
+  THEN it requires 2 Bars + 1 Ore → 1 Tool (multi-step chain)
+  AND I must have Bars (from Smelter) + Ore (from Mine)
+  AND this teaches complex supply chains
+
+Resource Dependency Tree:
+- Tier 1 Basic: Wood, Ore, Food (no inputs)
+- Tier 1 Intermediate: Bars (Wood + Ore)
+- Tier 1 Advanced: Tools (Bars + Ore)
+- Tier 2 Unlocks: Circuits (Tools + Ore), Machines (Circuits + Bars)
+```
+
+**US-002.3: NPC Market Trading System**
+```
+As a player
+I want to buy and sell resources at the NPC Market
+So that I can balance my economy and afford upgrades
+
+Acceptance Criteria:
+- GIVEN I open the NPC Market interface
+  WHEN I view available trades
+  THEN I see all 7 resources with FIXED prices:
+    - Wood: Buy 8g, Sell 5g (3g spread)
+    - Ore: Buy 10g, Sell 7g (3g spread)
+    - Food: Buy 6g, Sell 4g (2g spread)
+    - Bars: Buy 20g, Sell 15g (5g spread - intermediate)
+    - Tools: Buy 50g, Sell 40g (10g spread - advanced)
+    - Circuits: Buy 100g, Sell 80g (Tier 2 resource)
+    - Machines: Buy 200g, Sell 150g (Tier 2 resource)
+
+- GIVEN prices are FIXED in Tier 1
+  WHEN I check prices at different times
+  THEN prices NEVER change
+  AND no supply/demand mechanics yet (Tier 2 feature)
+  AND this teaches basic trading before complexity
+
+- GIVEN I select a resource to sell (e.g., 10 Wood)
+  WHEN I tap "Sell"
+  THEN I receive 5g × 10 = 50 gold
+  AND Wood inventory decreases by 10
+  AND transaction appears in history log
+
+- GIVEN I want to buy resources (e.g., 5 Ore)
+  WHEN I tap "Buy"
+  THEN I spend 10g × 5 = 50 gold
+  AND Ore inventory increases by 5
+  AND transaction recorded
+
+- GIVEN I try to sell more than I own
+  WHEN I enter amount > inventory
+  THEN transaction is blocked
+  AND error shows "Insufficient Resources!"
+
+- GIVEN I try to buy without enough gold
+  WHEN I tap "Buy"
+  THEN transaction is blocked
+  AND error shows "Insufficient Gold!"
+```
+
+**US-002.4: Supply Chain Management (Manual in Tier 1)**
+```
+As a player
+I want to manage multi-step supply chains manually
+So that I learn economic optimization before automation unlocks
+
+Acceptance Criteria:
+- GIVEN I want to produce Tools (advanced resource)
+  WHEN I plan the supply chain
+  THEN I realize I need:
+    1. Mine (produces Ore)
+    2. Lumbermill (produces Wood)
+    3. Smelter (Wood + Ore → Bars)
+    4. Workshop (Bars + Ore → Tools)
+
+- GIVEN I have all buildings in chain
+  WHEN I produce Tools manually
+  THEN I must:
+    1. Tap Mine to collect Ore
+    2. Tap Lumbermill to collect Wood
+    3. Tap Smelter, provide Wood + Ore, wait for Bars
+    4. Tap Smelter to collect Bars
+    5. Tap Workshop, provide Bars + Ore, wait for Tools
+    6. Tap Workshop to collect Tools
+  AND this 6-step process is tedious
+  AND creates desire for Tier 2 automation (conveyors)
+
+- GIVEN I complete a complex supply chain
+  WHEN I sell Tools at market (40g each)
+  THEN I earn significant profit
+  AND I understand value-add through production chains
+  AND I feel rewarded for planning
+```
+
+---
+
+#### Technical Specifications
+
+**Building Definitions:**
+
+```dart
+enum BuildingType {
+  lumbermill,  // Basic: Wood production
+  mine,        // Basic: Ore production
+  farm,        // Basic: Food production
+  smelter,     // Intermediate: Wood + Ore → Bars
+  workshop,    // Advanced: Bars + Ore → Tools
+}
+
+class BuildingDefinition {
+  final BuildingType type;
+  final String displayName;
+  final String description;
+  final ProductionRecipe recipe;
+  final BuildingCosts costs;
+  final BuildingStats stats;
+
+  BuildingDefinition({
+    required this.type,
+    required this.displayName,
+    required this.description,
+    required this.recipe,
+    required this.costs,
+    required this.stats,
+  });
+}
+
+// Tier 1 Building Catalog
+final Map<BuildingType, BuildingDefinition> tier1Buildings = {
+  BuildingType.lumbermill: BuildingDefinition(
+    type: BuildingType.lumbermill,
+    displayName: "Lumbermill",
+    description: "Produces Wood from forest resources",
+    recipe: ProductionRecipe(
+      inputs: {},  // No inputs (basic resource)
+      outputs: {"wood": 1},
+      productionTime: Duration(minutes: 1),  // 1 Wood/min
+    ),
+    costs: BuildingCosts(
+      construction: 100,  // 100 gold to build
+      upgradeTier1: [100, 150, 200, 250, 300],  // Level 2-6 costs
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 1.0,  // 1 unit/min
+      baseStorageCapacity: 10,  // Holds 10 Wood
+      gridSize: Size(2, 2),     // 2×2 tiles
+    ),
+  ),
+
+  BuildingType.mine: BuildingDefinition(
+    type: BuildingType.mine,
+    displayName: "Mine",
+    description: "Extracts Ore from underground deposits",
+    recipe: ProductionRecipe(
+      inputs: {},  // No inputs
+      outputs: {"ore": 1},
+      productionTime: Duration(minutes: 1),  // 1 Ore/min
+    ),
+    costs: BuildingCosts(
+      construction: 120,  // Slightly more expensive than Lumbermill
+      upgradeTier1: [120, 180, 240, 300, 360],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 1.0,
+      baseStorageCapacity: 10,
+      gridSize: Size(2, 2),
+    ),
+  ),
+
+  BuildingType.farm: BuildingDefinition(
+    type: BuildingType.farm,
+    displayName: "Farm",
+    description: "Grows Food for your workers",
+    recipe: ProductionRecipe(
+      inputs: {},  // No inputs
+      outputs: {"food": 1},
+      productionTime: Duration(minutes: 1),  // 1 Food/min
+    ),
+    costs: BuildingCosts(
+      construction: 80,  // Cheapest basic building
+      upgradeTier1: [80, 120, 160, 200, 240],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 1.0,
+      baseStorageCapacity: 10,
+      gridSize: Size(2, 2),
+    ),
+  ),
+
+  BuildingType.smelter: BuildingDefinition(
+    type: BuildingType.smelter,
+    displayName: "Smelter",
+    description: "Converts Wood + Ore into Bars",
+    recipe: ProductionRecipe(
+      inputs: {"wood": 1, "ore": 1},  // Requires 2 inputs
+      outputs: {"bars": 1},
+      productionTime: Duration(minutes: 2),  // 1 Bar/2min (slower)
+    ),
+    costs: BuildingCosts(
+      construction: 200,  // More expensive (intermediate)
+      upgradeTier1: [200, 300, 400, 500, 600],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 0.5,  // 0.5 Bars/min (slower production)
+      baseStorageCapacity: 5,   // Holds 5 Bars
+      gridSize: Size(3, 3),     // Larger building (3×3)
+    ),
+  ),
+
+  BuildingType.workshop: BuildingDefinition(
+    type: BuildingType.workshop,
+    displayName: "Workshop",
+    description: "Crafts Tools from Bars and Ore",
+    recipe: ProductionRecipe(
+      inputs: {"bars": 2, "ore": 1},  // Complex recipe (3 inputs)
+      outputs: {"tools": 1},
+      productionTime: Duration(minutes: 3),  // 1 Tool/3min (slowest)
+    ),
+    costs: BuildingCosts(
+      construction: 300,  // Most expensive Tier 1 building
+      upgradeTier1: [300, 450, 600, 750, 900],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 0.33,  // ~0.33 Tools/min
+      baseStorageCapacity: 3,    // Holds 3 Tools
+      gridSize: Size(3, 3),
+    ),
+  ),
+};
+```
+
+**Resource Definitions:**
+
+```dart
+enum ResourceType {
+  // Tier 1 Basic (no inputs)
+  wood,
+  ore,
+  food,
+
+  // Tier 1 Intermediate (1-2 inputs)
+  bars,
+  tools,
+
+  // Tier 2 Advanced (unlocks with Tier 2)
+  circuits,
+  machines,
+}
+
+class ResourceDefinition {
+  final ResourceType type;
+  final String displayName;
+  final String iconPath;
+  final ResourceTier tier;
+  final MarketPrices prices;
+
+  ResourceDefinition({
+    required this.type,
+    required this.displayName,
+    required this.iconPath,
+    required this.tier,
+    required this.prices,
+  });
+}
+
+enum ResourceTier {
+  basic,         // Wood, Ore, Food (produced from nothing)
+  intermediate,  // Bars (1 production step)
+  advanced,      // Tools (2 production steps)
+}
+
+class MarketPrices {
+  final int buyPrice;   // Price to buy from NPC Market
+  final int sellPrice;  // Price to sell to NPC Market
+
+  int get spread => buyPrice - sellPrice;  // Profit margin
+
+  MarketPrices({
+    required this.buyPrice,
+    required this.sellPrice,
+  });
+}
+
+// Tier 1 Resource Catalog
+final Map<ResourceType, ResourceDefinition> tier1Resources = {
+  ResourceType.wood: ResourceDefinition(
+    type: ResourceType.wood,
+    displayName: "Wood",
+    iconPath: "assets/resources/wood.png",
+    tier: ResourceTier.basic,
+    prices: MarketPrices(buyPrice: 8, sellPrice: 5),  // 3g spread
+  ),
+
+  ResourceType.ore: ResourceDefinition(
+    type: ResourceType.ore,
+    displayName: "Ore",
+    iconPath: "assets/resources/ore.png",
+    tier: ResourceTier.basic,
+    prices: MarketPrices(buyPrice: 10, sellPrice: 7),  // 3g spread
+  ),
+
+  ResourceType.food: ResourceDefinition(
+    type: ResourceType.food,
+    displayName: "Food",
+    iconPath: "assets/resources/food.png",
+    tier: ResourceTier.basic,
+    prices: MarketPrices(buyPrice: 6, sellPrice: 4),  // 2g spread
+  ),
+
+  ResourceType.bars: ResourceDefinition(
+    type: ResourceType.bars,
+    displayName: "Bars",
+    iconPath: "assets/resources/bars.png",
+    tier: ResourceTier.intermediate,
+    prices: MarketPrices(buyPrice: 20, sellPrice: 15),  // 5g spread (higher)
+  ),
+
+  ResourceType.tools: ResourceDefinition(
+    type: ResourceType.tools,
+    displayName: "Tools",
+    iconPath: "assets/resources/tools.png",
+    tier: ResourceTier.advanced,
+    prices: MarketPrices(buyPrice: 50, sellPrice: 40),  // 10g spread (highest)
+  ),
+};
+```
+
+**Market Trading System:**
+
+```dart
+class NPCMarket {
+  // Tier 1: FIXED prices (no fluctuations)
+  Map<ResourceType, MarketPrices> getCurrentPrices() {
+    // In Tier 1, prices never change
+    return tier1Resources.map((type, def) => MapEntry(type, def.prices));
+  }
+
+  // Buy resources from market
+  TransactionResult buyResource(
+    PlayerEconomy player,
+    ResourceType resourceType,
+    int amount,
+  ) {
+    final price = tier1Resources[resourceType]!.prices.buyPrice;
+    final totalCost = price * amount;
+
+    if (player.gold < totalCost) {
+      return TransactionResult.failure("Insufficient Gold! Need $totalCost gold");
+    }
+
+    // Deduct gold, add resources
+    player.gold -= totalCost;
+    player.inventory[resourceType.toString()]!.amount += amount;
+
+    FirebaseAnalytics.logEvent('market_buy', {
+      'resource': resourceType.toString(),
+      'amount': amount,
+      'cost': totalCost,
+    });
+
+    return TransactionResult.success("Bought $amount ${resourceType.toString()} for $totalCost gold");
+  }
+
+  // Sell resources to market
+  TransactionResult sellResource(
+    PlayerEconomy player,
+    ResourceType resourceType,
+    int amount,
+  ) {
+    final currentAmount = player.inventory[resourceType.toString()]!.amount;
+
+    if (currentAmount < amount) {
+      return TransactionResult.failure("Insufficient Resources! Have $currentAmount, need $amount");
+    }
+
+    final price = tier1Resources[resourceType]!.prices.sellPrice;
+    final totalEarned = price * amount;
+
+    // Add gold, remove resources
+    player.gold += totalEarned;
+    player.inventory[resourceType.toString()]!.amount -= amount;
+
+    FirebaseAnalytics.logEvent('market_sell', {
+      'resource': resourceType.toString(),
+      'amount': amount,
+      'earned': totalEarned,
+    });
+
+    return TransactionResult.success("Sold $amount ${resourceType.toString()} for $totalEarned gold");
+  }
+
+  // Calculate profit for selling produced resources
+  int calculateProductionProfit(ProductionRecipe recipe) {
+    int inputCost = 0;
+    recipe.inputs.forEach((resourceId, amount) {
+      final resourceType = ResourceType.values.firstWhere((t) => t.toString().endsWith(resourceId));
+      inputCost += tier1Resources[resourceType]!.prices.buyPrice * amount;
+    });
+
+    int outputValue = 0;
+    recipe.outputs.forEach((resourceId, amount) {
+      final resourceType = ResourceType.values.firstWhere((t) => t.toString().endsWith(resourceId));
+      outputValue += tier1Resources[resourceType]!.prices.sellPrice * amount;
+    });
+
+    return outputValue - inputCost;  // Profit per production cycle
+  }
+}
+
+class TransactionResult {
+  final bool success;
+  final String message;
+
+  TransactionResult.success(this.message) : success = true;
+  TransactionResult.failure(this.message) : success = false;
+}
+```
+
+**Supply Chain Economics:**
+
+```dart
+// Tier 1 Supply Chain Profitability Analysis
+class SupplyChainAnalysis {
+  // Example: Producing 1 Tool
+  static ProductionProfitability analyzeToolProduction() {
+    // Inputs needed:
+    // - 2 Bars (each Bar needs 1 Wood + 1 Ore)
+    // - 1 Ore
+    // Total: 2 Wood, 3 Ore
+
+    int costWood = 2 * 8;   // Buy 2 Wood = 16g
+    int costOre = 3 * 10;   // Buy 3 Ore = 30g
+    int totalCost = costWood + costOre;  // 46g
+
+    int sellTool = 1 * 40;  // Sell 1 Tool = 40g
+
+    int profit = sellTool - totalCost;  // -6g (LOSS if buying inputs!)
+
+    return ProductionProfitability(
+      totalInputCost: totalCost,
+      totalOutputValue: sellTool,
+      netProfit: profit,
+      recommendation: profit > 0
+          ? "Profitable! Produce and sell."
+          : "Loss if buying inputs. Produce your own resources!",
+    );
+  }
+
+  // Key Learning: Players must PRODUCE basic resources (Wood/Ore/Food)
+  // to make profit on advanced items. Buying all inputs = loss!
+  static ProductionProfitability analyzeWithOwnProduction() {
+    // If player produces own Wood (0 cost) and Ore (0 cost):
+    int totalCost = 0;  // All inputs produced, not bought
+    int sellTool = 1 * 40;  // Sell 1 Tool = 40g
+    int profit = sellTool - totalCost;  // 40g PROFIT!
+
+    return ProductionProfitability(
+      totalInputCost: totalCost,
+      totalOutputValue: sellTool,
+      netProfit: profit,
+      recommendation: "Highly profitable! Build Lumbermills and Mines.",
+    );
+  }
+}
+
+class ProductionProfitability {
+  final int totalInputCost;
+  final int totalOutputValue;
+  final int netProfit;
+  final String recommendation;
+
+  ProductionProfitability({
+    required this.totalInputCost,
+    required this.totalOutputValue,
+    required this.netProfit,
+    required this.recommendation,
+  });
+}
+```
+
+---
+
+#### Performance Requirements
+
+- **Market Interface Load Time:** <200ms to open NPC Market
+- **Transaction Processing:** <50ms for buy/sell operations
+- **Price Display:** All 7 resource prices visible simultaneously (no scrolling)
+- **Building Placement:** <100ms from tap to building placed (visual feedback)
+- **Supply Chain Visualization:** Recipe tooltips load in <100ms
+
+---
+
+#### UI/UX Specifications
+
+**Build Menu Interface:**
+- **Layout:** Bottom sheet with 5 building cards (horizontal scroll)
+- **Building Card Shows:**
+  - Building icon (64×64px)
+  - Display name ("Lumbermill")
+  - Construction cost ("100 gold")
+  - Production info ("1 Wood/min")
+  - "Build" button (green if affordable, gray if not)
+- **Placement Mode:**
+  - After selecting building, grid tiles highlight (green = valid, red = occupied)
+  - Drag to position, tap to confirm
+  - Cancel button visible at top
+
+**NPC Market Interface:**
+- **Layout:** Full-screen modal with 2 tabs (BUY | SELL)
+- **Resource Row Shows:**
+  - Resource icon + name
+  - Current inventory amount ("10 Wood")
+  - Buy price ("8g") or Sell price ("5g")
+  - Amount slider (1-100)
+  - "Buy"/"Sell" button
+- **Transaction Feedback:**
+  - Success: Green flash + "+50 gold" floating text
+  - Failure: Red shake + error message toast
+
+**Supply Chain Tooltips:**
+- **Tap building → Shows recipe card:**
+  - Inputs (left): "1 Wood + 1 Ore"
+  - Arrow → Outputs (right): "1 Bar"
+  - Production time: "2 minutes"
+  - Profitability: "+15g profit if inputs are free"
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **Building Variety:**
+- All 5 Tier 1 buildings placeable and functional
+- Each building produces correct resources at correct rates
+
+✅ **Supply Chain Functionality:**
+- Basic buildings (Lumbermill/Mine/Farm) produce without inputs
+- Intermediate buildings (Smelter) require correct inputs
+- Advanced buildings (Workshop) handle multi-step chains correctly
+
+✅ **Market Trading:**
+- All 7 resources available in NPC Market
+- Prices are FIXED (never change in Tier 1)
+- Buy/sell transactions process correctly
+- Profit/loss calculations visible to player
+
+✅ **Economic Learning:**
+- Players understand "produce your own inputs = profit" within 30 minutes
+- Supply chain tooltips explain dependencies clearly
+- Tier 1 feels rewarding but tedious (motivates Tier 2 automation)
+
+**Analytics to Track:**
+- Building placement distribution (which buildings are popular?)
+- Resource production rates (are players producing enough?)
+- Market transaction frequency (how often buy vs sell?)
+- Time to first advanced resource (Tools) produced
+- Tier 1 completion time (target: 5 hours to max out Tier 1)
+
+---
+
+#### Dependencies
+
+**Required Before FR-002:**
+- ✅ FR-001: Core Gameplay Loop (must have COLLECT/DECIDE/UPGRADE working)
+
+**Required After FR-002:**
+- FR-003: Tier 2 Automation System (conveyors unlock, uses Tier 1 economy as base)
+- FR-006: Progression System (Tier 1 → Tier 2 unlock requirements)
+- FR-007: Discovery-Based Tutorial (teach supply chains through events)
+
+---
+
+#### Open Questions
+
+1. **Building limit in Tier 1:** Should be 10 buildings total, or 10 per building type?
+   - **Recommendation:** 10 buildings TOTAL (forces strategic choices, rewards Tier 2 unlock)
+
+2. **Starting resources:** Should players start with 100 gold and 10 of each basic resource, or empty?
+   - **Recommendation:** Start with 100 gold, 0 resources (forces engagement with buildings immediately)
+
+3. **Food resource purpose:** Food is produced but has no use in Tier 1 recipes. Should it be required for building operation, or just for selling?
+   - **Recommendation:** Just for selling in Tier 1 (simplicity), becomes worker wages in Tier 2
+
+4. **Building placement restrictions:** Should certain buildings require adjacency (e.g., Smelter near Mine)?
+   - **Recommendation:** No restrictions in Tier 1 (player freedom), conveyors handle logistics in Tier 2
+
+5. **Grid size for buildings:** All buildings 2×2, or vary by type?
+   - **Recommendation:** Basic buildings 2×2, advanced buildings 3×3 (visual importance hierarchy)
+
+---
+
+**Status:** ✅ FR-002 Specification Complete
+**Next:** FR-003 Tier 2 Automation System
