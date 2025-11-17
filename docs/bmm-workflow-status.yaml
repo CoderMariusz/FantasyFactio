@@ -45,7 +45,7 @@ workflow_status:
         name: "Product Brief"
         agent: "analyst"
         command: "/bmad:bmm:workflows:1-analysis:product-brief"
-        status: "recommended"
+        status: "docs/product-brief-trade-factory-masters-2025-11-17.md"
         note: "Strategic product planning - INCLUDED by user choice"
 
   # Phase 1: Planning
