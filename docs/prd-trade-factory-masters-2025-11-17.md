@@ -1466,3 +1466,675 @@ class ProductionProfitability {
 
 **Status:** ✅ FR-002 Specification Complete
 **Next:** FR-003 Tier 2 Automation System
+
+---
+
+### FR-003: Tier 2 Automation System (CRITICAL - P0)
+
+**Description:** The Tier 2 Automation System is the **core value proposition** of Trade Factory Masters - the "aha moment" where conveyors unlock and transform tedious manual resource collection into satisfying automation. Players place START/END points, AI suggests optimal conveyor paths using A* pathfinding, and players confirm routes. This "conveyors as achievement" design differentiates TFM from competitors and hooks players.
+
+**Priority:** P0 (Critical - Core differentiator, drives retention from Tier 1 → Tier 2)
+**Dependencies:** FR-001 (Core Loop), FR-002 (Tier 1 Economy must establish tedium first)
+**Estimated Complexity:** Very High (pathfinding AI, real-time resource flow, performance with 50+ conveyors)
+
+---
+
+#### User Stories
+
+**US-003.1: Unlocking Automation ("Aha Moment")**
+```
+As a player who has been manually tapping buildings for 5 hours
+I want to unlock conveyor belts as a Tier 2 reward
+So that I experience the "aha moment" of automation unlocking
+
+Acceptance Criteria:
+- GIVEN I complete Tier 1 requirements (all buildings Level 5, 1000 gold, 100 Tools produced)
+  WHEN I tap the "Unlock Tier 2" button
+  THEN a celebration animation plays (fireworks, confetti)
+  AND a tutorial message appears: "Conveyors Unlocked! Automate your factory!"
+  AND the Build Menu now shows "Conveyor" option
+  AND I feel rewarded for grinding through manual Tier 1
+
+- GIVEN I unlock Tier 2 for the first time
+  WHEN the unlock completes
+  THEN analytics event fires: 'tier2_unlocked' with time_to_unlock_minutes
+  AND this measures how long Tier 1 engagement lasted
+  AND this is a CRITICAL retention metric (60%+ should reach this)
+```
+
+**US-003.2: Smart Conveyor Placement (AI-Assisted)**
+```
+As a player
+I want to connect buildings with conveyors WITHOUT tediously placing every tile
+So that factory planning is fun, not frustrating
+
+Acceptance Criteria:
+- GIVEN I have 2 buildings that should connect (Lumbermill → Smelter)
+  WHEN I enter "Conveyor Mode"
+  AND I tap the Lumbermill (START point)
+  AND I tap the Smelter (END point)
+  THEN AI calculates optimal path using A* pathfinding
+  AND suggested path is shown as semi-transparent conveyor tiles
+  AND path avoids existing buildings and other conveyors
+  AND path uses minimal tiles (shortest valid route)
+
+- GIVEN AI shows suggested conveyor path
+  WHEN I review the path
+  THEN I see:
+    - Path length (e.g., "12 tiles")
+    - Construction cost (e.g., "60 gold, 12 Bars")
+    - "Confirm" button (green) and "Cancel" button (red)
+    - Option to "Edit Path" manually if I want to customize
+
+- GIVEN I tap "Confirm" on suggested path
+  WHEN path is built
+  THEN all conveyor tiles are placed instantly
+  AND cost is deducted from inventory
+  AND conveyors immediately start transporting resources
+  AND I feel satisfied (automation working!)
+
+- GIVEN I tap "Edit Path" instead of Confirm
+  WHEN edit mode activates
+  THEN I can:
+    - Tap individual tiles to add/remove conveyor segments
+    - Keep AI-suggested route as base, modify only problem areas
+    - See updated cost in real-time as I edit
+    - Confirm when satisfied with custom route
+```
+
+**US-003.3: Automated Resource Flow**
+```
+As a player
+I want to watch resources automatically flow between buildings on conveyors
+So that I feel the satisfaction of automation working
+
+Acceptance Criteria:
+- GIVEN a conveyor connects Lumbermill (output) to Smelter (input)
+  WHEN Lumbermill produces Wood
+  THEN Wood automatically appears on conveyor as a sprite
+  AND sprite moves along conveyor path toward Smelter
+  AND movement is smooth (60 FPS, 1 tile/second speed)
+  AND I can see my factory "working" visually
+
+- GIVEN a resource sprite reaches the END building (Smelter)
+  WHEN sprite arrives
+  THEN resource is added to building's input buffer
+  AND sprite disappears (consumed by building)
+  AND building begins production if all inputs satisfied
+
+- GIVEN multiple resources are flowing on same conveyor
+  WHEN conveyors are busy
+  THEN resources queue naturally (2-3 sprites visible per conveyor)
+  AND no overlapping (sprites maintain spacing)
+  AND performance stays at 60 FPS with 50+ conveyors active
+
+- GIVEN I'm watching my factory in Build Mode (1.5x zoom)
+  WHEN resources are flowing
+  THEN I feel satisfaction watching automation work
+  AND I don't need to tap buildings anymore (except to collect finished products)
+  AND this is the core "hook" that retains players
+```
+
+**US-003.4: Conveyor Network Management**
+```
+As a player with a complex factory
+I want to manage multiple conveyor routes efficiently
+So that I can scale to Tier 2 complexity without overwhelming UI
+
+Acceptance Criteria:
+- GIVEN I have 10+ conveyor routes in my factory
+  WHEN I open "Conveyor Management" panel
+  THEN I see list of all routes:
+    - Route #1: Lumbermill → Smelter (12 tiles, Wood flow)
+    - Route #2: Mine → Smelter (8 tiles, Ore flow)
+    - Route #3: Smelter → Workshop (15 tiles, Bars flow)
+    - etc.
+
+- GIVEN I select a route in the list
+  WHEN I tap it
+  THEN camera pans to that route (highlight conveyors in green)
+  AND I can see current resource flow status
+  AND options appear: "Delete Route", "Edit Route", "Toggle On/Off"
+
+- GIVEN a conveyor route is blocked (building removed, path invalid)
+  WHEN route breaks
+  THEN route shows as RED in management panel
+  AND warning icon appears on affected buildings
+  AND tooltip explains: "Conveyor disconnected! Reconnect or delete route."
+
+- GIVEN I delete a conveyor route
+  WHEN I confirm deletion
+  THEN all conveyor tiles are removed
+  AND resources on those conveyors are returned to source building
+  AND 50% of construction cost is refunded (encourages experimentation)
+```
+
+**US-003.5: Tier 2 Economic Complexity**
+```
+As a player in Tier 2
+I want economic complexity to increase naturally
+So that automation feels necessary and rewarding
+
+Acceptance Criteria:
+- GIVEN I unlock Tier 2
+  WHEN I access NPC Market
+  THEN prices now FLUCTUATE based on events
+  AND "Dragon Attack" event drops Wood supply → prices spike 2x
+  AND "Mining Boom" event increases Ore supply → prices drop 0.5x
+  AND I must adapt my factory to market changes (no longer fixed prices)
+
+- GIVEN price fluctuations exist in Tier 2
+  WHEN Wood price spikes to 15g (was 5g)
+  THEN I realize selling Wood is very profitable right now
+  AND I redirect conveyors to prioritize Wood production
+  AND this adds strategic depth (was just tapping in Tier 1)
+
+- GIVEN I have automated supply chains
+  WHEN I optimize for profit
+  THEN I can:
+    - Build 20 buildings (vs 10 in Tier 1)
+    - Manage 5+ simultaneous supply chains
+    - React to market events within 30 seconds (not possible in manual Tier 1)
+    - Earn 10x more gold per hour than Tier 1
+```
+
+---
+
+#### Technical Specifications
+
+**Conveyor System Architecture:**
+
+```dart
+// Conveyor Route Definition
+class ConveyorRoute {
+  final String id;                        // Unique route ID
+  final Building startBuilding;           // Output building
+  final Building endBuilding;             // Input building
+  final List<Point<int>> path;            // Grid tiles (A* calculated)
+  final ResourceType transportedResource; // What flows on this conveyor
+  final ConveyorState state;              // Active, paused, broken
+
+  int get length => path.length;          // Number of tiles
+  int get constructionCost => length * 5; // 5 gold per tile
+
+  ConveyorRoute({
+    required this.id,
+    required this.startBuilding,
+    required this.endBuilding,
+    required this.path,
+    required this.transportedResource,
+    required this.state,
+  });
+}
+
+enum ConveyorState {
+  active,   // Functioning normally
+  paused,   // Player toggled off
+  broken,   // Path invalid (building removed)
+}
+
+// Resource Sprite on Conveyor
+class ResourceSprite {
+  final String id;
+  final ResourceType type;
+  final ConveyorRoute route;
+  int currentTileIndex;               // Position on path (0 = start, length-1 = end)
+  double progressToNextTile;          // 0.0-1.0 for smooth animation
+
+  Point<double> get currentPosition {
+    // Interpolate between current tile and next tile
+    final currentTile = route.path[currentTileIndex];
+    if (currentTileIndex >= route.path.length - 1) {
+      return Point(currentTile.x.toDouble(), currentTile.y.toDouble());
+    }
+
+    final nextTile = route.path[currentTileIndex + 1];
+    return Point(
+      currentTile.x + (nextTile.x - currentTile.x) * progressToNextTile,
+      currentTile.y + (nextTile.y - currentTile.y) * progressToNextTile,
+    );
+  }
+
+  ResourceSprite({
+    required this.id,
+    required this.type,
+    required this.route,
+    required this.currentTileIndex,
+    required this.progressToNextTile,
+  });
+}
+```
+
+**A* Pathfinding Implementation:**
+
+```dart
+// A* Pathfinding for Conveyor Routes
+class ConveyorPathfinder {
+  final Size gridSize;                    // 50×50 grid
+  final Set<Point<int>> occupiedTiles;    // Buildings + existing conveyors
+
+  ConveyorPathfinder({
+    required this.gridSize,
+    required this.occupiedTiles,
+  });
+
+  // Find shortest path from start to end, avoiding obstacles
+  List<Point<int>>? findPath(Point<int> start, Point<int> end) {
+    final openSet = PriorityQueue<AStarNode>((a, b) => a.fScore.compareTo(b.fScore));
+    final closedSet = <Point<int>>{};
+    final cameFrom = <Point<int>, Point<int>>{};
+    final gScore = <Point<int>, double>{start: 0};
+
+    openSet.add(AStarNode(
+      position: start,
+      gScore: 0,
+      fScore: _heuristic(start, end),
+    ));
+
+    while (openSet.isNotEmpty) {
+      final current = openSet.removeFirst();
+
+      // Reached destination
+      if (current.position == end) {
+        return _reconstructPath(cameFrom, current.position);
+      }
+
+      closedSet.add(current.position);
+
+      // Check all 4 neighbors (up, down, left, right)
+      for (final neighbor in _getNeighbors(current.position)) {
+        // Skip if occupied or already evaluated
+        if (occupiedTiles.contains(neighbor) || closedSet.contains(neighbor)) {
+          continue;
+        }
+
+        final tentativeGScore = gScore[current.position]! + 1;
+
+        if (!gScore.containsKey(neighbor) || tentativeGScore < gScore[neighbor]!) {
+          cameFrom[neighbor] = current.position;
+          gScore[neighbor] = tentativeGScore;
+
+          final fScore = tentativeGScore + _heuristic(neighbor, end);
+          openSet.add(AStarNode(
+            position: neighbor,
+            gScore: tentativeGScore,
+            fScore: fScore,
+          ));
+        }
+      }
+    }
+
+    return null; // No path found
+  }
+
+  // Manhattan distance heuristic (grid-based movement)
+  double _heuristic(Point<int> a, Point<int> b) {
+    return (a.x - b.x).abs() + (a.y - b.y).abs();
+  }
+
+  List<Point<int>> _getNeighbors(Point<int> p) {
+    return [
+      Point(p.x, p.y - 1), // Up
+      Point(p.x, p.y + 1), // Down
+      Point(p.x - 1, p.y), // Left
+      Point(p.x + 1, p.y), // Right
+    ].where((neighbor) =>
+      neighbor.x >= 0 && neighbor.x < gridSize.width &&
+      neighbor.y >= 0 && neighbor.y < gridSize.height
+    ).toList();
+  }
+
+  List<Point<int>> _reconstructPath(Map<Point<int>, Point<int>> cameFrom, Point<int> current) {
+    final path = <Point<int>>[current];
+    while (cameFrom.containsKey(current)) {
+      current = cameFrom[current]!;
+      path.insert(0, current);
+    }
+    return path;
+  }
+}
+
+class AStarNode {
+  final Point<int> position;
+  final double gScore;  // Cost from start to this node
+  final double fScore;  // gScore + heuristic (estimated total cost)
+
+  AStarNode({
+    required this.position,
+    required this.gScore,
+    required this.fScore,
+  });
+}
+```
+
+**Resource Flow Simulation:**
+
+```dart
+// Conveyor System Manager
+@riverpod
+class ConveyorSystem extends _$ConveyorSystem {
+  @override
+  ConveyorSystemState build() {
+    return ConveyorSystemState.initial();
+  }
+
+  // Update all resource sprites (called every frame at 60 FPS)
+  void updateResourceFlow(double deltaTime) {
+    final updatedSprites = <ResourceSprite>[];
+
+    for (final sprite in state.activeSprites) {
+      // Move sprite along conveyor path (1 tile/second = 1.0 progress/second)
+      var newProgress = sprite.progressToNextTile + deltaTime;
+      var newTileIndex = sprite.currentTileIndex;
+
+      // Advance to next tile if progress >= 1.0
+      while (newProgress >= 1.0 && newTileIndex < sprite.route.path.length - 1) {
+        newProgress -= 1.0;
+        newTileIndex++;
+      }
+
+      // Check if sprite reached destination
+      if (newTileIndex >= sprite.route.path.length - 1 && newProgress >= 1.0) {
+        // Deliver resource to destination building
+        _deliverResource(sprite);
+      } else {
+        // Continue moving
+        updatedSprites.add(sprite.copyWith(
+          currentTileIndex: newTileIndex,
+          progressToNextTile: newProgress,
+        ));
+      }
+    }
+
+    state = state.copyWith(activeSprites: updatedSprites);
+  }
+
+  // Spawn new resource sprite when building produces
+  void spawnResource(Building building, ResourceType resource) {
+    // Find conveyor routes starting from this building
+    final routes = state.routes.where((r) => r.startBuilding.id == building.id);
+
+    for (final route in routes) {
+      if (route.transportedResource == resource && route.state == ConveyorState.active) {
+        final sprite = ResourceSprite(
+          id: Uuid().v4(),
+          type: resource,
+          route: route,
+          currentTileIndex: 0,
+          progressToNextTile: 0.0,
+        );
+
+        state = state.copyWith(
+          activeSprites: [...state.activeSprites, sprite],
+        );
+      }
+    }
+  }
+
+  // Deliver resource to destination building
+  void _deliverResource(ResourceSprite sprite) {
+    final destBuilding = sprite.route.endBuilding;
+
+    // Add resource to building's input buffer
+    // (Building will start production if all inputs are satisfied)
+    _addResourceToBuilding(destBuilding, sprite.type, 1);
+
+    // Remove sprite from active list (delivered)
+    state = state.copyWith(
+      activeSprites: state.activeSprites.where((s) => s.id != sprite.id).toList(),
+    );
+  }
+
+  // Create new conveyor route using AI pathfinding
+  Future<ConveyorRoute?> createRoute(Building start, Building end, ResourceType resource) async {
+    final pathfinder = ConveyorPathfinder(
+      gridSize: Size(50, 50),
+      occupiedTiles: _getOccupiedTiles(),
+    );
+
+    final path = pathfinder.findPath(
+      start.gridPosition,
+      end.gridPosition,
+    );
+
+    if (path == null) {
+      return null; // No valid path found
+    }
+
+    final route = ConveyorRoute(
+      id: Uuid().v4(),
+      startBuilding: start,
+      endBuilding: end,
+      path: path,
+      transportedResource: resource,
+      state: ConveyorState.active,
+    );
+
+    // Track analytics
+    FirebaseAnalytics.logEvent('conveyor_created', {
+      'length': route.length,
+      'resource': resource.toString(),
+      'cost': route.constructionCost,
+    });
+
+    return route;
+  }
+}
+
+class ConveyorSystemState {
+  final List<ConveyorRoute> routes;
+  final List<ResourceSprite> activeSprites;
+
+  ConveyorSystemState({
+    required this.routes,
+    required this.activeSprites,
+  });
+
+  static ConveyorSystemState initial() {
+    return ConveyorSystemState(routes: [], activeSprites: []);
+  }
+}
+```
+
+**Tier 2 Dynamic Economy:**
+
+```dart
+// Dynamic Market Prices (Tier 2)
+@riverpod
+class DynamicMarket extends _$DynamicMarket {
+  @override
+  MarketState build() {
+    return MarketState.initial();
+  }
+
+  // Trigger economic event (e.g., Dragon Attack)
+  void triggerEvent(MarketEvent event) {
+    final newPrices = <ResourceType, MarketPrices>{};
+
+    // Apply event modifiers to prices
+    for (final entry in state.currentPrices.entries) {
+      final basePrice = tier1Resources[entry.key]!.prices;
+      final modifier = event.priceModifiers[entry.key] ?? 1.0;
+
+      newPrices[entry.key] = MarketPrices(
+        buyPrice: (basePrice.buyPrice * modifier).round(),
+        sellPrice: (basePrice.sellPrice * modifier).round(),
+      );
+    }
+
+    state = state.copyWith(
+      currentPrices: newPrices,
+      activeEvent: event,
+    );
+
+    // Show event notification to player
+    _showEventNotification(event);
+
+    // Track analytics
+    FirebaseAnalytics.logEvent('market_event', {
+      'event_type': event.name,
+      'duration_minutes': event.duration.inMinutes,
+    });
+  }
+}
+
+class MarketEvent {
+  final String name;              // "Dragon Attack", "Mining Boom"
+  final String description;       // "Wood supply disrupted!"
+  final Duration duration;        // How long event lasts
+  final Map<ResourceType, double> priceModifiers;  // Resource → multiplier
+
+  MarketEvent({
+    required this.name,
+    required this.description,
+    required this.duration,
+    required this.priceModifiers,
+  });
+
+  // Example events
+  static final dragonAttack = MarketEvent(
+    name: "Dragon Attack",
+    description: "A dragon burned the forest! Wood prices have spiked.",
+    duration: Duration(minutes: 5),
+    priceModifiers: {
+      ResourceType.wood: 2.0,  // Wood price doubles
+    },
+  );
+
+  static final miningBoom = MarketEvent(
+    name: "Mining Boom",
+    description: "New ore deposits discovered! Ore prices dropped.",
+    duration: Duration(minutes: 5),
+    priceModifiers: {
+      ResourceType.ore: 0.5,  // Ore price halves
+    },
+  );
+}
+```
+
+---
+
+#### Performance Requirements
+
+- **Pathfinding Performance:** <100ms to calculate A* path for 50-tile route
+- **Sprite Rendering:** 60 FPS with 50+ active resource sprites on conveyors
+- **Conveyor System Update:** <8ms per frame (allows other systems to render in 16ms budget)
+- **Route Creation:** <200ms from START/END selection to path preview shown
+- **Sprite Batching:** All resource sprites rendered in single draw call (performance optimization)
+
+---
+
+#### UI/UX Specifications
+
+**Conveyor Mode Interface:**
+- **Activation:** Tap "Conveyor" button in Build Menu
+- **Visual Changes:**
+  - Buildings show colored output/input indicators (green = output, blue = input)
+  - Grid fades slightly (focus on buildings)
+  - Instructions appear: "Tap START building, then END building"
+
+**AI Path Preview:**
+- **Suggested Path Rendering:**
+  - Semi-transparent blue conveyor tiles (50% opacity)
+  - Animated dashed line along path (shows direction)
+  - START point shows green marker, END shows blue marker
+- **Cost Panel (bottom):**
+  - "Path Length: 12 tiles"
+  - "Cost: 60 gold + 12 Bars"
+  - "Confirm" button (green, large) | "Edit Path" | "Cancel" (red, small)
+
+**Resource Flow Visualization:**
+- **Sprite Design:**
+  - Resource icon (16×16px) on conveyor tile
+  - Subtle glow effect (indicates movement)
+  - Smooth interpolation between tiles (no jitter)
+- **Conveyor Tile Design:**
+  - Directional arrows showing flow direction
+  - Subtle animation (arrows "pulse" to indicate active)
+  - Different color if paused (gray) or broken (red)
+
+**Tier 2 Unlock Celebration:**
+- **Animation:**
+  - Full-screen overlay with fireworks/confetti particles
+  - "TIER 2 UNLOCKED!" large text (gold color)
+  - "Conveyors Available!" subtitle
+  - Celebration lasts 3 seconds, then fades
+- **Audio:** Triumphant sound effect (validates 5 hours of Tier 1 grind)
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **Conveyor Unlocking:**
+- Tier 2 unlock triggers after Tier 1 completion (all buildings Level 5, 1000 gold, 100 Tools)
+- Celebration animation plays and feels rewarding
+- 60%+ of players reach Tier 2 unlock (critical retention metric)
+
+✅ **AI Pathfinding:**
+- A* pathfinding calculates valid paths in <100ms
+- Paths avoid buildings and existing conveyors
+- Paths are shortest valid route (no unnecessary detours)
+- Path preview is clear and easy to understand
+
+✅ **Resource Flow:**
+- Resources automatically flow on conveyors at 1 tile/second
+- 60 FPS maintained with 50+ active conveyors
+- Sprites don't overlap or jitter
+- Delivery to destination buildings works correctly
+
+✅ **Economic Complexity:**
+- Market events trigger price fluctuations in Tier 2
+- Players understand how to react to events within 10 minutes
+- Tier 2 feels significantly more strategic than Tier 1
+
+✅ **Satisfaction Factor (Qualitative):**
+- Players report "aha moment" when conveyors unlock (user testing)
+- Factory automation feels satisfying to watch (visual flow)
+- Tedium of Tier 1 → Relief of Tier 2 creates retention hook
+
+**Analytics to Track:**
+- Tier 2 unlock rate (target: 60%+)
+- Time to Tier 2 unlock (target: 5 hours)
+- Number of conveyor routes per player (engagement measure)
+- Average route length (optimization behavior)
+- Market event response time (strategic depth)
+- D7 retention after Tier 2 unlock (target: 70%+, vs 35% overall)
+
+---
+
+#### Dependencies
+
+**Required Before FR-003:**
+- ✅ FR-001: Core Gameplay Loop (building interaction must work)
+- ✅ FR-002: Tier 1 Economy (must establish tedium before relief)
+
+**Required After FR-003:**
+- FR-004: Offline Production System (conveyors must work offline too)
+- FR-006: Progression System (Tier 1 → Tier 2 unlock requirements)
+- FR-007: Discovery-Based Tutorial (teach conveyor placement through events)
+
+---
+
+#### Open Questions
+
+1. **Conveyor speed:** Should be 1 tile/second, or adjustable (slow 0.5x, fast 2x)?
+   - **Recommendation:** Fixed 1 tile/second in Tier 2 (simplicity), upgradeable speed in Tier 3+
+
+2. **Resource batching on conveyors:** Should conveyors transport 1 resource at a time, or batches of 5-10?
+   - **Recommendation:** 1 at a time for visual clarity (can see individual sprites moving)
+
+3. **Conveyor intersections:** If two conveyors cross, do they conflict or can resources pass through?
+   - **Recommendation:** Conveyors can't intersect (pathfinding avoids existing conveyors), forces planning
+
+4. **Manual conveyor editing:** Should players be able to place conveyors tile-by-tile without AI, or always AI-assisted?
+   - **Recommendation:** Always start with AI suggestion, allow manual edits (best of both)
+
+5. **Conveyor delete refund:** 50% refund or 100% refund when deleting routes?
+   - **Recommendation:** 50% refund (prevents abuse, encourages thoughtful planning)
+
+---
+
+**Status:** ✅ FR-003 Specification Complete
+**Next:** FR-004 Offline Production System
