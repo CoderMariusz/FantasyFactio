@@ -660,6 +660,396 @@ Budget: $0 (bootstrapped)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+### 🎯 Session 4: Progression & Retention - What If Scenarios + Time Shifting
+
+**Core Challenge:** 7h MVP content → 4-6 weeks until Update 1.1 → How to retain?
+
+**Time Shifting Scenarios Analyzed:**
+
+**Scenario 1: DAY 3 (Post-MVP Completion)**
+- Player finished 7h content, tier 2 mastered
+- Question: What motivates daily return without new content?
+
+**Scenario 2: 30 Days Offline Return**
+- Update 1.1 not yet released (4-6 week cycle)
+- Offline cap: 8h max (not 30 days)
+- Challenge: "Welcome back" experience that doesn't feel punishing
+
+**Scenario 3: Competitive Stagnation**
+- All players at same level (tier 2 complete)
+- Leaderboard plateau problem
+- Need: Horizontal progression, not just vertical
+
+**Scenario 4: Year 1 Longevity**
+- Multiple updates released (1.1, 1.2, 1.3)
+- Tier 3-4 available
+- Challenges: Economy inflation, power creep, veteran rewards
+
+**RETENTION STRATEGY - 3 PILLARS:**
+
+**1. Daily Engagement Hooks (Selected: A, C, E, B)**
+
+**A. Daily Login Rewards**
+```
+Day 1: 100 gold
+Day 2: 200 gold
+Day 3: 500 gold + 50 coal
+Day 4: 1000 gold
+Day 5: 2000 gold + 1 premium currency
+Day 6: Speed boost (2x production 1h)
+Day 7: JACKPOT (5000 gold + rare resource)
+→ Resets, escalates each week
+```
+
+**Why:** Classic mobile retention hook, proven effective
+
+**C. Daily Price Changes (Fake Economy)**
+```
+Each day @ midnight:
+- 3 random resources get ±20% price modifier
+- Displayed as: "🔥 Steel HOT today! +20%"
+- Or: "💤 Iron slow. -15%"
+
+Creates daily "check-in" motivation:
+"Is steel profitable today?"
+```
+
+**Why:** Gives agency (player decides when to sell), daily variety
+
+**E. Daily Leaderboard Resets (Competitive Seasons)**
+```
+24-hour Production Challenge:
+- "Who produces most Steel in 24h?"
+- Resets daily @ midnight
+- Top 10: Bonus rewards
+- Top 100: Participation reward
+
+Weekly Grand Leaderboard:
+- Total factory value
+- Doesn't reset (permanent competition)
+```
+
+**Why:** Daily gives everyone a chance, weekly rewards consistency
+
+**B. Daily Quests (3 per day)**
+```
+Refreshes daily:
+
+Quest 1 (Easy): "Collect 100 Iron Ore" → 50 gold
+Quest 2 (Medium): "Produce 20 Steel" → 200 gold
+Quest 3 (Hard): "Earn 5000 gold from sales" → 500 gold + bonus
+
+Special Weekly Quest:
+"Build 5 new conveyors" → 2000 gold + premium currency
+```
+
+**Why:** Stretches existing content, clear daily goals
+
+**2. Meta-Progression Beyond Tier 2 (Selected: A, B, F)**
+
+**A. Optimize Factory Efficiency (Speedrun/Minimalist Challenges)**
+```
+Post-tier-2 Achievements:
+
+Efficiency Master:
+├─ "Produce 100 Steel/min" (optimization challenge)
+├─ "Use only 10 buildings" (minimalist)
+├─ "Zero waste production" (perfect routing)
+└─ Rewards: Cosmetic skins, titles, leaderboard badges
+
+Factory Designer:
+├─ "Compact Master" (produce X in 5x5 grid)
+├─ "Spaghetti King" (longest conveyor chain)
+└─ Share factory designs (screenshot feature)
+```
+
+**Why:** Sandbox goals for optimization nerds, doesn't require new content
+
+**B. Achievement/Completionist System**
+```
+100+ Achievements across tiers:
+
+Production Milestones:
+├─ "First 1000 Iron Bars" → badge
+├─ "100,000 total production" → title
+├─ "1 Million gold earned" → cosmetic
+
+Discovery:
+├─ "Try all 9 buildings" → unlock factory color scheme
+├─ "Max out all buildings" → golden building skin
+
+Hidden/Secret:
+├─ "Produce at exactly midnight" → "Night Shift" badge
+├─ "Sell 1000 items in 1 day" → "Merchant Prince" title
+```
+
+**Why:** Completionists love 100%, gives long-term goals
+
+**F. Guild Progression (Post-Update 1.1)**
+```
+Guilds unlock @ Tier 2 completion:
+
+Guild Features (MVP simple):
+├─ Guild chat (async, not realtime)
+├─ Shared leaderboard (guild total production)
+├─ Guild quests (collective goals)
+└─ Guild warehouse (resource trading between members)
+
+Guild Progression:
+├─ Level 1: 10 members max
+├─ Level 5: 25 members, unlock guild bonuses
+├─ Level 10: 50 members, guild factory decorations
+
+Weekly Guild Wars (Update 1.2):
+├─ Guild vs Guild production competition
+├─ Winner: Exclusive cosmetics + resources
+```
+
+**Why:** Social retention, FOMO ("my guild needs me"), extends content
+
+**NOT SELECTED (Explicitly Rejected):**
+- ❌ Collection/cosmetics as PRIMARY (selected as achievement rewards instead)
+- ❌ Prestige system (too hardcore for mobile casual)
+
+**3. Churn Prevention Strategy (Selected: C, E, B)**
+
+**C. New Content Alerts (Push Notifications)**
+```
+Smart Notifications:
+
+Content Updates:
+"🎉 Update 1.1 is LIVE! New buildings unlocked!"
+
+Milestone Achieved Offline:
+"Your factory earned 10,000 gold while away!"
+
+Friend Activity (if guilds):
+"YourGuildMate just beat your production record!"
+
+Timing:
+- Max 1 notification per day (not spammy)
+- User can disable per-category
+- Never send after 10pm local time
+```
+
+**Why:** Brings churned players back for new content
+
+**E. Limited Time Events (FOMO)**
+```
+Monthly Event (post-Update 1.1):
+
+Example: "Gold Rush Weekend"
+├─ Friday-Sunday only
+├─ All prices +50%
+├─ Special "Golden Ore" drops (rare resource)
+├─ Leaderboard: Most gold earned
+└─ Top 10% get exclusive factory decoration
+
+Seasonal Events (Year 1):
+├─ Halloween: Spooky factory skins
+├─ Winter: Snow effects, frozen resources
+├─ Spring: Growth speed bonus
+```
+
+**Why:** FOMO brings back lapsed players, creates urgency
+
+**B. "We Miss You" Comeback Bonuses**
+```
+Lapsed Player Detection:
+
+After 7 days inactive:
+├─ Push: "We miss you! Come back for 2x offline production!"
+├─ Login bonus: 5000 gold + speed boost
+└─ Special comeback quest: Easy wins for re-engagement
+
+After 30 days:
+├─ "Welcome back!" package
+├─ 20,000 gold + premium currency
+├─ Auto-collect last 8h of offline production (no cap)
+└─ Tutorial refresh: "Here's what's new"
+```
+
+**Why:** Shows player they're valued, removes re-entry friction
+
+**NOT SELECTED (Explicitly Rejected):**
+- ❌ Heavy push notifications (selected max 1/day instead)
+- ❌ Social pull notifications before guilds exist
+
+**RETENTION TIMELINE:**
+
+```
+Day 1-7 (Post-MVP):
+├─ Daily login rewards (streak building)
+├─ Daily quests (3/day stretch content)
+├─ Daily price changes (variety)
+├─ Daily leaderboard (competition)
+└─ Achievement hunting (completionist goals)
+
+Week 2-4 (Content Gap):
+├─ Weekly guild competition
+├─ Factory optimization challenges
+├─ Continue daily loops
+└─ Build anticipation for Update 1.1
+
+Week 4-6 (Update 1.1 Release):
+├─ Push notification: "New content!"
+├─ Tier 3 unlocks (new buildings)
+├─ Guild features expand
+└─ New achievement tier
+
+Month 2-3 (Established Players):
+├─ Monthly limited events
+├─ Guild Wars (competitive)
+├─ Seasonal cosmetics
+└─ Veteran player exclusive content
+
+Year 1 (Long-term):
+├─ Multiple content updates (1.1, 1.2, 1.3)
+├─ Economy stability (gold sinks for inflation)
+├─ Power creep management (old buildings viable)
+└─ Veteran rewards (loyalty cosmetics)
+```
+
+**30-DAY OFFLINE RETURN EXPERIENCE:**
+
+```
+Player returns after 30 days:
+
+Welcome Screen:
+"Welcome back, Master! You've been away 30 days."
+
+Offline Production:
+├─ Calculation: 8h cap (not 30 days)
+├─ "Your factory ran for 8 hours at 60% efficiency"
+├─ Reward: ~5,000 Iron Ore, 2,000 Coal, 500 Steel
+├─ Message: "Login more often for full production!"
+
+What's New:
+├─ "Update 1.1 Released!" (if applicable)
+├─ "3 new buildings unlocked"
+├─ "Your guild reached Level 5!"
+
+Comeback Bonus:
+├─ 20,000 gold
+├─ 1 premium currency
+├─ 2x production boost (1 hour)
+
+Daily Catch-up:
+├─ Show last 30 days of daily rewards (can't claim, just show)
+├─ "You missed 210,000 gold in login rewards"
+├─ "Start your streak again today!"
+```
+
+**Why it works:**
+- ✅ Not punishing (8h cap is fair)
+- ✅ Shows what was missed (FOMO for future)
+- ✅ Generous comeback bonus (feels welcomed)
+- ✅ Clear path forward (new content to explore)
+
+**HORIZONTAL PROGRESSION (When Everyone at Tier 2):**
+
+```
+Instead of vertical (tier 3-4), offer horizontal:
+
+Factory Themes:
+├─ Industrial (default)
+├─ Medieval (achievement unlock)
+├─ Futuristic (premium)
+└─ Fantasy (limited event)
+
+Building Skins:
+├─ Earn through achievements
+├─ Mix & match
+└─ Show off in screenshots
+
+Efficiency Challenges:
+├─ Beat your own records
+├─ Community challenges: "Can you produce 1000 Steel with only 5 buildings?"
+└─ Leaderboards for creativity
+
+Resource Trading (Guild):
+├─ Player A: Excess Iron, needs Coal
+├─ Player B: Excess Coal, needs Iron
+└─ Trade system (not full economy, simple swap)
+```
+
+**YEAR 1 ECONOMY STABILITY:**
+
+**Inflation Prevention:**
+```
+Gold Sinks (prevent inflation):
+
+Cosmetic Shop:
+├─ Factory skins: 50,000 gold
+├─ Building decorations: 10,000 gold
+└─ Animated effects: 100,000 gold
+
+Prestige Buildings:
+├─ "Monument" building (no function, pure flex)
+├─ Cost: 1,000,000 gold
+└─ Shows on leaderboard
+
+Guild Contributions:
+├─ Donate gold to guild for shared bonuses
+├─ Unlimited donation (gold drain)
+```
+
+**Power Creep Management:**
+```
+Old buildings stay relevant:
+
+Tier 1 Mine:
+├─ Tier 3 unlock: "Upgraded Mine" (3x speed)
+├─ BUT: Tier 1 still needed for "Compact Factory" challenges
+└─ Cosmetic upgrades available (not obsolete)
+
+Parallel Progression:
+├─ Tier 3 = Steel & advanced
+├─ Tier 1-2 = Still needed for daily quests
+└─ Achievement: "Use only tier 1 buildings to produce X"
+```
+
+**Veteran Rewards (1 year):**
+```
+365-Day Player:
+├─ Exclusive "Founder" title
+├─ Golden factory theme
+├─ Special building: "Time Vault" (lore building)
+└─ Permanent 10% production bonus
+
+6-Month Player:
+├─ "Veteran" badge
+├─ Silver factory theme
+└─ 5% production bonus
+```
+
+**KEY RETENTION METRICS TO TRACK:**
+
+```
+Daily:
+├─ DAU (Daily Active Users)
+├─ Daily quest completion %
+├─ Leaderboard participation %
+
+Weekly:
+├─ WAU (Weekly Active Users)
+├─ Guild activity %
+├─ Factory optimization attempts
+
+Monthly:
+├─ MAU (Monthly Active Users)
+├─ Content update engagement
+├─ Churn rate (%)
+├─ Comeback rate (%)
+
+Targets:
+├─ D1 → D7 retention: >20% (good), >25% (great)
+├─ D7 → D30 retention: >40% (good), >50% (great)
+├─ Churn recovery: >10% return within 30 days
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ## Idea Categorization
 
 ### Immediate Opportunities
