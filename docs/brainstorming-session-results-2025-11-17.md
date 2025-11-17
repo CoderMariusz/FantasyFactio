@@ -162,6 +162,118 @@ Sprint 1 (Month 1):
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+### 🔬 Advanced Elicitation - Assumption Testing
+
+**Critical Revisions After Challenge:**
+
+**REVISION 1: Conveyor Timeline (MAJOR CHANGE)**
+- ❌ Original: No conveyors 0-5h
+- ✅ Revised: Progressive automation
+  - **Hour 0-0.5:** Tutorial shows automation teaser (aspirational)
+  - **Hour 0.5-2:** Storage auto-collect (QoL, not full automation)
+  - **Hour 2:** First conveyor unlock (NOT 5h!)
+  - **Hour 2-7:** Smart auto-routing expansion
+  - **Hour 7-10:** Manual editing (NOT 15h!)
+
+**Why Changed:**
+- 5h manual risk = uninstall before discovering automation
+- Competitors show auto-collect immediately
+- 2h = engagement proven + frustration point (not quit point)
+- Behavior-based unlock > fixed timer
+- Teaser from minute 1 prevents "this is the whole game" perception
+
+**REVISION 2: Player Segmentation (CONCEPTUAL SHIFT)**
+- ❌ Original: "90% Casual / 10% Hardcore" (admitted: "bullshit without data")
+- ✅ Revised: Spectrum Model
+  - 0-5h: "Tourists" (50%?) - instant fun needed
+  - 5-20h: "Regulars" (30%?) - progress feeling
+  - 20-50h: "Invested" (15%?) - depth/optimization
+  - 50-200h+: "Masters" (5%?) - endgame/community
+
+**Why Changed:**
+- Factory automation may attract more engaged players than typical mobile
+- "Casual" ≠ stupid, can be smart but time-constrained
+- Design: Core loop for all + optional depth layers (not forced simplification)
+- Respect player intelligence: complex systems with simple interfaces
+
+**REVISION 3: Educational System (HYBRID APPROACH)**
+- ❌ Original: Pure discovery learning (risky - RNG-based education)
+- ✅ Revised: Scripted + Random hybrid
+  - **Guaranteed scripted events** for core lessons:
+    - Hour 2: Small supply disruption (+30% prices)
+    - Hour 10: War demand spike (weapon opportunity)
+    - Hour 25: Trade embargo (black market unlock)
+  - **Random events** = bonus excitement (not primary education)
+  - **Optional explicit tutorials** (toggle in settings for analytical learners)
+
+**Why Changed:**
+- Player A experiences event ≠ Player B = unfair education
+- Pure trial-and-error = some players feel stupid
+- Telegraph events (hints before) = skill-based prediction
+- Both discovery AND explicit paths valid
+
+**REVISION 4: Smart Routing Improvements**
+- ❌ Original: Trust auto-routing alone
+- ✅ Revised: Preview + Player Control
+  - **Preview before build** (show ghost path, cost estimate)
+  - **Waypoint system** from start (player can guide routes)
+  - **Alternative suggestions** (show 2nd best path option)
+  - **Edge case handling** (blocked paths show clear options)
+  - **Retrofit tool** at manual unlock (upgrade existing, don't rebuild)
+
+**Why Changed:**
+- Auto-routing may block future expansion
+- Players need control without full complexity
+- "Confirm before build" > instant auto-build
+- Manual editing at 7-10h (not 15h) to avoid massive rebuilds
+
+**Key Lessons from Assumption Testing:**
+
+1. **Timing Matters More Than Theory**
+   - "Create desire through pain" sounds good, but 5h too risky
+   - 2h with teaser = proven engagement + manageable frustration
+
+2. **Data > Assumptions**
+   - "90/10 split" admitted as baseless
+   - Behavior-based metrics > demographic assumptions
+   - A/B testing required for timing validation
+
+3. **Hybrid > Pure**
+   - Not "discovery OR tutorials" but both (player choice)
+   - Not "casual OR hardcore" but spectrum
+   - Not "auto OR manual" but progressive evolution
+
+4. **Respect Player Intelligence**
+   - Simplify interface, not mechanics
+   - "Smart casual" = limited time ≠ limited brain
+   - Optional depth > forced simplicity
+
+5. **Fail-Safe Mechanisms**
+   - Scripted educational events (guarantee learning)
+   - Retrofit tools (avoid rebuild punishment)
+   - Preview systems (prevent regret)
+   - Behavior-based unlocks (rescue struggling players)
+
+**Revised Critical Timeline:**
+
+```
+Hour 0:    Tutorial + Automation Teaser
+Hour 0.5:  Storage auto-collect unlock
+Hour 2:    First conveyor (behavior-based)
+Hour 7:    Manual editing + retrofit tools
+Hour 10:   Guaranteed educational event (war)
+Hour 25:   Advanced mechanics unlock
+```
+
+**Most Critical Changes:**
+1. ✅ Conveyor unlock: 2h (not 5h) with minute-1 teaser
+2. ✅ Scripted educational events (not pure RNG)
+3. ✅ Optional explicit tutorial mode
+4. ✅ Routing preview + waypoints from start
+5. ✅ Manual editing at 7-10h (not 15h)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ## Idea Categorization
 
 ### Immediate Opportunities
