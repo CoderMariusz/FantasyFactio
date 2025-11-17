@@ -475,6 +475,191 @@ Your factory produced:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+### 🎯 Session 3: MVP Scope - Resource Constraints
+
+**Constraint:** 30 days, solo developer, $0 budget, prove concept
+
+**TIER 1 (0-2h) - Foundation**
+
+**Buildings: 4 (not 5)**
+- ✅ Mine (extraction)
+- ✅ Smelter (crafting)
+- ✅ Storage (QoL)
+- ✅ Market Stall (selling)
+- ❌ Worker Hut - CUT (idle mechanic too early)
+
+**Resources: 3 (not 5)**
+- ✅ Iron Ore (base)
+- ✅ Coal (fuel)
+- ✅ Iron Bar (first craft: 2 Ore + 1 Coal → 1 Bar)
+- ❌ Wood, Stone - deferred to Tier 2
+
+**Why 3 resources?** Simple chain: Mine Ore → Smelt Bar → Sell
+
+**Economy: Fixed Prices**
+- Iron Ore: 5g
+- Coal: 3g
+- Iron Bar: 25g (profit: 12g per bar)
+
+**Goal:** Make 1,000 gold
+- Requires ~40 Iron Bars
+- ~2h gameplay with manual collection
+- Unlocks: First Conveyor + Tier 2
+
+**TIER 2 (2-7h) - Automation**
+
+**New Buildings: 5 (not 6)**
+- ✅ Advanced Mine (2x speed)
+- ✅ Blast Furnace (3x speed)
+- ✅ Conveyor System (automation!)
+- ✅ Large Storage (10x capacity)
+- ✅ Coal Generator (needed for tier 3)
+- ❌ Research Lab - CUT (too complex for MVP)
+
+**New Resources: 4 (not 8)**
+- ✅ Steel (Iron Bar + Coal + heat)
+- ✅ Plank (Wood - NEW resource)
+- ✅ Copper Ore (NEW mine type)
+- ✅ Copper Wire (Copper craft)
+- ❌ Brick, Glass, Steam - deferred to tier 3
+
+**Economy: Scripted "Fake" Signals**
+- Fixed base prices
+- Daily message: "🔥 Steel demand HIGH today! +20%"
+- Or: "💤 Iron oversupply. -20%"
+- NOT: Real-time supply/demand math
+- YES: Scripted daily hints (sufficient for education)
+
+**Conveyors: Auto-routing with Preview**
+1. Tap building A
+2. Tap building B
+3. Show ghost path + cost
+4. [Confirm] or [Cancel]
+
+**Goal:** Build automated Steel production
+```
+[Mine] → [Conveyor] → [Smelter] → [Conveyor] → [Blast Furnace] → [Storage]
+```
+First complex chain achievement.
+
+**CUT FROM MVP ✂️**
+
+**Completely OUT:**
+- ❌ Tier 3-4 (unlock in Update 1.1, 4-6 weeks post-launch)
+- ❌ Manual conveyor editing (only smart auto-routing in MVP)
+- ❌ Full economic system (only fake daily price hints)
+- ❌ Multiplayer (maybe Year 2)
+- ❌ Multiple regions/NPCs (1 generic NPC max)
+
+**Minimal Inclusion:**
+- ⚠️ Events: 1 scripted only
+  - @ Hour 4: "⚠️ Mine Collapse!"
+  - Iron Ore supply -50% for 1 hour
+  - Prices +50%
+  - Tutorial economic lesson
+
+- ⚠️ NPC: 1 only - "Merchant Marcus"
+  - Generic trader
+  - Simple dialog: "Buy? Sell?"
+  - No personality, no quests in MVP
+
+**TUTORIAL 📚**
+
+**Duration: 10 minutes MAX**
+
+Step 1 (2 min): Tap mine → collect ore
+Step 2 (2 min): Tap smelter → craft iron bar
+Step 3 (2 min): Sell at market → get gold
+Step 4 (2 min): Buy second mine → place it
+Step 5 (2 min): Check storage → see offline production teaser
+
+**Goal:** >80% completion
+**Rule:** Keep each step <2 min, zero text walls, instant feedback
+
+**OFFLINE PRODUCTION ⏰**
+
+**Tier 1: 40% efficiency, 4h cap**
+- Online: 10 Iron Ore/min = 600/hour
+- Offline: 4 Iron Ore/min = 240/hour
+- Max: 4 hours = 960 Iron Ore
+- Message: "While away: +960 Iron Ore (4h)"
+
+**Tier 2: 60% efficiency, 8h cap**
+- Large Storage unlock = increases offline cap
+- Better buildings = better efficiency
+
+**Why penalty?**
+- Incentivizes returning
+- Doesn't kill casual progress
+- Feels fair ("machines run slower unmaintained")
+
+**SIGNATURE FEATURE: Smart Conveyors on Mobile**
+- USP: "Factorio automation in 1 tap"
+- Marketing: "See your factory work while you sleep"
+- Visual: Satisfying item flow animations
+- NOT: "Economic education" (too niche)
+- NOT: "AI NPCs" (cut from MVP)
+
+**CONTENT SUFFICIENCY: 7h Content = OK IF:**
+- ✅ Clear roadmap in-game: "Update 1.1: New Buildings!"
+- ✅ Leaderboard (competitive retention)
+- ✅ Daily quests (stretch current content)
+- ✅ Soft cap @ 7h: "You've mastered basics! More coming soon"
+
+Player quits @ 7h with "needs more content" = SUCCESS if retention metrics good.
+
+**MVP SUCCESS METRICS:**
+
+**Minimum Viable:**
+- Tutorial completion: >70%
+- D1 retention: >30%
+- D7 retention: >12%
+- Session length: >3 min average
+- Conveyor usage: >50% unlock
+
+**Good:**
+- Tutorial completion: >80%
+- D1 retention: >40%
+- D7 retention: >20%
+- Session length: >5 min
+- Conveyor usage: >70%
+
+**Great (unlikely for MVP):**
+- Tutorial completion: >85%
+- D1 retention: >50%
+- D7 retention: >25%
+- Session length: >8 min
+- Reviews: 4+ stars
+
+**FINAL MVP SUMMARY:**
+
+```
+Total Content:
+├─ 9 buildings (4 tier 1, 5 tier 2)
+├─ 7 resources (3 tier 1, 4 tier 2)
+├─ 7 hours gameplay
+├─ 1 NPC
+├─ 10 minute tutorial
+├─ 1 scripted event
+├─ Smart conveyors (auto-routing only)
+└─ Fake economic signals (scripted daily)
+
+Development Time: 30 days
+Team: Solo + 1 contract artist
+Budget: $0 (bootstrapped)
+```
+
+**Smart Cuts Analysis:**
+
+1. ✅ **4 buildings not 5** - Worker Hut deferred (idle too early)
+2. ✅ **3 resources not 5** - Simplest viable chain
+3. ✅ **Fake economy not real** - Scripted hints = 90% of learning, 10% of complexity
+4. ✅ **1 event not system** - Proves concept without infrastructure
+5. ✅ **7h not 100h** - Sufficient to prove retention patterns
+6. ✅ **Tutorial 10min not 15min** - Industry standard for mid-core mobile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ## Idea Categorization
 
 ### Immediate Opportunities
