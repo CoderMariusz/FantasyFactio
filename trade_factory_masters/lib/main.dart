@@ -16,9 +16,9 @@ Future<void> main() async {
   // Test Firebase Auth (Anonymous Sign-In)
   try {
     final userCredential = await FirebaseAuth.instance.signInAnonymously();
-    print('✅ Firebase Auth Success! User ID: ${userCredential.user?.uid}');
+    debugPrint('✅ Firebase Auth Success! User ID: ${userCredential.user?.uid}');
   } catch (e) {
-    print('❌ Firebase Auth Error: $e');
+    debugPrint('❌ Firebase Auth Error: $e');
   }
 
   runApp(

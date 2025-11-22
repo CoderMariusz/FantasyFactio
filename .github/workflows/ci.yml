@@ -1,0 +1,167 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  analyze-and-test:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: |
+          cd trade_factory_masters
+          flutter pub get
+
+      - name: Verify formatting
+        run: |
+          cd trade_factory_masters
+          flutter format --set-exit-if-changed .
+
+      - name: Analyze code
+        run: |
+          cd trade_factory_masters
+          flutter analyze --fatal-infos
+
+      - name: Run tests
+        run: |
+          cd trade_factory_masters
+          flutter test --coverage
+
+      - name: Check code coverage
+        run: |
+          cd trade_factory_masters
+          if [ -f coverage/lcov.info ]; then
+            echo "Coverage report generated successfully"
+            # TODO: Add coverage threshold check (80%+)
+          else
+            echo "Warning: No coverage report found"
+          fi
+
+      - name: Upload coverage to artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: trade_factory_masters/coverage/
+
+  build-android:
+    name: Build Android APK
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: |
+          cd trade_factory_masters
+          flutter pub get
+
+      - name: Build APK
+        run: |
+          cd trade_factory_masters
+          flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: trade_factory_masters/build/app/outputs/flutter-apk/app-debug.apk
+
+  build-ios:
+    name: Build iOS (macOS only)
+    needs: analyze-and-test
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: |
+          cd trade_factory_masters
+          flutter pub get
+
+      - name: Build iOS (no codesign)
+        run: |
+          cd trade_factory_masters
+          flutter build ios --debug --no-codesign
+
+      - name: Upload iOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: trade_factory_masters/build/ios/
+
+  performance-check:
+    name: Performance Check
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: |
+          cd trade_factory_masters
+          flutter pub get
+
+      - name: Check app size
+        run: |
+          cd trade_factory_masters
+          flutter build apk --debug --target-platform android-arm64
+          APK_SIZE=$(stat -f%z "build/app/outputs/flutter-apk/app-debug.apk" 2>/dev/null || stat -c%s "build/app/outputs/flutter-apk/app-debug.apk")
+          echo "APK Size: $((APK_SIZE / 1024 / 1024)) MB"
+          if [ $APK_SIZE -gt 157286400 ]; then
+            echo "Warning: APK size exceeds 150MB target"
+          fi
