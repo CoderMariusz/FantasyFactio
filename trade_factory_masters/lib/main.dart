@@ -22,8 +22,10 @@ Future<void> main() async {
   Hive.registerAdapter(BuildingTypeAdapter());
   Hive.registerAdapter(GridPositionAdapter());
   Hive.registerAdapter(PlayerEconomyAdapter());
+  Hive.registerAdapter(ProductionConfigAdapter());
+  Hive.registerAdapter(UpgradeConfigAdapter());
 
-  debugPrint('✅ Hive initialized with 6 adapters registered');
+  debugPrint('✅ Hive initialized with 8 adapters registered');
 
   // Initialize Firebase
   await Firebase.initializeApp(

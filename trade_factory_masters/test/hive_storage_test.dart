@@ -17,6 +17,8 @@ void main() {
     Hive.registerAdapter(BuildingTypeAdapter());
     Hive.registerAdapter(GridPositionAdapter());
     Hive.registerAdapter(PlayerEconomyAdapter());
+    Hive.registerAdapter(ProductionConfigAdapter());
+    Hive.registerAdapter(UpgradeConfigAdapter());
   });
 
   tearDownAll(() async {
@@ -47,12 +49,20 @@ void main() {
           ),
         ],
         buildings: [
-          const Building(
+          Building(
             id: 'collector_1',
-            name: 'Wood Collector',
             type: BuildingType.collector,
             level: 2,
-            position: GridPosition(x: 5, y: 10),
+            gridPosition: const GridPosition(x: 5, y: 10),
+            production: const ProductionConfig(
+              baseRate: 10.0,
+              resourceType: 'wood',
+            ),
+            upgradeConfig: const UpgradeConfig(
+              baseCost: 100,
+              costIncrement: 20,
+            ),
+            lastCollected: DateTime.now(),
             isActive: true,
           ),
         ],
@@ -73,7 +83,7 @@ void main() {
       expect(loaded.resources[0].name, equals('Wood'));
       expect(loaded.resources[0].quantity, equals(100));
       expect(loaded.buildings.length, equals(1));
-      expect(loaded.buildings[0].name, equals('Wood Collector'));
+      expect(loaded.buildings[0].type, equals(BuildingType.collector));
       expect(loaded.buildings[0].level, equals(2));
 
       // Clean up
