@@ -1,8 +1,26 @@
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Test Firebase Auth (Anonymous Sign-In)
+  try {
+    final userCredential = await FirebaseAuth.instance.signInAnonymously();
+    print('✅ Firebase Auth Success! User ID: ${userCredential.user?.uid}');
+  } catch (e) {
+    print('❌ Firebase Auth Error: $e');
+  }
+
   runApp(
     GameWidget(
       game: TradeFactoryGame(),

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "131505452988",
+    "project_id": "fantasyfactory-685ab",
+    "storage_bucket": "fantasyfactory-685ab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131505452988:android:371c723598cd6a2ee01db9",
+        "android_client_info": {
+          "package_name": "com.codermariusz.trade_factory_masters"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131505452988-3o6cgs2hk8mvb8ei43akocuccddgak6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBImAHUSPVIdrfGFJRbJa6AfHJghqHke48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131505452988-3o6cgs2hk8mvb8ei43akocuccddgak6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

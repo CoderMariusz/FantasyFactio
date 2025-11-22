@@ -10,7 +10,11 @@
       "Bash(flutter pub add:*)",
       "Bash(flutter analyze:*)",
       "Bash(flutter test:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(dart pub global activate:*)",
+      "Bash(dart pub global run:*)"
     ],
     "deny": [],
     "ask": []
