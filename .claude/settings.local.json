@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter --version:*)",
+      "Bash(git --version:*)",
+      "Bash(firebase --version:*)",
+      "Bash(npm install:*)",
+      "Bash(gh:*)",
+      "Bash(flutter create:*)",
+      "Bash(flutter pub add:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter test:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
