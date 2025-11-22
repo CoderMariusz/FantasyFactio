@@ -15,7 +15,15 @@
       "Bash(git push:*)",
       "Bash(dart pub global activate:*)",
       "Bash(dart pub global run:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(trade_factory_masters/.gitignore)",
+      "Bash(flutter devices:*)",
+      "Bash(flutter emulators:*)",
+      "Bash(flutter doctor:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(flutter run:*)",
+      "Bash(timeout:*)",
+      "Bash(git restore:*)"
     ],
     "deny": [],
     "ask": []
