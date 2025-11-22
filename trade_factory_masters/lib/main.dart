@@ -3,10 +3,27 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
+import 'domain/entities/resource.dart';
+import 'domain/entities/building.dart';
+import 'domain/entities/player_economy.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Hive
+  await Hive.initFlutter();
+
+  // Register Hive Adapters
+  Hive.registerAdapter(ResourceAdapter());
+  Hive.registerAdapter(ResourceTypeAdapter());
+  Hive.registerAdapter(BuildingAdapter());
+  Hive.registerAdapter(BuildingTypeAdapter());
+  Hive.registerAdapter(GridPositionAdapter());
+  Hive.registerAdapter(PlayerEconomyAdapter());
+
+  debugPrint('✅ Hive initialized with 6 adapters registered');
 
   // Initialize Firebase
   await Firebase.initializeApp(
