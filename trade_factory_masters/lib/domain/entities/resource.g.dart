@@ -18,27 +18,30 @@ class ResourceAdapter extends TypeAdapter<Resource> {
     };
     return Resource(
       id: fields[0] as String,
-      name: fields[1] as String,
+      displayName: fields[1] as String,
       type: fields[2] as ResourceType,
-      quantity: fields[3] as int,
-      productionRate: fields[4] as double,
+      amount: fields[3] as int,
+      maxCapacity: fields[4] as int,
+      iconPath: fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Resource obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name)
+      ..write(obj.displayName)
       ..writeByte(2)
       ..write(obj.type)
       ..writeByte(3)
-      ..write(obj.quantity)
+      ..write(obj.amount)
       ..writeByte(4)
-      ..write(obj.productionRate);
+      ..write(obj.maxCapacity)
+      ..writeByte(5)
+      ..write(obj.iconPath);
   }
 
   @override

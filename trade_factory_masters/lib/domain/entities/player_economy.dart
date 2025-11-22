@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'resource.dart';
 import 'building.dart';
@@ -5,49 +7,133 @@ import 'building.dart';
 part 'player_economy.g.dart';
 
 /// PlayerEconomy entity for Trade Factory Masters
-/// Represents player's economic state (resources, buildings, currency)
+/// Represents player's economic state (gold, resources, buildings, progression tier)
+/// Immutable - all state transitions create new instances
 @HiveType(typeId: 5)
-class PlayerEconomy {
+class PlayerEconomy extends Equatable {
+  /// Player's gold currency
   @HiveField(0)
-  final String playerId;
-
-  @HiveField(1)
   final int gold;
 
-  @HiveField(2)
-  final List<Resource> resources;
+  /// Resource inventory (resourceId → Resource)
+  /// Stored as Map for O(1) lookup
+  @HiveField(1)
+  final Map<String, Resource> inventory;
 
-  @HiveField(3)
+  /// Buildings placed on the grid
+  @HiveField(2)
   final List<Building> buildings;
 
+  /// Current progression tier (1, 2, 3)
+  /// Determines which resources/buildings are unlocked
+  @HiveField(3)
+  final int tier;
+
+  /// Last time player was active (for offline production)
   @HiveField(4)
-  final DateTime lastUpdated;
+  final DateTime lastSeen;
 
   const PlayerEconomy({
-    required this.playerId,
     this.gold = 1000, // Starting gold
-    this.resources = const [],
+    this.inventory = const {},
     this.buildings = const [],
-    required this.lastUpdated,
+    this.tier = 1, // Start at Tier 1
+    required this.lastSeen,
   });
 
+  /// Check if player can afford a purchase
+  /// Returns true if gold >= goldCost
+  bool canAfford(int goldCost) => gold >= goldCost;
+
+  /// Add resources to inventory (respects maxCapacity)
+  /// Returns new PlayerEconomy instance with updated inventory
+  /// If resource doesn't exist in inventory, creates it
+  /// If adding would exceed maxCapacity, clamps to max
+  PlayerEconomy addResource(String resourceId, int amountToAdd) {
+    if (!inventory.containsKey(resourceId)) {
+      // Resource not in inventory yet, can't add
+      return this;
+    }
+
+    final resource = inventory[resourceId]!;
+    final newAmount = min(
+      resource.amount + amountToAdd,
+      resource.maxCapacity,
+    );
+
+    final updatedResource = resource.copyWith(amount: newAmount);
+    final updatedInventory = Map<String, Resource>.from(inventory);
+    updatedInventory[resourceId] = updatedResource;
+
+    return copyWith(inventory: updatedInventory);
+  }
+
+  /// Deduct gold from player's balance
+  /// Returns new PlayerEconomy instance with reduced gold
+  /// WARNING: Does not check if player can afford
+  /// Call canAfford() first to validate
+  PlayerEconomy deductGold(int amount) {
+    return copyWith(gold: gold - amount);
+  }
+
+  /// Add gold to player's balance
+  /// Returns new PlayerEconomy instance with increased gold
+  PlayerEconomy addGold(int amount) {
+    return copyWith(gold: gold + amount);
+  }
+
+  /// Deduct resources from inventory
+  /// Returns new PlayerEconomy instance with reduced resource amount
+  /// WARNING: Does not check if player has enough resources
+  PlayerEconomy deductResource(String resourceId, int amountToDeduct) {
+    if (!inventory.containsKey(resourceId)) {
+      return this;
+    }
+
+    final resource = inventory[resourceId]!;
+    final newAmount = max(0, resource.amount - amountToDeduct);
+
+    final updatedResource = resource.copyWith(amount: newAmount);
+    final updatedInventory = Map<String, Resource>.from(inventory);
+    updatedInventory[resourceId] = updatedResource;
+
+    return copyWith(inventory: updatedInventory);
+  }
+
+  /// Add a building to the player's collection
+  /// Returns new PlayerEconomy instance with added building
+  PlayerEconomy addBuilding(Building building) {
+    final updatedBuildings = List<Building>.from(buildings)..add(building);
+    return copyWith(buildings: updatedBuildings);
+  }
+
+  /// Create a copy with modified fields
   PlayerEconomy copyWith({
-    String? playerId,
     int? gold,
-    List<Resource>? resources,
+    Map<String, Resource>? inventory,
     List<Building>? buildings,
-    DateTime? lastUpdated,
+    int? tier,
+    DateTime? lastSeen,
   }) {
     return PlayerEconomy(
-      playerId: playerId ?? this.playerId,
       gold: gold ?? this.gold,
-      resources: resources ?? this.resources,
+      inventory: inventory ?? this.inventory,
       buildings: buildings ?? this.buildings,
-      lastUpdated: lastUpdated ?? this.lastUpdated,
+      tier: tier ?? this.tier,
+      lastSeen: lastSeen ?? this.lastSeen,
     );
   }
 
   @override
-  String toString() => 'PlayerEconomy(playerId: $playerId, gold: $gold, '
-      'resources: ${resources.length}, buildings: ${buildings.length})';
+  List<Object?> get props => [
+        gold,
+        inventory,
+        buildings,
+        tier,
+        lastSeen,
+      ];
+
+  @override
+  String toString() => 'PlayerEconomy(gold: $gold, tier: $tier, '
+      'resources: ${inventory.length}, buildings: ${buildings.length})';
 }

@@ -30,24 +30,26 @@ void main() {
     test('Save and Load PlayerEconomy', () async {
       // Create test data
       final testEconomy = PlayerEconomy(
-        playerId: 'test_player_1',
         gold: 5000,
-        resources: [
-          const Resource(
-            id: 'wood_1',
-            name: 'Wood',
+        tier: 1,
+        inventory: {
+          'wood': const Resource(
+            id: 'wood',
+            displayName: 'Wood',
             type: ResourceType.tier1,
-            quantity: 100,
-            productionRate: 10.5,
+            amount: 100,
+            maxCapacity: 1000,
+            iconPath: 'assets/images/resources/wood.png',
           ),
-          const Resource(
-            id: 'stone_1',
-            name: 'Stone',
+          'stone': const Resource(
+            id: 'stone',
+            displayName: 'Stone',
             type: ResourceType.tier1,
-            quantity: 75,
-            productionRate: 8.2,
+            amount: 75,
+            maxCapacity: 1000,
+            iconPath: 'assets/images/resources/stone.png',
           ),
-        ],
+        },
         buildings: [
           Building(
             id: 'collector_1',
@@ -66,7 +68,7 @@ void main() {
             isActive: true,
           ),
         ],
-        lastUpdated: DateTime.now(),
+        lastSeen: DateTime.now(),
       );
 
       // Open box and save
@@ -77,11 +79,11 @@ void main() {
       final loaded = box.get('current_player');
 
       expect(loaded, isNotNull);
-      expect(loaded!.playerId, equals('test_player_1'));
-      expect(loaded.gold, equals(5000));
-      expect(loaded.resources.length, equals(2));
-      expect(loaded.resources[0].name, equals('Wood'));
-      expect(loaded.resources[0].quantity, equals(100));
+      expect(loaded!.gold, equals(5000));
+      expect(loaded.tier, equals(1));
+      expect(loaded.inventory.length, equals(2));
+      expect(loaded.inventory['wood']!.displayName, equals('Wood'));
+      expect(loaded.inventory['wood']!.amount, equals(100));
       expect(loaded.buildings.length, equals(1));
       expect(loaded.buildings[0].type, equals(BuildingType.collector));
       expect(loaded.buildings[0].level, equals(2));
@@ -94,11 +96,11 @@ void main() {
     test('Clear cache functionality', () async {
       // Create test data
       final testEconomy = PlayerEconomy(
-        playerId: 'test_player_2',
         gold: 1000,
-        resources: const [],
+        tier: 1,
+        inventory: const {},
         buildings: const [],
-        lastUpdated: DateTime.now(),
+        lastSeen: DateTime.now(),
       );
 
       // Open box and save
@@ -123,11 +125,11 @@ void main() {
       // Create multiple players
       for (int i = 1; i <= 5; i++) {
         final economy = PlayerEconomy(
-          playerId: 'player_$i',
           gold: 1000 * i,
-          resources: const [],
+          tier: 1,
+          inventory: const {},
           buildings: const [],
-          lastUpdated: DateTime.now(),
+          lastSeen: DateTime.now(),
         );
         await box.put('player_$i', economy);
       }
@@ -138,8 +140,8 @@ void main() {
       for (int i = 1; i <= 5; i++) {
         final loaded = box.get('player_$i');
         expect(loaded, isNotNull);
-        expect(loaded!.playerId, equals('player_$i'));
-        expect(loaded.gold, equals(1000 * i));
+        expect(loaded!.gold, equals(1000 * i));
+        expect(loaded.tier, equals(1));
       }
 
       // Clean up
@@ -154,18 +156,20 @@ void main() {
       // Save 1000 instances
       for (int i = 0; i < 1000; i++) {
         final economy = PlayerEconomy(
-          playerId: 'perf_player_$i',
           gold: 1000 + i,
-          resources: [
-            Resource(
+          tier: 1,
+          inventory: {
+            'res_$i': Resource(
               id: 'res_$i',
-              name: 'Resource $i',
+              displayName: 'Resource $i',
               type: ResourceType.tier1,
-              quantity: i * 10,
+              amount: i * 10,
+              maxCapacity: 1000,
+              iconPath: 'assets/images/resources/resource_$i.png',
             ),
-          ],
+          },
           buildings: const [],
-          lastUpdated: DateTime.now(),
+          lastSeen: DateTime.now(),
         );
         await box.put('perf_$i', economy);
       }

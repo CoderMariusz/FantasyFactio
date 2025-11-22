@@ -17,11 +17,11 @@ class PlayerEconomyAdapter extends TypeAdapter<PlayerEconomy> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlayerEconomy(
-      playerId: fields[0] as String,
-      gold: fields[1] as int,
-      resources: (fields[2] as List).cast<Resource>(),
-      buildings: (fields[3] as List).cast<Building>(),
-      lastUpdated: fields[4] as DateTime,
+      gold: fields[0] as int,
+      inventory: (fields[1] as Map).cast<String, Resource>(),
+      buildings: (fields[2] as List).cast<Building>(),
+      tier: fields[3] as int,
+      lastSeen: fields[4] as DateTime,
     );
   }
 
@@ -30,15 +30,15 @@ class PlayerEconomyAdapter extends TypeAdapter<PlayerEconomy> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.playerId)
-      ..writeByte(1)
       ..write(obj.gold)
+      ..writeByte(1)
+      ..write(obj.inventory)
       ..writeByte(2)
-      ..write(obj.resources)
-      ..writeByte(3)
       ..write(obj.buildings)
+      ..writeByte(3)
+      ..write(obj.tier)
       ..writeByte(4)
-      ..write(obj.lastUpdated);
+      ..write(obj.lastSeen);
   }
 
   @override
