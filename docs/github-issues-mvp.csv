@@ -1,0 +1,250 @@
+Title,Body,Labels,Milestone,Story Points,Priority,Epic,Sprint
+"STORY-00.1: Flutter Project Initialization","**As a** developer
+**I want** to initialize Flutter project with Flame game engine
+**So that** I have a working foundation for game development
+
+**Acceptance Criteria:**
+- [ ] Flutter 3.16+ project created with `flutter create trade_factory_masters`
+- [ ] Flame 1.12+ added to pubspec.yaml
+- [ ] Riverpod 3.0 (@riverpod code generation) configured
+- [ ] Project structure created per Architecture doc
+- [ ] HelloWorld Flame game renders successfully (60 FPS test)
+- [ ] README.md created with setup instructions
+
+**Story Points:** 2 SP
+**Priority:** P0
+**Dependencies:** None
+**Sprint:** Sprint 1
+
+**Documentation:** docs/epics-stories-trade-factory-masters-2025-11-17.md","epic: Setup,priority: P0 - critical,size: S (1-2 SP),type: infrastructure","Sprint 1: Foundation (Week 1)",2,P0,EPIC-00,1
+"STORY-00.2: Firebase Project Configuration","**As a** developer
+**I want** to configure Firebase backend services
+**So that** I can implement authentication, cloud save, and analytics
+
+**Acceptance Criteria:**
+- [ ] Firebase project created: `trade-factory-masters`
+- [ ] FlutterFire configured (`flutterfire configure`)
+- [ ] Firebase Auth enabled (Anonymous, Google, Apple)
+- [ ] Firestore database created with security rules
+- [ ] Firebase Analytics enabled
+- [ ] Firebase Crashlytics integrated
+- [ ] Test authentication flow works
+
+**Story Points:** 3 SP
+**Priority:** P0
+**Dependencies:** STORY-00.1
+**Sprint:** Sprint 1","epic: Setup,priority: P0 - critical,size: M (3-5 SP),type: infrastructure","Sprint 1: Foundation (Week 1)",3,P0,EPIC-00,1
+"STORY-00.3: CI/CD Pipeline Setup","**As a** developer
+**I want** automated testing and deployment pipeline
+**So that** I catch bugs early and streamline releases
+
+**Acceptance Criteria:**
+- [ ] GitHub Actions workflow created
+- [ ] Workflow runs on push to main and develop
+- [ ] Automated tests: flutter analyze, unit tests
+- [ ] Coverage report generated (80%+ target)
+- [ ] Build APK/IPA on successful test pass
+- [ ] Pre-commit hook installed
+
+**Story Points:** 3 SP
+**Priority:** P1
+**Dependencies:** STORY-00.1
+**Sprint:** Sprint 1","epic: Setup,priority: P1 - high,size: M (3-5 SP),type: infrastructure","Sprint 1: Foundation (Week 1)",3,P1,EPIC-00,1
+"STORY-00.4: Hive Local Storage Setup","**As a** developer
+**I want** Hive local storage configured
+**So that** I can implement offline-first architecture
+
+**Acceptance Criteria:**
+- [ ] Hive 2.2+ added to pubspec.yaml
+- [ ] Hive initialized in main.dart
+- [ ] Type adapters generated for data models
+- [ ] Test: Save/load PlayerEconomy to/from Hive
+- [ ] Clear cache functionality implemented
+- [ ] 10× faster than SQLite (benchmark)
+
+**Story Points:** 5 SP
+**Priority:** P1
+**Dependencies:** STORY-00.1
+**Sprint:** Sprint 1","epic: Setup,priority: P1 - high,size: M (3-5 SP),type: infrastructure","Sprint 1: Foundation (Week 1)",5,P1,EPIC-00,1
+"STORY-01.1: Domain Layer - Building Entity","**As a** developer
+**I want** Building domain entity with production logic
+**So that** I can implement core gameplay mechanics
+
+**Acceptance Criteria:**
+- [ ] Building entity created
+- [ ] Properties: id, type, level, gridPosition, production, upgradeConfig, lastCollected
+- [ ] Computed property: productionRate (baseRate × [1 + (level-1) × 0.2])
+- [ ] Method: canUpgrade(PlayerEconomy) → bool
+- [ ] Method: calculateUpgradeCost() → int
+- [ ] 100% test coverage (15 unit tests)
+
+**Story Points:** 3 SP
+**Priority:** P0
+**Dependencies:** STORY-00.1
+**Sprint:** Sprint 1","epic: Core Loop,priority: P0 - critical,size: M (3-5 SP),type: feature","Sprint 1: Foundation (Week 1)",3,P0,EPIC-01,1
+"STORY-01.2: Domain Layer - Resource & PlayerEconomy Entities","**As a** developer
+**I want** Resource and PlayerEconomy entities
+**So that** I can manage game state
+
+**Acceptance Criteria:**
+- [ ] Resource entity created
+- [ ] PlayerEconomy entity created
+- [ ] Method: canAfford(int goldCost) → bool
+- [ ] Method: addResource() → PlayerEconomy (immutable)
+- [ ] Method: deductGold() → PlayerEconomy
+- [ ] 100% test coverage (20 unit tests)
+
+**Story Points:** 3 SP
+**Priority:** P0
+**Dependencies:** STORY-01.1
+**Sprint:** Sprint 2","epic: Core Loop,priority: P0 - critical,size: M (3-5 SP),type: feature","Sprint 2: Core Loop Part 1 (Week 2)",3,P0,EPIC-01,2
+"STORY-01.3: Use Case - Collect Resources","**As a** player
+**I want** to tap a building to collect produced resources
+**So that** I earn materials and gold
+
+**Acceptance Criteria:**
+- [ ] CollectResourcesUseCase created
+- [ ] Calculate resources based on time elapsed
+- [ ] Apply production rate multiplier
+- [ ] Respect building storage capacity
+- [ ] Update building lastCollected timestamp
+- [ ] Return updated PlayerEconomy (immutable)
+- [ ] 100% test coverage (25 unit tests)
+
+**Story Points:** 5 SP
+**Priority:** P0
+**Dependencies:** STORY-01.2
+**Sprint:** Sprint 2","epic: Core Loop,priority: P0 - critical,size: M (3-5 SP),type: feature","Sprint 2: Core Loop Part 1 (Week 2)",5,P0,EPIC-01,2
+"STORY-01.4: Use Case - Upgrade Building","**As a** player
+**I want** to upgrade a building to increase production
+**So that** I earn resources faster
+
+**Acceptance Criteria:**
+- [ ] UpgradeBuildingUseCase created
+- [ ] Check if player can afford upgrade cost
+- [ ] Check if building is at max level (Tier 1: level 5)
+- [ ] Deduct gold from economy
+- [ ] Increase building level by 1
+- [ ] Increase storage capacity by 10%
+- [ ] Return Result<PlayerEconomy, UpgradeError>
+- [ ] 100% test coverage (20 unit tests)
+
+**Story Points:** 5 SP
+**Priority:** P0
+**Dependencies:** STORY-01.3
+**Sprint:** Sprint 2","epic: Core Loop,priority: P0 - critical,size: M (3-5 SP),type: feature","Sprint 2: Core Loop Part 1 (Week 2)",5,P0,EPIC-01,2
+"STORY-09.1: Firebase Authentication Flow","**As a** player
+**I want** to sign in easily
+**So that** my progress is saved
+
+**Acceptance Criteria:**
+- [ ] Anonymous sign-in on first launch (automatic)
+- [ ] Upgrade to Google Sign-In (optional)
+- [ ] Upgrade to Apple Sign-In (iOS only, optional)
+- [ ] Account linking: Anonymous → Google
+- [ ] Sign-out option in Settings
+
+**Story Points:** 4 SP
+**Priority:** P1
+**Dependencies:** STORY-00.2
+**Sprint:** Sprint 2","epic: Backend,priority: P1 - high,size: M (3-5 SP),type: feature","Sprint 2: Core Loop Part 1 (Week 2)",4,P1,EPIC-09,2
+"STORY-01.5: Flame Game Engine - Grid System","**As a** developer
+**I want** 50×50 tile grid rendered with Flame
+**So that** players can place buildings on a spatial grid
+
+**Acceptance Criteria:**
+- [ ] GridComponent created
+- [ ] 50×50 tile grid (32×32px tiles)
+- [ ] Grid lines rendered (1px gray, 0.2 opacity)
+- [ ] Coordinate system: (0,0) top-left, (49,49) bottom-right
+- [ ] Camera viewport: 375×667px
+- [ ] Spatial culling: only render visible tiles + 1-tile buffer
+- [ ] 60 FPS maintained (performance test)
+
+**Story Points:** 5 SP
+**Priority:** P0
+**Dependencies:** STORY-00.1
+**Sprint:** Sprint 3","epic: Core Loop,priority: P0 - critical,size: M (3-5 SP),type: feature","Sprint 3: Core Loop Part 2 + Economy (Week 3)",5,P0,EPIC-01,3
+"STORY-01.6: Flame Game Engine - Dual Zoom Camera","**As a** player
+**I want** to switch between Planning Mode (0.5× zoom) and Build Mode (1.5× zoom)
+**So that** I can see full factory layout or interact with buildings
+
+**Acceptance Criteria:**
+- [ ] GridCamera class with ZoomMode enum
+- [ ] Planning Mode: 0.5× zoom (see full 50×50 grid)
+- [ ] Build Mode: 1.5× zoom (default mode)
+- [ ] Double-tap to toggle zoom modes
+- [ ] Smooth zoom transition (300ms ease-out)
+- [ ] Camera pan (swipe gesture, momentum)
+- [ ] Pinch-to-zoom (0.3× to 2.0× range)
+- [ ] 60 FPS during zoom/pan
+
+**Story Points:** 8 SP
+**Priority:** P0
+**Dependencies:** STORY-01.5
+**Sprint:** Sprint 3
+**High Risk:** Complex gesture handling + performance","epic: Core Loop,priority: P0 - critical,size: L (8-13 SP),type: feature","Sprint 3: Core Loop Part 2 + Economy (Week 3)",8,P0,EPIC-01,3
+"STORY-01.7: Presentation Layer - Building Sprite Component","**As a** player
+**I want** to see buildings rendered on the grid
+**So that** I know where my buildings are placed
+
+**Acceptance Criteria:**
+- [ ] BuildingComponent extends SpriteComponent
+- [ ] Load sprite: assets/images/buildings/{type}_level{level}.png
+- [ ] Position building at gridPosition × tileSize
+- [ ] Tap detection (tap to collect resources)
+- [ ] Visual feedback: pulse animation on tap
+- [ ] Floating text animation: '+X Wood' on collect
+- [ ] 60 FPS with 20 buildings on screen
+
+**Story Points:** 3 SP
+**Priority:** P0
+**Dependencies:** STORY-01.6
+**Sprint:** Sprint 3","epic: Core Loop,priority: P0 - critical,size: M (3-5 SP),type: feature","Sprint 3: Core Loop Part 2 + Economy (Week 3)",3,P0,EPIC-01,3
+"STORY-02.1: Building Definitions - 5 Tier 1 Types","**As a** developer
+**I want** 5 building type definitions with production configs
+**So that** players have economic choices
+
+**Acceptance Criteria:**
+- [ ] BuildingDefinition class created
+- [ ] 5 building types: Lumbermill, Mine, Smelter, Workshop, Market
+- [ ] Each has: displayName, description, costs, production, upgrade
+- [ ] Production rates balanced
+- [ ] Construction costs defined
+- [ ] Unit tests: 15 tests validating all definitions
+
+**Story Points:** 3 SP
+**Priority:** P1
+**Dependencies:** STORY-01.2
+**Sprint:** Sprint 3","epic: Economy,priority: P1 - high,size: M (3-5 SP),type: feature","Sprint 3: Core Loop Part 2 + Economy (Week 3)",3,P1,EPIC-02,3
+"STORY-02.2: Resource Definitions - 7 Tier 1 Resources","**As a** developer
+**I want** 7 resource type definitions
+**So that** I can implement economy trading
+
+**Acceptance Criteria:**
+- [ ] ResourceDefinition class created
+- [ ] 7 resources: Wood, Ore, Bars, Tools, Stone, Clay, Bricks
+- [ ] Each has: id, displayName, description, iconPath, baseMarketPrice
+- [ ] Market prices defined
+- [ ] Price validation: No arbitrage loops
+- [ ] All icons created (32×32px PNG)
+
+**Story Points:** 2 SP
+**Priority:** P1
+**Dependencies:** STORY-02.1
+**Sprint:** Sprint 3","epic: Economy,priority: P1 - high,size: S (1-2 SP),type: feature","Sprint 3: Core Loop Part 2 + Economy (Week 3)",2,P1,EPIC-02,3
+"STORY-09.2: Firestore Cloud Save Schema","**As a** developer
+**I want** optimized Firestore schema
+**So that** costs are minimized
+
+**Acceptance Criteria:**
+- [ ] Schema: /users/{userId}/gameState (single document)
+- [ ] Document fields: gold, tier, buildings, inventory, lastSeen
+- [ ] Max document size: <1 MB
+- [ ] Write strategy: Debounced (save every 30 seconds)
+- [ ] Conflict resolution: Last-write-wins with timestamp
+
+**Story Points:** 5 SP
+**Priority:** P1
+**Dependencies:** STORY-09.1
+**Sprint:** Sprint 3","epic: Backend,priority: P1 - high,size: M (3-5 SP),type: infrastructure","Sprint 3: Core Loop Part 2 + Economy (Week 3)",5,P1,EPIC-09,3

@@ -1,0 +1,3097 @@
+# Trade Factory Masters - Product Requirements Document
+
+**Author:** Mariusz (CoderMariusz)
+**Date:** 2025-11-17
+**Version:** 1.0
+**Status:** In Progress
+**Product Brief:** docs/product-brief-trade-factory-masters-2025-11-17.md
+
+---
+
+## Executive Summary
+
+**Trade Factory Masters** is a mobile factory automation game that fills a critical market gap: **desktop-quality automation for Factorio fans on mobile devices**. This PRD transforms the strategic vision (captured in Product Brief) into detailed, implementable requirements.
+
+### Vision Alignment
+
+3.5M+ Factorio players want a mobile version - but Factorio has no official mobile port planned. Mobile "factory builders" like Builderment (1.5M downloads) are too casual, simplifying mechanics for mass appeal. Trade Factory Masters proves that **mobile can handle mid-core complexity** by delivering Factorio-inspired depth optimized for touch controls and flexible session lengths (30s to 60min).
+
+**Market Opportunity:** $135B mobile gaming industry + $400M SAM (factory automation + educational mobile games) with ZERO desktop-quality competitors on mobile.
+
+### What Makes This Special
+
+**"Factorio in 1 Tap"** - Progressive complexity unlock transforms automation into achievement:
+
+1. **Conveyors are REWARDS, not starting features** - Players manually tap resources (Tier 1), creating desire for automation. Conveyors unlock at Tier 2 as achievement, triggering the "aha moment" that hooks players.
+
+2. **Economic education through gameplay** - Supply/demand learned via events (dragon attacks drop wood supply → prices spike), not tutorials. Parents approve (68% prioritize educational value), players learn economics naturally.
+
+3. **Ethical F2P ($10 complete game)** - Industry standard is $50-200 for "complete" F2P experience. TFM caps at $10 total, building trust and regulatory compliance (EU 2025 loot box laws favor transparency).
+
+4. **Smart AI-assisted automation** - Player places START/END points, AI suggests optimal conveyor path (A* pathfinding), player confirms. Not tedious manual placement like desktop games.
+
+5. **Offline production with O(1) calculation** - 1 week offline = 1ms calculation (not simulating every second). Respects player time, battery-friendly, differentiates from web idle games.
+
+6. **Cross-platform ready** - Flutter/Flame native support: Mobile MVP → Desktop port in 3-4 weeks (85% code reuse validated in Technical Research).
+
+---
+
+## Project Classification
+
+**Technical Type:** Mobile Game (Flutter/Flame)
+**Domain:** Gaming - Factory Automation + Economics Education
+**Complexity:** High (Mid-core game mechanics, mobile performance optimization, cross-platform)
+**Target Platform:** Mobile-first (Android primary, iOS secondary), Desktop expansion (Month 6-7)
+**Development Approach:** Solo indie, Enterprise BMAD Method (greenfield)
+
+### Project Context
+
+**Research Foundation:**
+- Domain Research: 510 lines (mobile gaming industry 2025, ethical F2P movement, factory automation gap)
+- Market Research: 677 lines (competitive analysis, revenue validation, Builderment competitor profile)
+- Technical Research: 1,143 lines (Flutter/Flame 60 FPS validated, Firebase costs, Riverpod state management)
+- Brainstorming: 6 technique sessions (Core Gameplay, Technical Challenges, MVP Scope, Retention, Monetization, Multiplayer)
+
+**Key Validation:**
+- ✅ Tech stack validated (60 FPS on Snapdragon 660 budget Android)
+- ✅ Market gap confirmed (no desktop-quality automation on mobile)
+- ✅ Firebase costs validated ($3/month for 10k users, $45/month for 100k)
+- ✅ Revenue model validated ($20-30k Year 1 conservative, requires 35-40% D7 retention)
+
+### Domain Context: Mobile Gaming (Mid-Core Segment)
+
+**Industry Landscape (2025):**
+- Mobile gaming market: $135B (growing 6.5% CAGR)
+- Mid-core segment rising: 10 titles in top 200 grossing (vs 5 in 2023)
+- Average D7 retention: 20% (mid-core), 40%+ (top performers)
+- Industry LTV: $4-6 average, $10+ achievable with 40% D7 retention
+- CPI (Cost Per Install): $2.03 mid-core vs $0.98 casual
+
+**Regulatory Environment:**
+- EU loot box regulations (2025) favor ethical F2P
+- Brazil transparency laws favor upfront pricing
+- COPPA compliance required (kids play mobile games: 73% US children <12 own device)
+
+**Technical Constraints:**
+- Budget device target: 60% of users on low-end Android (India, Africa markets)
+- Performance expectation: 60 FPS standard, <3s load time, <1% crash rate
+- Session length distribution: 40% short (30s-2min), 40% medium (5-10min), 20% long (30-60min)
+
+**Monetization Standards:**
+- Conversion rate: 2% industry standard (mid-core)
+- ARPPU: $10-30 typical, $5-10 for ethical F2P
+- Ad eCPM: $10-25 (US/EU markets)
+- Rewarded video adoption: 60-80% of DAU willing to watch ads for rewards
+
+---
+
+## Success Criteria
+
+### Critical Success Metrics (MVP Launch - First 30 Days)
+
+**User Acquisition:**
+- ✅ **10,000 organic downloads** (Reddit r/factorio + r/AndroidGaming + YouTube ASO)
+  - **Measurement:** Google Play Console + App Store Connect download counts
+  - **Target Breakdown:** 60% Android (6k), 40% iOS (4k)
+
+**Retention (Make-or-Break Metric):**
+- ✅ **D1 Retention: 45%+** (standard mid-core)
+  - **Measurement:** Firebase Analytics cohort analysis
+  - **Benchmark:** Industry mid-core average is 45%
+
+- ✅ **D7 Retention: 30-35%** (minimum viable, target 35-40%)
+  - **Measurement:** Firebase Analytics 7-day cohort retention
+  - **Benchmark:** 20% industry average, 40% top 10% performers
+  - **Critical:** <30% D7 = core loop problem, DO NOT scale marketing
+
+- ✅ **D30 Retention: 20%+**
+  - **Measurement:** Firebase Analytics 30-day cohort
+  - **Benchmark:** 10% industry average
+
+**Performance:**
+- ✅ **60 FPS on budget Android** (Snapdragon 660 benchmark device)
+  - **Measurement:** Flame performance overlay, real device testing
+  - **Acceptance:** 60 FPS sustained with 50 conveyors + 10 buildings + 20 moving resources
+  - **Failure Condition:** <45 FPS = performance optimization required before launch
+
+**Stability:**
+- ✅ **Crash rate: <1%** (industry standard)
+  - **Measurement:** Firebase Crashlytics
+  - **Acceptance:** <1% crash-free sessions
+
+- ✅ **Load time: <3 seconds** (cold start)
+  - **Measurement:** Firebase Performance Monitoring
+  - **Benchmark:** 53% of users abandon if >3s load time
+
+**Player Progression:**
+- ✅ **Tier 2 unlock rate: 60%+** (players reaching automation "aha moment")
+  - **Measurement:** Firebase Analytics custom event tracking
+  - **Critical:** Tier 2 = conveyor unlock = automation value demonstrated
+  - **Failure:** <50% = Tier 1 too boring OR too hard, onboarding broken
+
+**Ratings:**
+- ✅ **4.0+ star rating** (App Store + Google Play average)
+  - **Measurement:** Store dashboards
+  - **Target:** 4.2+ optimal, 4.0+ acceptable, <3.8 = critical issues
+
+### Business Metrics
+
+**Revenue Targets (Conservative - 10k downloads, 35% D7):**
+- **Year 1 Total: $20-30k** (realistic range)
+  - Ad revenue: $18k/year (60% ad watch rate, $20 eCPM, US/EU focus)
+  - IAP revenue: $8k/year (2% conversion, $10 ARPPU)
+- **LTV Target:** $2-3 (if D7=35%), $10+ (if D7=40%)
+- **Break-Even:** 5,000 downloads with 30% D7 = ~$10k revenue (covers $500-1k costs)
+
+**Conversion Metrics:**
+- **Conversion Rate: 2%+** (industry standard)
+  - **Measurement:** Firebase Analytics purchase events / DAU
+  - **Failure:** <1% = pricing issue, value proposition unclear
+
+- **Ad Watch Rate: 60%+** (rewarded video engagement)
+  - **Measurement:** Ad impressions / DAU
+  - **Target:** 80%+ optimal (2x offline production incentive)
+
+**Cost Metrics:**
+- **Firebase Costs: <$50/month** (even at 100k MAU)
+  - **Measurement:** Firebase Console billing
+  - **Alert:** Set billing alert at $20/month threshold
+
+- **CAC (Cost of Acquisition): $0** (organic only in MVP)
+  - Optional: Google Ads test ($100-500 budget post-launch if metrics hit)
+
+### Growth Indicators (Month 2-6)
+
+- **Download Growth: 10-20%/month** (organic word-of-mouth + ASO optimization)
+- **D7 Retention Improvement: +5%** (from onboarding iteration based on analytics)
+- **Featured Placement:** Google Play or App Store editorial (aspirational accelerator)
+- **Community Formation:** Discord server, Reddit presence, YouTube coverage
+
+### Long-Term Success (Year 1)
+
+- **100k downloads** (viral/featured scenario)
+- **D7 Retention: 40%+** (top tier, drives $200k+ revenue)
+- **Desktop Port Launched** (Month 6-7, cross-platform cloud saves)
+- **Active Community:** Discord 1k+ members, r/TradeFactoryMasters subreddit
+
+---
+
+## Product Scope
+
+### MVP - Minimum Viable Product (Tier 1-2 ONLY, 0-7 hours gameplay)
+
+**Ruthless Scope Decision:** Tier 1-2 only (reduces development by 60% vs full Tier 1-4). Prove core loop works FIRST, monetize Tier 3-4 as paid DLC ($2.99) post-launch.
+
+**Core MVP Features (10 Must-Haves):**
+
+1. **3-Step Core Gameplay Loop** (CRITICAL)
+2. **Tier 1 Economy System** (0-5h content)
+3. **Tier 2 Automation System** (5-7h, conveyor unlock)
+4. **Offline Production System** (O(1) calculation)
+5. **Mobile-First UX** (one-handed, 60 FPS)
+6. **Progression System** (Tier 1 → Tier 2 unlocks)
+7. **Discovery-Based Tutorial** (no text, learn by events)
+8. **Ethical F2P Monetization** ($10 cap, ads optional)
+9. **Firebase Backend** (auth, cloud saves, leaderboards)
+10. **Analytics & Metrics Tracking** (D7, session length, crashes)
+
+### Growth Features (Post-MVP Updates)
+
+**Update 1.1 (Month 2) - Polish & Balance:**
+- Performance optimizations (based on analytics)
+- Balance tweaks (building costs, prices, progression pacing)
+- Bug fixes, crash resolution
+- QoL improvements (UI feedback, tooltips, settings)
+
+**Update 1.2 (Month 3) - Social Features:**
+- Leaderboards expansion (regional, friend-based)
+- Basic guilds (join, chat, shared goals)
+- Friend codes (invite system)
+- Blueprint sharing (export/import factory layouts)
+
+**Update 1.3 (Month 4) - Tier 3 DLC:**
+- **Paid DLC: $2.99** unlocks Tier 3 content (15-30h gameplay)
+- 8 new buildings, 3 new resources
+- Manual optimization mechanics
+- Full dynamic economy
+
+### Vision Features (Year 2+)
+
+**Update 2.0 (Month 6) - Desktop Port:**
+- Windows/Mac/Linux version (Flutter native cross-platform)
+- Cross-platform cloud saves (play on mobile, continue on desktop)
+- Mouse + keyboard controls optimized
+- Same codebase (85% code reuse)
+- Premium pricing option: $9.99 desktop standalone
+
+**Update 2.1 (Month 7) - Competitive Features:**
+- Ranked seasons (monthly leaderboards, reset every 30 days)
+- Guild competitions (team efficiency challenges)
+- Spectator mode (watch top factories in real-time)
+- Rewards (cosmetics, titles, badges)
+
+**Year 2+ Vision:**
+- **Tier 4 Endgame:** Player market, advanced automation, guild projects
+- **Modding Support:** Custom buildings via JSON config files
+- **Cross-Platform Multiplayer:** Shared factories (mobile + desktop players together)
+- **Educational Partnerships:** Schools, economics courses integration
+- **Localization:** 10+ languages (EU: German/French/Spanish, Asia: Chinese/Japanese/Korean)
+
+---
+
+## Functional Requirements
+
+### FR-001: Core Gameplay Loop (CRITICAL - P0)
+
+**Description:** The 3-step core gameplay loop (COLLECT → DECIDE → UPGRADE) is the foundation of Trade Factory Masters. This loop must be satisfying in both 30-second commute sessions AND 60-minute deep dives, proving mobile viability for mid-core factory automation.
+
+**Priority:** P0 (Blocker - nothing works without this)
+**Dependencies:** None (foundational feature)
+**Estimated Complexity:** High (affects all other systems)
+
+---
+
+#### User Stories
+
+**US-001.1: Resource Collection (COLLECT - 10 seconds)**
+```
+As a player
+I want to tap buildings to collect resources they produce
+So that I can gather raw materials and start my factory economy
+
+Acceptance Criteria:
+- GIVEN a building is producing resources (Lumbermill with Wood)
+  WHEN I tap the building
+  THEN resources are added to my inventory
+  AND a visual animation shows resources moving from building to inventory
+  AND haptic feedback confirms the tap (mobile best practice)
+  AND a "+X Wood" text appears briefly above the building
+
+- GIVEN a building has NO resources ready
+  WHEN I tap the building
+  THEN no resources are collected
+  AND a "Empty" or production timer is shown
+  AND no haptic feedback occurs (indicates nothing happened)
+
+- GIVEN my inventory is FULL (at capacity limit)
+  WHEN I tap a building with resources ready
+  THEN collection is blocked
+  AND a "Inventory Full!" warning appears
+  AND I must sell/use resources before collecting more
+```
+
+**US-001.2: Economic Decision Making (DECIDE - 20 seconds)**
+```
+As a player
+I want to buy and sell resources at different prices
+So that I can make profit by understanding supply/demand economics
+
+Acceptance Criteria:
+- GIVEN I have resources in my inventory (10 Wood)
+  WHEN I open the NPC Market interface
+  THEN I see current buy/sell prices for all resources
+  AND prices are clearly labeled (Sell: 5 gold, Buy: 8 gold per Wood)
+
+- GIVEN current market prices show profit opportunity
+  WHEN I sell resources
+  THEN gold is added to my wallet
+  AND a profit calculation is shown ("+50 gold profit!")
+  AND resources are removed from inventory
+
+- GIVEN I see a resource is needed for a building recipe
+  WHEN I buy resources from the market
+  THEN gold is deducted from wallet
+  AND resources are added to inventory
+  AND transaction is recorded in game state
+
+- GIVEN prices are FIXED in Tier 1 (no fluctuations)
+  WHEN I check prices multiple times
+  THEN prices remain constant (e.g., Wood always 5 gold)
+  AND this teaches basic economics before complexity increases
+```
+
+**US-001.3: Building Upgrades (UPGRADE - 30 seconds)**
+```
+As a player
+I want to upgrade buildings to increase production rates
+So that I can optimize my factory and progress faster
+
+Acceptance Criteria:
+- GIVEN I have sufficient gold and resources for an upgrade
+  WHEN I select a building and tap "Upgrade"
+  THEN the building level increases (Level 1 → Level 2)
+  AND production rate increases by 20% (e.g., 1 Wood/min → 1.2 Wood/min)
+  AND upgrade cost is deducted (gold + resources)
+  AND building visual changes slightly (level indicator appears)
+
+- GIVEN a building is at MAX level (Level 5 in Tier 1)
+  WHEN I select the building
+  THEN "Upgrade" button is disabled/grayed out
+  AND "MAX LEVEL" indicator is shown
+  AND tooltip suggests unlocking Tier 2 for further upgrades
+
+- GIVEN I don't have enough resources for upgrade
+  WHEN I tap "Upgrade"
+  THEN upgrade is blocked
+  AND missing resources are highlighted in red
+  AND tooltip shows "Need: 10 Wood, 5 Ore"
+```
+
+**US-001.4: Loop Completion & Feedback (Full Cycle)**
+```
+As a player
+I want to complete the COLLECT → DECIDE → UPGRADE loop quickly
+So that I feel productive even in short 30-second sessions
+
+Acceptance Criteria:
+- GIVEN I play for 30 seconds
+  WHEN I tap lumbermill (COLLECT 10s)
+  AND sell wood for profit (DECIDE 10s)
+  AND upgrade lumbermill to Level 2 (UPGRADE 10s)
+  THEN the full loop completes in ≤30 seconds
+  AND I see measurable progress (higher production rate)
+  AND positive feedback reinforces loop ("Factory Improved! +20% production")
+
+- GIVEN I play for 60 minutes (long session)
+  WHEN I repeat the loop 100+ times
+  THEN each loop feels rewarding (progressive unlocks, achievements)
+  AND complexity increases naturally (Tier 2 unlocks at ~5h)
+  AND session doesn't feel repetitive (events, price changes in Tier 2)
+```
+
+---
+
+#### Technical Specifications
+
+**Data Models:**
+
+```dart
+// Resource Model
+class Resource {
+  final String id;           // "wood", "ore", "food", etc.
+  final String displayName;  // "Wood", "Ore", "Food"
+  final int amount;          // Current inventory count
+  final int maxCapacity;     // Inventory limit (e.g., 1000 per resource)
+  final String iconPath;     // Asset path for sprite
+
+  Resource({
+    required this.id,
+    required this.displayName,
+    required this.amount,
+    required this.maxCapacity,
+    required this.iconPath,
+  });
+}
+
+// Building Model
+class Building {
+  final String id;                  // "lumbermill_01"
+  final BuildingType type;          // BuildingType.lumbermill
+  final int level;                  // 1-5 in Tier 1
+  final Point<int> gridPosition;    // (x, y) on 50×50 grid
+  final ProductionConfig production; // What it produces
+  final UpgradeConfig upgradeConfig; // Cost to upgrade
+
+  double get productionRate => production.baseRate * (1 + (level - 1) * 0.2);
+  // Level 1: 1.0x, Level 2: 1.2x, Level 3: 1.4x, etc.
+
+  DateTime lastCollected;    // Timestamp for offline production
+
+  Building({
+    required this.id,
+    required this.type,
+    required this.level,
+    required this.gridPosition,
+    required this.production,
+    required this.upgradeConfig,
+    required this.lastCollected,
+  });
+}
+
+// Production Config
+class ProductionConfig {
+  final Resource outputResource;  // What building produces
+  final double baseRate;          // Units per minute (e.g., 1.0 Wood/min)
+  final int storageCapacity;      // How much building can hold before full
+
+  ProductionConfig({
+    required this.outputResource,
+    required this.baseRate,
+    required this.storageCapacity,
+  });
+}
+
+// Upgrade Config
+class UpgradeConfig {
+  final int goldCost;                    // Base gold cost
+  final Map<String, int> resourceCosts;  // Required resources (e.g., {"wood": 10, "ore": 5})
+  final int maxLevel;                    // Max level for this tier (5 in Tier 1)
+
+  int calculateCost(int currentLevel) {
+    // Linear scaling in Tier 1
+    return goldCost * currentLevel;
+  }
+
+  UpgradeConfig({
+    required this.goldCost,
+    required this.resourceCosts,
+    required this.maxLevel,
+  });
+}
+
+// Player Economy State
+class PlayerEconomy {
+  int gold;                              // Current gold balance
+  Map<String, Resource> inventory;       // All resources player owns
+  List<Building> buildings;              // All placed buildings
+
+  PlayerEconomy({
+    required this.gold,
+    required this.inventory,
+    required this.buildings,
+  });
+}
+```
+
+**Core Calculations:**
+
+```dart
+// Resource collection calculation
+int calculateResourcesReady(Building building, DateTime now) {
+  final elapsed = now.difference(building.lastCollected);
+  final minutesElapsed = elapsed.inSeconds / 60.0;
+  final produced = (building.productionRate * minutesElapsed).floor();
+
+  return min(produced, building.production.storageCapacity);
+}
+
+// Profit calculation (for UI feedback)
+int calculateProfit(String resourceId, int amount, int sellPrice) {
+  // In Tier 1, profit is simple: sell price × amount
+  return sellPrice * amount;
+}
+
+// Upgrade cost scaling (Tier 1 linear)
+UpgradeCost calculateUpgradeCost(Building building) {
+  final baseCost = building.upgradeConfig.goldCost;
+  final currentLevel = building.level;
+
+  return UpgradeCost(
+    gold: baseCost * currentLevel,
+    resources: building.upgradeConfig.resourceCosts.map(
+      (resourceId, baseAmount) => MapEntry(
+        resourceId,
+        baseAmount * currentLevel, // Linear scaling
+      ),
+    ),
+  );
+}
+```
+
+**State Management (Riverpod):**
+
+```dart
+// Game state provider
+@riverpod
+class GameState extends _$GameState {
+  @override
+  PlayerEconomy build() {
+    return PlayerEconomy.initial(); // Load from Firestore or create new
+  }
+
+  void collectResources(Building building) {
+    final now = DateTime.now();
+    final resourcesReady = calculateResourcesReady(building, now);
+
+    if (resourcesReady > 0) {
+      // Add to inventory
+      final resource = building.production.outputResource;
+      state = state.copyWith(
+        inventory: {
+          ...state.inventory,
+          resource.id: resource.copyWith(amount: resource.amount + resourcesReady),
+        },
+      );
+
+      // Update building's lastCollected timestamp
+      final updatedBuilding = building.copyWith(lastCollected: now);
+      state = state.copyWith(
+        buildings: state.buildings.map((b) =>
+          b.id == building.id ? updatedBuilding : b
+        ).toList(),
+      );
+
+      // Trigger haptic feedback & UI animation
+      HapticFeedback.lightImpact();
+      _showFloatingText("+$resourcesReady ${resource.displayName}");
+    }
+  }
+
+  void sellResources(String resourceId, int amount) {
+    final resource = state.inventory[resourceId]!;
+    final price = MarketPrices.getSellPrice(resourceId); // Fixed in Tier 1
+    final profit = price * amount;
+
+    state = state.copyWith(
+      gold: state.gold + profit,
+      inventory: {
+        ...state.inventory,
+        resourceId: resource.copyWith(amount: resource.amount - amount),
+      },
+    );
+
+    _showFloatingText("+$profit gold profit!");
+  }
+
+  void upgradeBuilding(String buildingId) {
+    final building = state.buildings.firstWhere((b) => b.id == buildingId);
+    final cost = calculateUpgradeCost(building);
+
+    // Check if player can afford
+    if (state.gold >= cost.gold && _hasResources(cost.resources)) {
+      // Deduct costs
+      state = state.copyWith(
+        gold: state.gold - cost.gold,
+        inventory: _deductResources(state.inventory, cost.resources),
+      );
+
+      // Upgrade building
+      final upgraded = building.copyWith(level: building.level + 1);
+      state = state.copyWith(
+        buildings: state.buildings.map((b) =>
+          b.id == buildingId ? upgraded : b
+        ).toList(),
+      );
+
+      _showFloatingText("Factory Improved! +20% production");
+
+      // Track analytics
+      FirebaseAnalytics.logEvent('building_upgraded', {
+        'building_type': building.type.name,
+        'level': upgraded.level,
+      });
+    } else {
+      _showWarning("Insufficient resources");
+    }
+  }
+}
+```
+
+**Grid & Camera System (CRITICAL for conveyor planning):**
+
+```dart
+// Grid Camera with dual zoom modes
+class GridCamera {
+  Point<double> position;          // Camera center (x, y in grid coordinates)
+  ZoomMode currentMode;            // Planning vs Build mode
+  double zoomLevel;                // Current zoom (0.5x - 2.0x)
+
+  Size viewportSize;               // Screen size in pixels
+  Rect gridBounds;                 // 50×50 grid bounds
+
+  // Zoom mode configuration
+  static const Map<ZoomMode, CameraConfig> modeConfigs = {
+    ZoomMode.planning: CameraConfig(
+      zoom: 0.5,                   // See entire 50×50 grid
+      description: "Plan conveyors, view whole factory",
+      icon: Icons.map,
+    ),
+    ZoomMode.build: CameraConfig(
+      zoom: 1.5,                   // Focus on ~15×15 area
+      description: "Tap buildings, collect resources",
+      icon: Icons.build,
+    ),
+  };
+}
+
+enum ZoomMode {
+  planning,  // 0.5x zoom - entire factory visible
+  build,     // 1.5x zoom - interact with buildings
+}
+
+// Camera Controls
+class CameraController {
+  void onSwipe(Offset delta) {
+    // Pan camera (any zoom level)
+    camera.position += delta / camera.zoomLevel;
+    camera.position = camera.position.clamp(gridBounds);
+  }
+
+  void onPinchZoom(double scale) {
+    // Pinch to zoom (0.5x - 2.0x continuous)
+    camera.zoomLevel = (camera.zoomLevel * scale).clamp(0.5, 2.0);
+  }
+
+  void toggleZoomMode() {
+    // Quick toggle button (UI button or double-tap)
+    camera.currentMode = camera.currentMode == ZoomMode.planning
+        ? ZoomMode.build
+        : ZoomMode.planning;
+
+    // Animate to new zoom level
+    animateZoom(
+      from: camera.zoomLevel,
+      to: modeConfigs[camera.currentMode].zoom,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+
+  void doubleTapRecenter() {
+    // Double tap to recenter on factory center
+    animateTo(
+      position: Point(25, 25), // Center of 50×50 grid
+      duration: Duration(milliseconds: 400),
+    );
+  }
+}
+```
+
+**Camera UX Specifications:**
+
+**Gesture Controls:**
+- **Swipe (1 finger):** Pan camera across grid
+  - Works at any zoom level
+  - Smooth momentum/inertia on release
+  - Bounds: Cannot pan outside 50×50 grid
+
+- **Pinch (2 fingers):** Continuous zoom 0.5x - 2.0x
+  - Zoom centered on pinch midpoint
+  - Smooth interpolation (no jitter)
+
+- **Double Tap:** Recenter to factory center (25, 25)
+  - 400ms smooth animation
+  - Helpful when player gets lost in grid
+
+**Zoom Mode Toggle:**
+- **UI Button:** Bottom-right corner toggle
+  - Icon changes: Map icon (Planning) ↔ Build icon (Build)
+  - Shows current mode ("Planning Mode" / "Build Mode")
+  - 300ms zoom animation on toggle
+
+**Planning Mode (0.5x zoom):**
+- **Purpose:** View entire 50×50 grid, plan conveyor layouts
+- **Visible Area:** Full factory (all buildings visible)
+- **Interaction:** Limited to viewing + conveyor planning
+  - CAN place conveyor START/END points
+  - CAN see AI-suggested paths
+  - CANNOT tap buildings to collect (too small tap targets)
+- **UI Elements:** Minimap hidden (redundant at 0.5x)
+
+**Build Mode (1.5x zoom - DEFAULT):**
+- **Purpose:** Tap buildings, collect resources, interact
+- **Visible Area:** ~15×15 tiles (enough to see local area)
+- **Interaction:** Full gameplay
+  - CAN tap buildings to collect
+  - CAN upgrade buildings
+  - CAN place new buildings
+- **UI Elements:** Minimap visible (corner, shows full 50×50 grid)
+
+**Minimap (Build Mode only):**
+- **Location:** Top-right corner, 80×80 pixels
+- **Shows:** Full 50×50 grid overview
+  - Buildings as colored dots
+  - Player camera viewport as white rectangle
+  - Conveyors as thin lines
+- **Tap to Jump:** Tap minimap to pan camera to that location
+
+**Performance Requirements:**
+- **Pan/Zoom Performance:** 60 FPS during camera movement
+- **Zoom Animation:** 300ms smooth interpolation (Planning ↔ Build toggle)
+- **Sprite Batching:** All tiles rendered in single draw call (regardless of zoom)
+- **Culling:** Only render visible tiles + 1-tile buffer (performance optimization)
+
+**Acceptance Criteria:**
+
+✅ **Camera Navigation:**
+- Player can swipe to pan entire 50×50 grid smoothly (60 FPS)
+- Pinch zoom works intuitively (0.5x - 2.0x range)
+- Double tap recenters to factory center
+
+✅ **Zoom Mode Toggle:**
+- Toggle button clearly indicates current mode
+- Transition animates smoothly in 300ms
+- Player understands difference (tested with playtesters)
+
+✅ **Planning Mode Use Case:**
+- Player can see entire factory to plan conveyor routes
+- Conveyor START/END placement works at 0.5x zoom
+- AI pathfinding suggestions are visible
+
+✅ **Build Mode Use Case:**
+- Buildings are large enough to tap (44×44px minimum)
+- Minimap provides overview without zooming out
+- All core loop actions (COLLECT/DECIDE/UPGRADE) work smoothly
+
+**Performance Requirements:**
+
+- **Tap Response Time:** <50ms from tap to haptic feedback
+- **Collection Animation:** 200-400ms smooth animation (resource → inventory)
+- **State Update:** <16ms (maintain 60 FPS during collection/upgrade)
+- **UI Feedback:** Floating text appears within 100ms of action
+- **Camera Pan:** 60 FPS during swipe gestures
+- **Zoom Animation:** 300ms smooth transition (Planning ↔ Build)
+
+**UI/UX Specifications:**
+
+- **Tap Target Size:** Minimum 44×44 pixels (Apple HIG, mobile best practice)
+  - **Build Mode (1.5x zoom):** Buildings are 60×60px = easy to tap
+  - **Planning Mode (0.5x zoom):** Buildings are 20×20px = too small for tap, conveyor planning only
+- **Visual Feedback:**
+  - Tappable buildings pulse subtly when resources ready (Build Mode only)
+  - Collected resources animate from building to inventory bar
+  - Upgrade button glows green when affordable, gray when locked
+  - Zoom mode indicator shows current state (Map icon or Build icon)
+- **Haptic Feedback:**
+  - Light impact on successful tap
+  - Medium impact on upgrade completion
+  - No haptic on blocked actions (empty building, full inventory)
+  - Light haptic on zoom mode toggle
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **Loop Completion Time:**
+- 30-second session completes full COLLECT → DECIDE → UPGRADE cycle
+- Player sees measurable progress (gold increases, building upgrades)
+
+✅ **Performance:**
+- 60 FPS maintained during resource collection (tested with 10 buildings)
+- <50ms tap response time on budget Android (Snapdragon 660)
+
+✅ **Economic Learning:**
+- Players understand "buy low, sell high" within first 5 minutes
+- Profit calculation is visible and clear ("+50 gold profit!")
+
+✅ **Progression Feel:**
+- Each upgrade provides noticeable benefit (+20% visible in production)
+- Loop doesn't feel repetitive in 60-minute session (tested with playtesters)
+
+**Analytics to Track:**
+- Average loop completion time (target: 30-60 seconds)
+- Session length distribution (40% <2min, 40% 5-10min, 20% >30min)
+- Upgrade frequency (how often players upgrade vs save gold)
+- D1 retention (target: 45%+ if loop is engaging)
+
+---
+
+#### Dependencies
+
+**Required Before FR-001:**
+- None (this is the foundational feature)
+
+**Required After FR-001:**
+- FR-002: Tier 1 Economy System (buildings, resources, market prices)
+- FR-005: Mobile-First UX (touch controls, haptics, animations)
+- FR-010: Analytics Tracking (measure loop engagement metrics)
+
+---
+
+#### Open Questions
+
+1. **Inventory capacity:** Should be per-resource (1000 Wood, 1000 Ore) or total (1000 total across all resources)?
+   - **Recommendation:** Per-resource (simpler UX, less frustrating)
+
+2. **Upgrade cost scaling:** Linear in Tier 1, exponential in Tier 2+?
+   - **Recommendation:** Linear Tier 1 (accessible), exponential Tier 2+ (longevity)
+
+3. **Building storage capacity:** Should buildings hold more resources as they level up?
+   - **Recommendation:** Yes, +10% per level (incentivizes upgrades for offline players)
+
+---
+
+**Status:** ✅ FR-001 Specification Complete
+**Next:** FR-002 Tier 1 Economy System
+
+---
+
+### FR-002: Tier 1 Economy System (HIGH - P1)
+
+**Description:** The Tier 1 Economy System establishes the foundational economic gameplay (0-5 hours content) with 5 building types, 7 resources, and fixed market prices. This tier teaches basic factory automation and supply chain management without overwhelming complexity (no price fluctuations, no automation). Players manually collect resources, learn supply chains, and prepare for Tier 2's automation unlock.
+
+**Priority:** P1 (High - Core content, blocks Tier 2 unlock)
+**Dependencies:** FR-001 (Core Gameplay Loop must exist first)
+**Estimated Complexity:** High (defines all Tier 1 content balance, progression pacing)
+
+---
+
+#### User Stories
+
+**US-002.1: Building Types & Placement**
+```
+As a player
+I want to build 5 different building types on the grid
+So that I can create a diverse factory producing multiple resources
+
+Acceptance Criteria:
+- GIVEN I'm in Build Mode
+  WHEN I open the "Build Menu"
+  THEN I see 5 available building types:
+    1. Lumbermill (produces Wood from nothing - basic resource)
+    2. Mine (produces Ore from nothing - basic resource)
+    3. Farm (produces Food from nothing - basic resource)
+    4. Smelter (converts Wood + Ore → Bars - intermediate resource)
+    5. Workshop (converts Bars + Ore → Tools - advanced resource)
+
+- GIVEN I select a building to place (e.g., Lumbermill)
+  WHEN I tap an empty grid tile
+  THEN the building is placed at that location
+  AND construction cost is deducted (Gold: 100, Resources: none for Tier 1)
+  AND building starts producing immediately
+  AND building shows "Level 1" indicator
+
+- GIVEN I try to place a building on occupied tile
+  WHEN I tap the tile
+  THEN placement is blocked
+  AND error message shows "Tile Occupied!"
+  AND I must choose a different location
+
+- GIVEN I reach 10 buildings placed (Tier 1 limit)
+  WHEN I try to place another building
+  THEN placement is blocked
+  AND message shows "Max Buildings! Upgrade to Tier 2 to build more"
+```
+
+**US-002.2: Resource Production Chains**
+```
+As a player
+I want to understand which buildings produce which resources
+So that I can plan supply chains and optimize my factory
+
+Acceptance Criteria:
+- GIVEN I have basic resource buildings (Lumbermill/Mine/Farm)
+  WHEN they produce resources
+  THEN they require NO input (produce from nothing)
+  AND production is simple (1 Wood/min, 1 Ore/min, 1 Food/min base rate)
+
+- GIVEN I build a Smelter (intermediate building)
+  WHEN it produces Bars
+  THEN it requires input resources (1 Wood + 1 Ore → 1 Bar)
+  AND I must manually provide input by tapping "Add Resources"
+  AND production happens after resources are provided
+
+- GIVEN I build a Workshop (advanced building)
+  WHEN it produces Tools
+  THEN it requires 2 Bars + 1 Ore → 1 Tool (multi-step chain)
+  AND I must have Bars (from Smelter) + Ore (from Mine)
+  AND this teaches complex supply chains
+
+Resource Dependency Tree:
+- Tier 1 Basic: Wood, Ore, Food (no inputs)
+- Tier 1 Intermediate: Bars (Wood + Ore)
+- Tier 1 Advanced: Tools (Bars + Ore)
+- Tier 2 Unlocks: Circuits (Tools + Ore), Machines (Circuits + Bars)
+```
+
+**US-002.3: NPC Market Trading System**
+```
+As a player
+I want to buy and sell resources at the NPC Market
+So that I can balance my economy and afford upgrades
+
+Acceptance Criteria:
+- GIVEN I open the NPC Market interface
+  WHEN I view available trades
+  THEN I see all 7 resources with FIXED prices:
+    - Wood: Buy 8g, Sell 5g (3g spread)
+    - Ore: Buy 10g, Sell 7g (3g spread)
+    - Food: Buy 6g, Sell 4g (2g spread)
+    - Bars: Buy 20g, Sell 15g (5g spread - intermediate)
+    - Tools: Buy 50g, Sell 40g (10g spread - advanced)
+    - Circuits: Buy 100g, Sell 80g (Tier 2 resource)
+    - Machines: Buy 200g, Sell 150g (Tier 2 resource)
+
+- GIVEN prices are FIXED in Tier 1
+  WHEN I check prices at different times
+  THEN prices NEVER change
+  AND no supply/demand mechanics yet (Tier 2 feature)
+  AND this teaches basic trading before complexity
+
+- GIVEN I select a resource to sell (e.g., 10 Wood)
+  WHEN I tap "Sell"
+  THEN I receive 5g × 10 = 50 gold
+  AND Wood inventory decreases by 10
+  AND transaction appears in history log
+
+- GIVEN I want to buy resources (e.g., 5 Ore)
+  WHEN I tap "Buy"
+  THEN I spend 10g × 5 = 50 gold
+  AND Ore inventory increases by 5
+  AND transaction recorded
+
+- GIVEN I try to sell more than I own
+  WHEN I enter amount > inventory
+  THEN transaction is blocked
+  AND error shows "Insufficient Resources!"
+
+- GIVEN I try to buy without enough gold
+  WHEN I tap "Buy"
+  THEN transaction is blocked
+  AND error shows "Insufficient Gold!"
+```
+
+**US-002.4: Supply Chain Management (Manual in Tier 1)**
+```
+As a player
+I want to manage multi-step supply chains manually
+So that I learn economic optimization before automation unlocks
+
+Acceptance Criteria:
+- GIVEN I want to produce Tools (advanced resource)
+  WHEN I plan the supply chain
+  THEN I realize I need:
+    1. Mine (produces Ore)
+    2. Lumbermill (produces Wood)
+    3. Smelter (Wood + Ore → Bars)
+    4. Workshop (Bars + Ore → Tools)
+
+- GIVEN I have all buildings in chain
+  WHEN I produce Tools manually
+  THEN I must:
+    1. Tap Mine to collect Ore
+    2. Tap Lumbermill to collect Wood
+    3. Tap Smelter, provide Wood + Ore, wait for Bars
+    4. Tap Smelter to collect Bars
+    5. Tap Workshop, provide Bars + Ore, wait for Tools
+    6. Tap Workshop to collect Tools
+  AND this 6-step process is tedious
+  AND creates desire for Tier 2 automation (conveyors)
+
+- GIVEN I complete a complex supply chain
+  WHEN I sell Tools at market (40g each)
+  THEN I earn significant profit
+  AND I understand value-add through production chains
+  AND I feel rewarded for planning
+```
+
+---
+
+#### Technical Specifications
+
+**Building Definitions:**
+
+```dart
+enum BuildingType {
+  lumbermill,  // Basic: Wood production
+  mine,        // Basic: Ore production
+  farm,        // Basic: Food production
+  smelter,     // Intermediate: Wood + Ore → Bars
+  workshop,    // Advanced: Bars + Ore → Tools
+}
+
+class BuildingDefinition {
+  final BuildingType type;
+  final String displayName;
+  final String description;
+  final ProductionRecipe recipe;
+  final BuildingCosts costs;
+  final BuildingStats stats;
+
+  BuildingDefinition({
+    required this.type,
+    required this.displayName,
+    required this.description,
+    required this.recipe,
+    required this.costs,
+    required this.stats,
+  });
+}
+
+// Tier 1 Building Catalog
+final Map<BuildingType, BuildingDefinition> tier1Buildings = {
+  BuildingType.lumbermill: BuildingDefinition(
+    type: BuildingType.lumbermill,
+    displayName: "Lumbermill",
+    description: "Produces Wood from forest resources",
+    recipe: ProductionRecipe(
+      inputs: {},  // No inputs (basic resource)
+      outputs: {"wood": 1},
+      productionTime: Duration(minutes: 1),  // 1 Wood/min
+    ),
+    costs: BuildingCosts(
+      construction: 100,  // 100 gold to build
+      upgradeTier1: [100, 150, 200, 250, 300],  // Level 2-6 costs
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 1.0,  // 1 unit/min
+      baseStorageCapacity: 10,  // Holds 10 Wood
+      gridSize: Size(2, 2),     // 2×2 tiles
+    ),
+  ),
+
+  BuildingType.mine: BuildingDefinition(
+    type: BuildingType.mine,
+    displayName: "Mine",
+    description: "Extracts Ore from underground deposits",
+    recipe: ProductionRecipe(
+      inputs: {},  // No inputs
+      outputs: {"ore": 1},
+      productionTime: Duration(minutes: 1),  // 1 Ore/min
+    ),
+    costs: BuildingCosts(
+      construction: 120,  // Slightly more expensive than Lumbermill
+      upgradeTier1: [120, 180, 240, 300, 360],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 1.0,
+      baseStorageCapacity: 10,
+      gridSize: Size(2, 2),
+    ),
+  ),
+
+  BuildingType.farm: BuildingDefinition(
+    type: BuildingType.farm,
+    displayName: "Farm",
+    description: "Grows Food for your workers",
+    recipe: ProductionRecipe(
+      inputs: {},  // No inputs
+      outputs: {"food": 1},
+      productionTime: Duration(minutes: 1),  // 1 Food/min
+    ),
+    costs: BuildingCosts(
+      construction: 80,  // Cheapest basic building
+      upgradeTier1: [80, 120, 160, 200, 240],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 1.0,
+      baseStorageCapacity: 10,
+      gridSize: Size(2, 2),
+    ),
+  ),
+
+  BuildingType.smelter: BuildingDefinition(
+    type: BuildingType.smelter,
+    displayName: "Smelter",
+    description: "Converts Wood + Ore into Bars",
+    recipe: ProductionRecipe(
+      inputs: {"wood": 1, "ore": 1},  // Requires 2 inputs
+      outputs: {"bars": 1},
+      productionTime: Duration(minutes: 2),  // 1 Bar/2min (slower)
+    ),
+    costs: BuildingCosts(
+      construction: 200,  // More expensive (intermediate)
+      upgradeTier1: [200, 300, 400, 500, 600],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 0.5,  // 0.5 Bars/min (slower production)
+      baseStorageCapacity: 5,   // Holds 5 Bars
+      gridSize: Size(3, 3),     // Larger building (3×3)
+    ),
+  ),
+
+  BuildingType.workshop: BuildingDefinition(
+    type: BuildingType.workshop,
+    displayName: "Workshop",
+    description: "Crafts Tools from Bars and Ore",
+    recipe: ProductionRecipe(
+      inputs: {"bars": 2, "ore": 1},  // Complex recipe (3 inputs)
+      outputs: {"tools": 1},
+      productionTime: Duration(minutes: 3),  // 1 Tool/3min (slowest)
+    ),
+    costs: BuildingCosts(
+      construction: 300,  // Most expensive Tier 1 building
+      upgradeTier1: [300, 450, 600, 750, 900],
+    ),
+    stats: BuildingStats(
+      baseProductionRate: 0.33,  // ~0.33 Tools/min
+      baseStorageCapacity: 3,    // Holds 3 Tools
+      gridSize: Size(3, 3),
+    ),
+  ),
+};
+```
+
+**Resource Definitions:**
+
+```dart
+enum ResourceType {
+  // Tier 1 Basic (no inputs)
+  wood,
+  ore,
+  food,
+
+  // Tier 1 Intermediate (1-2 inputs)
+  bars,
+  tools,
+
+  // Tier 2 Advanced (unlocks with Tier 2)
+  circuits,
+  machines,
+}
+
+class ResourceDefinition {
+  final ResourceType type;
+  final String displayName;
+  final String iconPath;
+  final ResourceTier tier;
+  final MarketPrices prices;
+
+  ResourceDefinition({
+    required this.type,
+    required this.displayName,
+    required this.iconPath,
+    required this.tier,
+    required this.prices,
+  });
+}
+
+enum ResourceTier {
+  basic,         // Wood, Ore, Food (produced from nothing)
+  intermediate,  // Bars (1 production step)
+  advanced,      // Tools (2 production steps)
+}
+
+class MarketPrices {
+  final int buyPrice;   // Price to buy from NPC Market
+  final int sellPrice;  // Price to sell to NPC Market
+
+  int get spread => buyPrice - sellPrice;  // Profit margin
+
+  MarketPrices({
+    required this.buyPrice,
+    required this.sellPrice,
+  });
+}
+
+// Tier 1 Resource Catalog
+final Map<ResourceType, ResourceDefinition> tier1Resources = {
+  ResourceType.wood: ResourceDefinition(
+    type: ResourceType.wood,
+    displayName: "Wood",
+    iconPath: "assets/resources/wood.png",
+    tier: ResourceTier.basic,
+    prices: MarketPrices(buyPrice: 8, sellPrice: 5),  // 3g spread
+  ),
+
+  ResourceType.ore: ResourceDefinition(
+    type: ResourceType.ore,
+    displayName: "Ore",
+    iconPath: "assets/resources/ore.png",
+    tier: ResourceTier.basic,
+    prices: MarketPrices(buyPrice: 10, sellPrice: 7),  // 3g spread
+  ),
+
+  ResourceType.food: ResourceDefinition(
+    type: ResourceType.food,
+    displayName: "Food",
+    iconPath: "assets/resources/food.png",
+    tier: ResourceTier.basic,
+    prices: MarketPrices(buyPrice: 6, sellPrice: 4),  // 2g spread
+  ),
+
+  ResourceType.bars: ResourceDefinition(
+    type: ResourceType.bars,
+    displayName: "Bars",
+    iconPath: "assets/resources/bars.png",
+    tier: ResourceTier.intermediate,
+    prices: MarketPrices(buyPrice: 20, sellPrice: 15),  // 5g spread (higher)
+  ),
+
+  ResourceType.tools: ResourceDefinition(
+    type: ResourceType.tools,
+    displayName: "Tools",
+    iconPath: "assets/resources/tools.png",
+    tier: ResourceTier.advanced,
+    prices: MarketPrices(buyPrice: 50, sellPrice: 40),  // 10g spread (highest)
+  ),
+};
+```
+
+**Market Trading System:**
+
+```dart
+class NPCMarket {
+  // Tier 1: FIXED prices (no fluctuations)
+  Map<ResourceType, MarketPrices> getCurrentPrices() {
+    // In Tier 1, prices never change
+    return tier1Resources.map((type, def) => MapEntry(type, def.prices));
+  }
+
+  // Buy resources from market
+  TransactionResult buyResource(
+    PlayerEconomy player,
+    ResourceType resourceType,
+    int amount,
+  ) {
+    final price = tier1Resources[resourceType]!.prices.buyPrice;
+    final totalCost = price * amount;
+
+    if (player.gold < totalCost) {
+      return TransactionResult.failure("Insufficient Gold! Need $totalCost gold");
+    }
+
+    // Deduct gold, add resources
+    player.gold -= totalCost;
+    player.inventory[resourceType.toString()]!.amount += amount;
+
+    FirebaseAnalytics.logEvent('market_buy', {
+      'resource': resourceType.toString(),
+      'amount': amount,
+      'cost': totalCost,
+    });
+
+    return TransactionResult.success("Bought $amount ${resourceType.toString()} for $totalCost gold");
+  }
+
+  // Sell resources to market
+  TransactionResult sellResource(
+    PlayerEconomy player,
+    ResourceType resourceType,
+    int amount,
+  ) {
+    final currentAmount = player.inventory[resourceType.toString()]!.amount;
+
+    if (currentAmount < amount) {
+      return TransactionResult.failure("Insufficient Resources! Have $currentAmount, need $amount");
+    }
+
+    final price = tier1Resources[resourceType]!.prices.sellPrice;
+    final totalEarned = price * amount;
+
+    // Add gold, remove resources
+    player.gold += totalEarned;
+    player.inventory[resourceType.toString()]!.amount -= amount;
+
+    FirebaseAnalytics.logEvent('market_sell', {
+      'resource': resourceType.toString(),
+      'amount': amount,
+      'earned': totalEarned,
+    });
+
+    return TransactionResult.success("Sold $amount ${resourceType.toString()} for $totalEarned gold");
+  }
+
+  // Calculate profit for selling produced resources
+  int calculateProductionProfit(ProductionRecipe recipe) {
+    int inputCost = 0;
+    recipe.inputs.forEach((resourceId, amount) {
+      final resourceType = ResourceType.values.firstWhere((t) => t.toString().endsWith(resourceId));
+      inputCost += tier1Resources[resourceType]!.prices.buyPrice * amount;
+    });
+
+    int outputValue = 0;
+    recipe.outputs.forEach((resourceId, amount) {
+      final resourceType = ResourceType.values.firstWhere((t) => t.toString().endsWith(resourceId));
+      outputValue += tier1Resources[resourceType]!.prices.sellPrice * amount;
+    });
+
+    return outputValue - inputCost;  // Profit per production cycle
+  }
+}
+
+class TransactionResult {
+  final bool success;
+  final String message;
+
+  TransactionResult.success(this.message) : success = true;
+  TransactionResult.failure(this.message) : success = false;
+}
+```
+
+**Supply Chain Economics:**
+
+```dart
+// Tier 1 Supply Chain Profitability Analysis
+class SupplyChainAnalysis {
+  // Example: Producing 1 Tool
+  static ProductionProfitability analyzeToolProduction() {
+    // Inputs needed:
+    // - 2 Bars (each Bar needs 1 Wood + 1 Ore)
+    // - 1 Ore
+    // Total: 2 Wood, 3 Ore
+
+    int costWood = 2 * 8;   // Buy 2 Wood = 16g
+    int costOre = 3 * 10;   // Buy 3 Ore = 30g
+    int totalCost = costWood + costOre;  // 46g
+
+    int sellTool = 1 * 40;  // Sell 1 Tool = 40g
+
+    int profit = sellTool - totalCost;  // -6g (LOSS if buying inputs!)
+
+    return ProductionProfitability(
+      totalInputCost: totalCost,
+      totalOutputValue: sellTool,
+      netProfit: profit,
+      recommendation: profit > 0
+          ? "Profitable! Produce and sell."
+          : "Loss if buying inputs. Produce your own resources!",
+    );
+  }
+
+  // Key Learning: Players must PRODUCE basic resources (Wood/Ore/Food)
+  // to make profit on advanced items. Buying all inputs = loss!
+  static ProductionProfitability analyzeWithOwnProduction() {
+    // If player produces own Wood (0 cost) and Ore (0 cost):
+    int totalCost = 0;  // All inputs produced, not bought
+    int sellTool = 1 * 40;  // Sell 1 Tool = 40g
+    int profit = sellTool - totalCost;  // 40g PROFIT!
+
+    return ProductionProfitability(
+      totalInputCost: totalCost,
+      totalOutputValue: sellTool,
+      netProfit: profit,
+      recommendation: "Highly profitable! Build Lumbermills and Mines.",
+    );
+  }
+}
+
+class ProductionProfitability {
+  final int totalInputCost;
+  final int totalOutputValue;
+  final int netProfit;
+  final String recommendation;
+
+  ProductionProfitability({
+    required this.totalInputCost,
+    required this.totalOutputValue,
+    required this.netProfit,
+    required this.recommendation,
+  });
+}
+```
+
+---
+
+#### Performance Requirements
+
+- **Market Interface Load Time:** <200ms to open NPC Market
+- **Transaction Processing:** <50ms for buy/sell operations
+- **Price Display:** All 7 resource prices visible simultaneously (no scrolling)
+- **Building Placement:** <100ms from tap to building placed (visual feedback)
+- **Supply Chain Visualization:** Recipe tooltips load in <100ms
+
+---
+
+#### UI/UX Specifications
+
+**Build Menu Interface:**
+- **Layout:** Bottom sheet with 5 building cards (horizontal scroll)
+- **Building Card Shows:**
+  - Building icon (64×64px)
+  - Display name ("Lumbermill")
+  - Construction cost ("100 gold")
+  - Production info ("1 Wood/min")
+  - "Build" button (green if affordable, gray if not)
+- **Placement Mode:**
+  - After selecting building, grid tiles highlight (green = valid, red = occupied)
+  - Drag to position, tap to confirm
+  - Cancel button visible at top
+
+**NPC Market Interface:**
+- **Layout:** Full-screen modal with 2 tabs (BUY | SELL)
+- **Resource Row Shows:**
+  - Resource icon + name
+  - Current inventory amount ("10 Wood")
+  - Buy price ("8g") or Sell price ("5g")
+  - Amount slider (1-100)
+  - "Buy"/"Sell" button
+- **Transaction Feedback:**
+  - Success: Green flash + "+50 gold" floating text
+  - Failure: Red shake + error message toast
+
+**Supply Chain Tooltips:**
+- **Tap building → Shows recipe card:**
+  - Inputs (left): "1 Wood + 1 Ore"
+  - Arrow → Outputs (right): "1 Bar"
+  - Production time: "2 minutes"
+  - Profitability: "+15g profit if inputs are free"
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **Building Variety:**
+- All 5 Tier 1 buildings placeable and functional
+- Each building produces correct resources at correct rates
+
+✅ **Supply Chain Functionality:**
+- Basic buildings (Lumbermill/Mine/Farm) produce without inputs
+- Intermediate buildings (Smelter) require correct inputs
+- Advanced buildings (Workshop) handle multi-step chains correctly
+
+✅ **Market Trading:**
+- All 7 resources available in NPC Market
+- Prices are FIXED (never change in Tier 1)
+- Buy/sell transactions process correctly
+- Profit/loss calculations visible to player
+
+✅ **Economic Learning:**
+- Players understand "produce your own inputs = profit" within 30 minutes
+- Supply chain tooltips explain dependencies clearly
+- Tier 1 feels rewarding but tedious (motivates Tier 2 automation)
+
+**Analytics to Track:**
+- Building placement distribution (which buildings are popular?)
+- Resource production rates (are players producing enough?)
+- Market transaction frequency (how often buy vs sell?)
+- Time to first advanced resource (Tools) produced
+- Tier 1 completion time (target: 5 hours to max out Tier 1)
+
+---
+
+#### Dependencies
+
+**Required Before FR-002:**
+- ✅ FR-001: Core Gameplay Loop (must have COLLECT/DECIDE/UPGRADE working)
+
+**Required After FR-002:**
+- FR-003: Tier 2 Automation System (conveyors unlock, uses Tier 1 economy as base)
+- FR-006: Progression System (Tier 1 → Tier 2 unlock requirements)
+- FR-007: Discovery-Based Tutorial (teach supply chains through events)
+
+---
+
+#### Open Questions
+
+1. **Building limit in Tier 1:** Should be 10 buildings total, or 10 per building type?
+   - **Recommendation:** 10 buildings TOTAL (forces strategic choices, rewards Tier 2 unlock)
+
+2. **Starting resources:** Should players start with 100 gold and 10 of each basic resource, or empty?
+   - **Recommendation:** Start with 100 gold, 0 resources (forces engagement with buildings immediately)
+
+3. **Food resource purpose:** Food is produced but has no use in Tier 1 recipes. Should it be required for building operation, or just for selling?
+   - **Recommendation:** Just for selling in Tier 1 (simplicity), becomes worker wages in Tier 2
+
+4. **Building placement restrictions:** Should certain buildings require adjacency (e.g., Smelter near Mine)?
+   - **Recommendation:** No restrictions in Tier 1 (player freedom), conveyors handle logistics in Tier 2
+
+5. **Grid size for buildings:** All buildings 2×2, or vary by type?
+   - **Recommendation:** Basic buildings 2×2, advanced buildings 3×3 (visual importance hierarchy)
+
+---
+
+**Status:** ✅ FR-002 Specification Complete
+**Next:** FR-003 Tier 2 Automation System
+
+---
+
+### FR-003: Tier 2 Automation System (CRITICAL - P0)
+
+**Description:** The Tier 2 Automation System is the **core value proposition** of Trade Factory Masters - the "aha moment" where conveyors unlock and transform tedious manual resource collection into satisfying automation. Players place START/END points, AI suggests optimal conveyor paths using A* pathfinding, and players confirm routes. This "conveyors as achievement" design differentiates TFM from competitors and hooks players.
+
+**Priority:** P0 (Critical - Core differentiator, drives retention from Tier 1 → Tier 2)
+**Dependencies:** FR-001 (Core Loop), FR-002 (Tier 1 Economy must establish tedium first)
+**Estimated Complexity:** Very High (pathfinding AI, real-time resource flow, performance with 50+ conveyors)
+
+---
+
+#### User Stories
+
+**US-003.1: Unlocking Automation ("Aha Moment")**
+```
+As a player who has been manually tapping buildings for 5 hours
+I want to unlock conveyor belts as a Tier 2 reward
+So that I experience the "aha moment" of automation unlocking
+
+Acceptance Criteria:
+- GIVEN I complete Tier 1 requirements (all buildings Level 5, 1000 gold, 100 Tools produced)
+  WHEN I tap the "Unlock Tier 2" button
+  THEN a celebration animation plays (fireworks, confetti)
+  AND a tutorial message appears: "Conveyors Unlocked! Automate your factory!"
+  AND the Build Menu now shows "Conveyor" option
+  AND I feel rewarded for grinding through manual Tier 1
+
+- GIVEN I unlock Tier 2 for the first time
+  WHEN the unlock completes
+  THEN analytics event fires: 'tier2_unlocked' with time_to_unlock_minutes
+  AND this measures how long Tier 1 engagement lasted
+  AND this is a CRITICAL retention metric (60%+ should reach this)
+```
+
+**US-003.2: Smart Conveyor Placement (AI-Assisted)**
+```
+As a player
+I want to connect buildings with conveyors WITHOUT tediously placing every tile
+So that factory planning is fun, not frustrating
+
+Acceptance Criteria:
+- GIVEN I have 2 buildings that should connect (Lumbermill → Smelter)
+  WHEN I enter "Conveyor Mode"
+  AND I tap the Lumbermill (START point)
+  AND I tap the Smelter (END point)
+  THEN AI calculates optimal path using A* pathfinding
+  AND suggested path is shown as semi-transparent conveyor tiles
+  AND path avoids existing buildings and other conveyors
+  AND path uses minimal tiles (shortest valid route)
+
+- GIVEN AI shows suggested conveyor path
+  WHEN I review the path
+  THEN I see:
+    - Path length (e.g., "12 tiles")
+    - Construction cost (e.g., "60 gold, 12 Bars")
+    - "Confirm" button (green) and "Cancel" button (red)
+    - Option to "Edit Path" manually if I want to customize
+
+- GIVEN I tap "Confirm" on suggested path
+  WHEN path is built
+  THEN all conveyor tiles are placed instantly
+  AND cost is deducted from inventory
+  AND conveyors immediately start transporting resources
+  AND I feel satisfied (automation working!)
+
+- GIVEN I tap "Edit Path" instead of Confirm
+  WHEN edit mode activates
+  THEN I can:
+    - Tap individual tiles to add/remove conveyor segments
+    - Keep AI-suggested route as base, modify only problem areas
+    - See updated cost in real-time as I edit
+    - Confirm when satisfied with custom route
+```
+
+**US-003.3: Automated Resource Flow**
+```
+As a player
+I want to watch resources automatically flow between buildings on conveyors
+So that I feel the satisfaction of automation working
+
+Acceptance Criteria:
+- GIVEN a conveyor connects Lumbermill (output) to Smelter (input)
+  WHEN Lumbermill produces Wood
+  THEN Wood automatically appears on conveyor as a sprite
+  AND sprite moves along conveyor path toward Smelter
+  AND movement is smooth (60 FPS, 1 tile/second speed)
+  AND I can see my factory "working" visually
+
+- GIVEN a resource sprite reaches the END building (Smelter)
+  WHEN sprite arrives
+  THEN resource is added to building's input buffer
+  AND sprite disappears (consumed by building)
+  AND building begins production if all inputs satisfied
+
+- GIVEN multiple resources are flowing on same conveyor
+  WHEN conveyors are busy
+  THEN resources queue naturally (2-3 sprites visible per conveyor)
+  AND no overlapping (sprites maintain spacing)
+  AND performance stays at 60 FPS with 50+ conveyors active
+
+- GIVEN I'm watching my factory in Build Mode (1.5x zoom)
+  WHEN resources are flowing
+  THEN I feel satisfaction watching automation work
+  AND I don't need to tap buildings anymore (except to collect finished products)
+  AND this is the core "hook" that retains players
+```
+
+**US-003.4: Conveyor Network Management**
+```
+As a player with a complex factory
+I want to manage multiple conveyor routes efficiently
+So that I can scale to Tier 2 complexity without overwhelming UI
+
+Acceptance Criteria:
+- GIVEN I have 10+ conveyor routes in my factory
+  WHEN I open "Conveyor Management" panel
+  THEN I see list of all routes:
+    - Route #1: Lumbermill → Smelter (12 tiles, Wood flow)
+    - Route #2: Mine → Smelter (8 tiles, Ore flow)
+    - Route #3: Smelter → Workshop (15 tiles, Bars flow)
+    - etc.
+
+- GIVEN I select a route in the list
+  WHEN I tap it
+  THEN camera pans to that route (highlight conveyors in green)
+  AND I can see current resource flow status
+  AND options appear: "Delete Route", "Edit Route", "Toggle On/Off"
+
+- GIVEN a conveyor route is blocked (building removed, path invalid)
+  WHEN route breaks
+  THEN route shows as RED in management panel
+  AND warning icon appears on affected buildings
+  AND tooltip explains: "Conveyor disconnected! Reconnect or delete route."
+
+- GIVEN I delete a conveyor route
+  WHEN I confirm deletion
+  THEN all conveyor tiles are removed
+  AND resources on those conveyors are returned to source building
+  AND 50% of construction cost is refunded (encourages experimentation)
+```
+
+**US-003.5: Tier 2 Economic Complexity**
+```
+As a player in Tier 2
+I want economic complexity to increase naturally
+So that automation feels necessary and rewarding
+
+Acceptance Criteria:
+- GIVEN I unlock Tier 2
+  WHEN I access NPC Market
+  THEN prices now FLUCTUATE based on events
+  AND "Dragon Attack" event drops Wood supply → prices spike 2x
+  AND "Mining Boom" event increases Ore supply → prices drop 0.5x
+  AND I must adapt my factory to market changes (no longer fixed prices)
+
+- GIVEN price fluctuations exist in Tier 2
+  WHEN Wood price spikes to 15g (was 5g)
+  THEN I realize selling Wood is very profitable right now
+  AND I redirect conveyors to prioritize Wood production
+  AND this adds strategic depth (was just tapping in Tier 1)
+
+- GIVEN I have automated supply chains
+  WHEN I optimize for profit
+  THEN I can:
+    - Build 20 buildings (vs 10 in Tier 1)
+    - Manage 5+ simultaneous supply chains
+    - React to market events within 30 seconds (not possible in manual Tier 1)
+    - Earn 10x more gold per hour than Tier 1
+```
+
+---
+
+#### Technical Specifications
+
+**Conveyor System Architecture:**
+
+```dart
+// Conveyor Route Definition
+class ConveyorRoute {
+  final String id;                        // Unique route ID
+  final Building startBuilding;           // Output building
+  final Building endBuilding;             // Input building
+  final List<Point<int>> path;            // Grid tiles (A* calculated)
+  final ResourceType transportedResource; // What flows on this conveyor
+  final ConveyorState state;              // Active, paused, broken
+
+  int get length => path.length;          // Number of tiles
+  int get constructionCost => length * 5; // 5 gold per tile
+
+  ConveyorRoute({
+    required this.id,
+    required this.startBuilding,
+    required this.endBuilding,
+    required this.path,
+    required this.transportedResource,
+    required this.state,
+  });
+}
+
+enum ConveyorState {
+  active,   // Functioning normally
+  paused,   // Player toggled off
+  broken,   // Path invalid (building removed)
+}
+
+// Resource Sprite on Conveyor
+class ResourceSprite {
+  final String id;
+  final ResourceType type;
+  final ConveyorRoute route;
+  int currentTileIndex;               // Position on path (0 = start, length-1 = end)
+  double progressToNextTile;          // 0.0-1.0 for smooth animation
+
+  Point<double> get currentPosition {
+    // Interpolate between current tile and next tile
+    final currentTile = route.path[currentTileIndex];
+    if (currentTileIndex >= route.path.length - 1) {
+      return Point(currentTile.x.toDouble(), currentTile.y.toDouble());
+    }
+
+    final nextTile = route.path[currentTileIndex + 1];
+    return Point(
+      currentTile.x + (nextTile.x - currentTile.x) * progressToNextTile,
+      currentTile.y + (nextTile.y - currentTile.y) * progressToNextTile,
+    );
+  }
+
+  ResourceSprite({
+    required this.id,
+    required this.type,
+    required this.route,
+    required this.currentTileIndex,
+    required this.progressToNextTile,
+  });
+}
+```
+
+**A* Pathfinding Implementation:**
+
+```dart
+// A* Pathfinding for Conveyor Routes
+class ConveyorPathfinder {
+  final Size gridSize;                    // 50×50 grid
+  final Set<Point<int>> occupiedTiles;    // Buildings + existing conveyors
+
+  ConveyorPathfinder({
+    required this.gridSize,
+    required this.occupiedTiles,
+  });
+
+  // Find shortest path from start to end, avoiding obstacles
+  List<Point<int>>? findPath(Point<int> start, Point<int> end) {
+    final openSet = PriorityQueue<AStarNode>((a, b) => a.fScore.compareTo(b.fScore));
+    final closedSet = <Point<int>>{};
+    final cameFrom = <Point<int>, Point<int>>{};
+    final gScore = <Point<int>, double>{start: 0};
+
+    openSet.add(AStarNode(
+      position: start,
+      gScore: 0,
+      fScore: _heuristic(start, end),
+    ));
+
+    while (openSet.isNotEmpty) {
+      final current = openSet.removeFirst();
+
+      // Reached destination
+      if (current.position == end) {
+        return _reconstructPath(cameFrom, current.position);
+      }
+
+      closedSet.add(current.position);
+
+      // Check all 4 neighbors (up, down, left, right)
+      for (final neighbor in _getNeighbors(current.position)) {
+        // Skip if occupied or already evaluated
+        if (occupiedTiles.contains(neighbor) || closedSet.contains(neighbor)) {
+          continue;
+        }
+
+        final tentativeGScore = gScore[current.position]! + 1;
+
+        if (!gScore.containsKey(neighbor) || tentativeGScore < gScore[neighbor]!) {
+          cameFrom[neighbor] = current.position;
+          gScore[neighbor] = tentativeGScore;
+
+          final fScore = tentativeGScore + _heuristic(neighbor, end);
+          openSet.add(AStarNode(
+            position: neighbor,
+            gScore: tentativeGScore,
+            fScore: fScore,
+          ));
+        }
+      }
+    }
+
+    return null; // No path found
+  }
+
+  // Manhattan distance heuristic (grid-based movement)
+  double _heuristic(Point<int> a, Point<int> b) {
+    return (a.x - b.x).abs() + (a.y - b.y).abs();
+  }
+
+  List<Point<int>> _getNeighbors(Point<int> p) {
+    return [
+      Point(p.x, p.y - 1), // Up
+      Point(p.x, p.y + 1), // Down
+      Point(p.x - 1, p.y), // Left
+      Point(p.x + 1, p.y), // Right
+    ].where((neighbor) =>
+      neighbor.x >= 0 && neighbor.x < gridSize.width &&
+      neighbor.y >= 0 && neighbor.y < gridSize.height
+    ).toList();
+  }
+
+  List<Point<int>> _reconstructPath(Map<Point<int>, Point<int>> cameFrom, Point<int> current) {
+    final path = <Point<int>>[current];
+    while (cameFrom.containsKey(current)) {
+      current = cameFrom[current]!;
+      path.insert(0, current);
+    }
+    return path;
+  }
+}
+
+class AStarNode {
+  final Point<int> position;
+  final double gScore;  // Cost from start to this node
+  final double fScore;  // gScore + heuristic (estimated total cost)
+
+  AStarNode({
+    required this.position,
+    required this.gScore,
+    required this.fScore,
+  });
+}
+```
+
+**Resource Flow Simulation:**
+
+```dart
+// Conveyor System Manager
+@riverpod
+class ConveyorSystem extends _$ConveyorSystem {
+  @override
+  ConveyorSystemState build() {
+    return ConveyorSystemState.initial();
+  }
+
+  // Update all resource sprites (called every frame at 60 FPS)
+  void updateResourceFlow(double deltaTime) {
+    final updatedSprites = <ResourceSprite>[];
+
+    for (final sprite in state.activeSprites) {
+      // Move sprite along conveyor path (1 tile/second = 1.0 progress/second)
+      var newProgress = sprite.progressToNextTile + deltaTime;
+      var newTileIndex = sprite.currentTileIndex;
+
+      // Advance to next tile if progress >= 1.0
+      while (newProgress >= 1.0 && newTileIndex < sprite.route.path.length - 1) {
+        newProgress -= 1.0;
+        newTileIndex++;
+      }
+
+      // Check if sprite reached destination
+      if (newTileIndex >= sprite.route.path.length - 1 && newProgress >= 1.0) {
+        // Deliver resource to destination building
+        _deliverResource(sprite);
+      } else {
+        // Continue moving
+        updatedSprites.add(sprite.copyWith(
+          currentTileIndex: newTileIndex,
+          progressToNextTile: newProgress,
+        ));
+      }
+    }
+
+    state = state.copyWith(activeSprites: updatedSprites);
+  }
+
+  // Spawn new resource sprite when building produces
+  void spawnResource(Building building, ResourceType resource) {
+    // Find conveyor routes starting from this building
+    final routes = state.routes.where((r) => r.startBuilding.id == building.id);
+
+    for (final route in routes) {
+      if (route.transportedResource == resource && route.state == ConveyorState.active) {
+        final sprite = ResourceSprite(
+          id: Uuid().v4(),
+          type: resource,
+          route: route,
+          currentTileIndex: 0,
+          progressToNextTile: 0.0,
+        );
+
+        state = state.copyWith(
+          activeSprites: [...state.activeSprites, sprite],
+        );
+      }
+    }
+  }
+
+  // Deliver resource to destination building
+  void _deliverResource(ResourceSprite sprite) {
+    final destBuilding = sprite.route.endBuilding;
+
+    // Add resource to building's input buffer
+    // (Building will start production if all inputs are satisfied)
+    _addResourceToBuilding(destBuilding, sprite.type, 1);
+
+    // Remove sprite from active list (delivered)
+    state = state.copyWith(
+      activeSprites: state.activeSprites.where((s) => s.id != sprite.id).toList(),
+    );
+  }
+
+  // Create new conveyor route using AI pathfinding
+  Future<ConveyorRoute?> createRoute(Building start, Building end, ResourceType resource) async {
+    final pathfinder = ConveyorPathfinder(
+      gridSize: Size(50, 50),
+      occupiedTiles: _getOccupiedTiles(),
+    );
+
+    final path = pathfinder.findPath(
+      start.gridPosition,
+      end.gridPosition,
+    );
+
+    if (path == null) {
+      return null; // No valid path found
+    }
+
+    final route = ConveyorRoute(
+      id: Uuid().v4(),
+      startBuilding: start,
+      endBuilding: end,
+      path: path,
+      transportedResource: resource,
+      state: ConveyorState.active,
+    );
+
+    // Track analytics
+    FirebaseAnalytics.logEvent('conveyor_created', {
+      'length': route.length,
+      'resource': resource.toString(),
+      'cost': route.constructionCost,
+    });
+
+    return route;
+  }
+}
+
+class ConveyorSystemState {
+  final List<ConveyorRoute> routes;
+  final List<ResourceSprite> activeSprites;
+
+  ConveyorSystemState({
+    required this.routes,
+    required this.activeSprites,
+  });
+
+  static ConveyorSystemState initial() {
+    return ConveyorSystemState(routes: [], activeSprites: []);
+  }
+}
+```
+
+**Tier 2 Dynamic Economy:**
+
+```dart
+// Dynamic Market Prices (Tier 2)
+@riverpod
+class DynamicMarket extends _$DynamicMarket {
+  @override
+  MarketState build() {
+    return MarketState.initial();
+  }
+
+  // Trigger economic event (e.g., Dragon Attack)
+  void triggerEvent(MarketEvent event) {
+    final newPrices = <ResourceType, MarketPrices>{};
+
+    // Apply event modifiers to prices
+    for (final entry in state.currentPrices.entries) {
+      final basePrice = tier1Resources[entry.key]!.prices;
+      final modifier = event.priceModifiers[entry.key] ?? 1.0;
+
+      newPrices[entry.key] = MarketPrices(
+        buyPrice: (basePrice.buyPrice * modifier).round(),
+        sellPrice: (basePrice.sellPrice * modifier).round(),
+      );
+    }
+
+    state = state.copyWith(
+      currentPrices: newPrices,
+      activeEvent: event,
+    );
+
+    // Show event notification to player
+    _showEventNotification(event);
+
+    // Track analytics
+    FirebaseAnalytics.logEvent('market_event', {
+      'event_type': event.name,
+      'duration_minutes': event.duration.inMinutes,
+    });
+  }
+}
+
+class MarketEvent {
+  final String name;              // "Dragon Attack", "Mining Boom"
+  final String description;       // "Wood supply disrupted!"
+  final Duration duration;        // How long event lasts
+  final Map<ResourceType, double> priceModifiers;  // Resource → multiplier
+
+  MarketEvent({
+    required this.name,
+    required this.description,
+    required this.duration,
+    required this.priceModifiers,
+  });
+
+  // Example events
+  static final dragonAttack = MarketEvent(
+    name: "Dragon Attack",
+    description: "A dragon burned the forest! Wood prices have spiked.",
+    duration: Duration(minutes: 5),
+    priceModifiers: {
+      ResourceType.wood: 2.0,  // Wood price doubles
+    },
+  );
+
+  static final miningBoom = MarketEvent(
+    name: "Mining Boom",
+    description: "New ore deposits discovered! Ore prices dropped.",
+    duration: Duration(minutes: 5),
+    priceModifiers: {
+      ResourceType.ore: 0.5,  // Ore price halves
+    },
+  );
+}
+```
+
+---
+
+#### Performance Requirements
+
+- **Pathfinding Performance:** <100ms to calculate A* path for 50-tile route
+- **Sprite Rendering:** 60 FPS with 50+ active resource sprites on conveyors
+- **Conveyor System Update:** <8ms per frame (allows other systems to render in 16ms budget)
+- **Route Creation:** <200ms from START/END selection to path preview shown
+- **Sprite Batching:** All resource sprites rendered in single draw call (performance optimization)
+
+---
+
+#### UI/UX Specifications
+
+**Conveyor Mode Interface:**
+- **Activation:** Tap "Conveyor" button in Build Menu
+- **Visual Changes:**
+  - Buildings show colored output/input indicators (green = output, blue = input)
+  - Grid fades slightly (focus on buildings)
+  - Instructions appear: "Tap START building, then END building"
+
+**AI Path Preview:**
+- **Suggested Path Rendering:**
+  - Semi-transparent blue conveyor tiles (50% opacity)
+  - Animated dashed line along path (shows direction)
+  - START point shows green marker, END shows blue marker
+- **Cost Panel (bottom):**
+  - "Path Length: 12 tiles"
+  - "Cost: 60 gold + 12 Bars"
+  - "Confirm" button (green, large) | "Edit Path" | "Cancel" (red, small)
+
+**Resource Flow Visualization:**
+- **Sprite Design:**
+  - Resource icon (16×16px) on conveyor tile
+  - Subtle glow effect (indicates movement)
+  - Smooth interpolation between tiles (no jitter)
+- **Conveyor Tile Design:**
+  - Directional arrows showing flow direction
+  - Subtle animation (arrows "pulse" to indicate active)
+  - Different color if paused (gray) or broken (red)
+
+**Tier 2 Unlock Celebration:**
+- **Animation:**
+  - Full-screen overlay with fireworks/confetti particles
+  - "TIER 2 UNLOCKED!" large text (gold color)
+  - "Conveyors Available!" subtitle
+  - Celebration lasts 3 seconds, then fades
+- **Audio:** Triumphant sound effect (validates 5 hours of Tier 1 grind)
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **Conveyor Unlocking:**
+- Tier 2 unlock triggers after Tier 1 completion (all buildings Level 5, 1000 gold, 100 Tools)
+- Celebration animation plays and feels rewarding
+- 60%+ of players reach Tier 2 unlock (critical retention metric)
+
+✅ **AI Pathfinding:**
+- A* pathfinding calculates valid paths in <100ms
+- Paths avoid buildings and existing conveyors
+- Paths are shortest valid route (no unnecessary detours)
+- Path preview is clear and easy to understand
+
+✅ **Resource Flow:**
+- Resources automatically flow on conveyors at 1 tile/second
+- 60 FPS maintained with 50+ active conveyors
+- Sprites don't overlap or jitter
+- Delivery to destination buildings works correctly
+
+✅ **Economic Complexity:**
+- Market events trigger price fluctuations in Tier 2
+- Players understand how to react to events within 10 minutes
+- Tier 2 feels significantly more strategic than Tier 1
+
+✅ **Satisfaction Factor (Qualitative):**
+- Players report "aha moment" when conveyors unlock (user testing)
+- Factory automation feels satisfying to watch (visual flow)
+- Tedium of Tier 1 → Relief of Tier 2 creates retention hook
+
+**Analytics to Track:**
+- Tier 2 unlock rate (target: 60%+)
+- Time to Tier 2 unlock (target: 5 hours)
+- Number of conveyor routes per player (engagement measure)
+- Average route length (optimization behavior)
+- Market event response time (strategic depth)
+- D7 retention after Tier 2 unlock (target: 70%+, vs 35% overall)
+
+---
+
+#### Dependencies
+
+**Required Before FR-003:**
+- ✅ FR-001: Core Gameplay Loop (building interaction must work)
+- ✅ FR-002: Tier 1 Economy (must establish tedium before relief)
+
+**Required After FR-003:**
+- FR-004: Offline Production System (conveyors must work offline too)
+- FR-006: Progression System (Tier 1 → Tier 2 unlock requirements)
+- FR-007: Discovery-Based Tutorial (teach conveyor placement through events)
+
+---
+
+#### Open Questions
+
+1. **Conveyor speed:** Should be 1 tile/second, or adjustable (slow 0.5x, fast 2x)?
+   - **Recommendation:** Fixed 1 tile/second in Tier 2 (simplicity), upgradeable speed in Tier 3+
+
+2. **Resource batching on conveyors:** Should conveyors transport 1 resource at a time, or batches of 5-10?
+   - **Recommendation:** 1 at a time for visual clarity (can see individual sprites moving)
+
+3. **Conveyor intersections:** If two conveyors cross, do they conflict or can resources pass through?
+   - **Recommendation:** Conveyors can't intersect (pathfinding avoids existing conveyors), forces planning
+
+4. **Manual conveyor editing:** Should players be able to place conveyors tile-by-tile without AI, or always AI-assisted?
+   - **Recommendation:** Always start with AI suggestion, allow manual edits (best of both)
+
+5. **Conveyor delete refund:** 50% refund or 100% refund when deleting routes?
+   - **Recommendation:** 50% refund (prevents abuse, encourages thoughtful planning)
+
+---
+
+**Status:** ✅ FR-003 Specification Complete
+**Next:** FR-004 Offline Production System
+
+---
+
+### FR-004: Offline Production System (HIGH - P1)
+
+**Description:** The Offline Production System calculates resources produced while the player is away using an **O(1) constant-time algorithm** (not simulating every second). This respects player time, prevents battery drain, and differentiates TFM from web-based idle games that require constant connection. Players return to see progress, encouraging daily engagement.
+
+**Priority:** P1 (High - Critical retention feature, industry standard for mobile games)
+**Dependencies:** FR-001 (Core Loop), FR-002 (Economy), FR-003 (Automation for Tier 2 offline)
+**Estimated Complexity:** Medium-High (complex math for O(1) calculation, edge cases with storage limits)
+
+---
+
+#### User Stories
+
+**US-004.1: Short Offline Session (1 Hour Away)**
+```
+As a mobile player
+I want my factory to keep producing resources while I'm away for 1 hour
+So that I feel rewarded for returning and don't fall behind
+
+Acceptance Criteria:
+- GIVEN I close the app with 2 buildings producing (Lumbermill Level 3, Mine Level 2)
+  AND I'm away for exactly 1 hour
+  WHEN I reopen the app
+  THEN offline production is calculated instantly (O(1), <50ms)
+  AND I see results:
+    - Lumbermill: +60 Wood (1 Wood/min × 60 min × 1.4x Level 3 bonus = 84 Wood)
+    - Mine: +60 Ore (1 Ore/min × 60 min × 1.2x Level 2 bonus = 72 Ore)
+    - Capped by storage: Lumbermill storage = 14 capacity (10 base + 40% from 4 levels)
+
+- GIVEN I return after 1 hour
+  WHEN app opens
+  THEN "Welcome Back!" modal appears showing:
+    - Time away: "1 hour 3 minutes"
+    - Resources produced: "+84 Wood, +72 Ore"
+    - Gold earned (if I sold automatically): "+420 gold"
+    - "Collect" button (large, green)
+  AND this positive feedback encourages return visits
+
+- GIVEN I see offline production results
+  WHEN I tap "Collect"
+  THEN resources are added to inventory
+  AND celebration animation plays (sparkles, +numbers floating)
+  AND I immediately feel progress was made during absence
+```
+
+**US-004.2: Long Offline Session (1 Week Away)**
+```
+As a casual player who returns after a long absence
+I want to receive meaningful rewards (but not break game economy)
+So that I'm motivated to continue playing, not overwhelmed
+
+Acceptance Criteria:
+- GIVEN I'm away for 7 days (168 hours)
+  AND my buildings have 10-hour storage capacity
+  WHEN I return
+  THEN production is capped at storage limits:
+    - Lumbermill produces for 10 hours, then stops (full)
+    - Total: 840 Wood (capped at storage limit, not 168h × rate)
+  AND I don't receive 7 days worth (would break economy)
+
+- GIVEN I return after 7 days
+  WHEN app opens
+  THEN "Welcome Back!" modal shows:
+    - "Away for 7 days"
+    - "Your factory ran for 10 hours before storage filled up"
+    - "Upgrade storage to earn more offline!"
+    - Resources capped at storage limits
+  AND this teaches storage upgrade value
+
+- GIVEN long absence (7+ days)
+  WHEN I return
+  THEN I also see:
+    - "Daily Bonus: +500 gold!" (comeback incentive)
+    - "Watch ad for 2x offline production?" (optional, ethical)
+  AND I feel welcomed back, not punished for absence
+```
+
+**US-004.3: Offline Production with Conveyors (Tier 2)**
+```
+As a Tier 2 player with automated supply chains
+I want conveyors to continue working offline
+So that complex production chains complete while I'm away
+
+Acceptance Criteria:
+- GIVEN I have supply chain: Lumbermill → Smelter → Workshop (via conveyors)
+  AND I'm away for 2 hours
+  WHEN I return
+  THEN O(1) calculation determines:
+    1. Lumbermill produces 120 Wood (60/hour × 2 hours)
+    2. Conveyor delivers Wood to Smelter automatically (offline)
+    3. Smelter produces Bars (limited by Wood input availability)
+    4. Conveyor delivers Bars to Workshop
+    5. Workshop produces Tools (limited by Bars + Ore inputs)
+
+- GIVEN complex supply chain offline
+  WHEN calculation completes
+  THEN I see breakdown:
+    - "Lumbermill → Smelter: 120 Wood transported"
+    - "Smelter produced: 60 Bars (limited by Ore availability)"
+    - "Workshop produced: 20 Tools (limited by Bars input)"
+  AND I understand bottlenecks in my supply chain
+
+- GIVEN offline production with conveyors
+  WHEN resources were limited (e.g., Smelter ran out of Ore)
+  THEN modal shows:
+    - "Smelter stopped after 30 minutes (ran out of Ore)"
+    - "Upgrade Mine or adjust conveyors to fix!"
+  AND this encourages factory optimization
+```
+
+**US-004.4: Offline Production Bonus (Ad Reward)**
+```
+As a player who watches ads voluntarily
+I want to boost offline production by 2x
+So that I earn rewards for engaging with monetization
+
+Acceptance Criteria:
+- GIVEN I return after 3 hours away
+  AND I see "Welcome Back!" modal with results
+  WHEN I'm offered "Watch ad for 2x offline production?"
+  AND I tap "Watch Ad"
+  THEN 30-second rewarded video plays (Google AdMob)
+  AND upon completion, my offline earnings double:
+    - Wood: 180 → 360
+    - Ore: 150 → 300
+    - Gold: 500 → 1000
+
+- GIVEN I choose not to watch ad
+  WHEN I tap "No Thanks"
+  THEN I receive standard offline production (1x)
+  AND no negative consequences (ethical F2P)
+  AND option remains for next session
+
+- GIVEN I watch ad for 2x boost
+  WHEN boost is applied
+  THEN analytics tracks:
+    - 'offline_ad_watched' event
+    - Offline duration (to measure when players watch ads)
+    - Boost value (to prevent economy breaking)
+  AND this data informs ad placement strategy
+```
+
+**US-004.5: Offline Production Caps & Limits**
+```
+As a game designer
+I want offline production to have smart limits
+So that economy stays balanced and storage upgrades feel valuable
+
+Acceptance Criteria:
+- GIVEN building has storage capacity = 14 units
+  AND building produces 1 unit/min
+  WHEN player is away for 30 minutes
+  THEN production stops at 14 units (storage full)
+  AND building shows "FULL" indicator when player returns
+
+- GIVEN player has NOT unlocked Tier 2
+  WHEN offline production is calculated
+  THEN manual buildings (Tier 1) produce normally
+  BUT conveyors don't exist yet (no complex chains)
+  AND calculation is simple (just building rates × time)
+
+- GIVEN player HAS unlocked Tier 2
+  WHEN offline production is calculated
+  THEN conveyors are simulated (O(1) algorithm)
+  AND supply chains complete automatically
+  AND bottlenecks are detected and reported
+
+- GIVEN player returns after 24+ hours
+  WHEN production exceeds reasonable limits
+  THEN maximum offline cap applies:
+    - Tier 1: 12 hours max production
+    - Tier 2: 24 hours max production (conveyors extend cap)
+  AND this prevents exploits (setting up factory, leaving for months)
+```
+
+---
+
+#### Technical Specifications
+
+**O(1) Offline Production Algorithm:**
+
+```dart
+// Offline Production Calculator
+class OfflineProductionCalculator {
+  // Calculate production for single building (O(1) - constant time)
+  ProductionResult calculateBuildingProduction(
+    Building building,
+    DateTime lastCollected,
+    DateTime now,
+  ) {
+    final elapsed = now.difference(lastCollected);
+    final minutesElapsed = elapsed.inSeconds / 60.0;
+
+    // Calculate total production (rate × time × level bonus)
+    final productionRate = building.productionRate; // Already includes level bonus
+    final totalProduced = (productionRate * minutesElapsed).floor();
+
+    // Apply storage cap
+    final storageCap = building.production.storageCapacity *
+                       (1 + (building.level - 1) * 0.10); // +10% per level
+    final cappedProduction = min(totalProduced, storageCap.floor());
+
+    // Calculate when storage filled up (for UI feedback)
+    final minutesToFill = storageCap / productionRate;
+    final filledAt = minutesElapsed > minutesToFill
+        ? lastCollected.add(Duration(minutes: minutesToFill.round()))
+        : null;
+
+    return ProductionResult(
+      resource: building.production.outputResource,
+      amount: cappedProduction,
+      wasCapped: totalProduced > cappedProduction,
+      cappedAt: filledAt,
+    );
+  }
+
+  // Calculate production for entire factory (O(n) where n = building count)
+  FactoryProductionResult calculateFactoryProduction(
+    List<Building> buildings,
+    DateTime lastSeen,
+    DateTime now,
+  ) {
+    final results = <Building, ProductionResult>{};
+    final elapsed = now.difference(lastSeen);
+
+    // Apply offline production cap (prevent infinite production)
+    final maxOfflineHours = buildings.any((b) => b.level > 5) ? 24.0 : 12.0;
+    final cappedElapsed = min(elapsed.inMinutes / 60.0, maxOfflineHours);
+    final cappedNow = lastSeen.add(Duration(minutes: (cappedElapsed * 60).round()));
+
+    for (final building in buildings) {
+      results[building] = calculateBuildingProduction(
+        building,
+        building.lastCollected,
+        cappedNow,
+      );
+    }
+
+    return FactoryProductionResult(
+      buildingResults: results,
+      offlineDuration: elapsed,
+      effectiveDuration: Duration(minutes: (cappedElapsed * 60).round()),
+      wasCapped: elapsed.inHours > maxOfflineHours,
+    );
+  }
+
+  // Calculate conveyor-based production (Tier 2) - Still O(n) for n buildings
+  FactoryProductionResult calculateAutomatedProduction(
+    List<Building> buildings,
+    List<ConveyorRoute> conveyors,
+    DateTime lastSeen,
+    DateTime now,
+  ) {
+    final elapsed = now.difference(lastSeen);
+    final maxOfflineHours = 24.0; // Tier 2 extended cap
+    final cappedElapsed = min(elapsed.inMinutes / 60.0, maxOfflineHours);
+
+    // Build dependency graph of production chains
+    final dependencyGraph = _buildDependencyGraph(buildings, conveyors);
+
+    // Topologically sort to process in correct order
+    final sortedBuildings = _topologicalSort(dependencyGraph);
+
+    final results = <Building, ProductionResult>{};
+    final resourceBuffer = <String, int>{}; // Simulated conveyor buffer
+
+    // Process buildings in dependency order
+    for (final building in sortedBuildings) {
+      // Check if inputs are available (from conveyors)
+      final inputs = building.production.recipe.inputs;
+      var limitingFactor = double.infinity;
+
+      for (final entry in inputs.entries) {
+        final available = resourceBuffer[entry.key] ?? 0;
+        final required = entry.value;
+        final possibleCycles = available / required;
+        limitingFactor = min(limitingFactor, possibleCycles);
+      }
+
+      // Calculate actual production (limited by inputs or time)
+      final timeBasedProduction = (building.productionRate * cappedElapsed * 60).floor();
+      final actualProduction = min(timeBasedProduction, limitingFactor.floor());
+
+      // Consume inputs from buffer
+      for (final entry in inputs.entries) {
+        resourceBuffer[entry.key] =
+          (resourceBuffer[entry.key] ?? 0) - (entry.value * actualProduction);
+      }
+
+      // Add outputs to buffer
+      final output = building.production.recipe.outputs.entries.first;
+      resourceBuffer[output.key] =
+        (resourceBuffer[output.key] ?? 0) + (output.value * actualProduction);
+
+      results[building] = ProductionResult(
+        resource: building.production.outputResource,
+        amount: actualProduction,
+        wasCapped: actualProduction < timeBasedProduction,
+        limitedBy: limitingFactor.isFinite ? 'inputs' : null,
+      );
+    }
+
+    return FactoryProductionResult(
+      buildingResults: results,
+      offlineDuration: elapsed,
+      effectiveDuration: Duration(minutes: (cappedElapsed * 60).round()),
+      wasCapped: elapsed.inHours > maxOfflineHours,
+    );
+  }
+
+  // Helper: Build dependency graph from conveyor routes
+  Map<Building, List<Building>> _buildDependencyGraph(
+    List<Building> buildings,
+    List<ConveyorRoute> conveyors,
+  ) {
+    final graph = <Building, List<Building>>{};
+
+    for (final conveyor in conveyors) {
+      if (!graph.containsKey(conveyor.endBuilding)) {
+        graph[conveyor.endBuilding] = [];
+      }
+      graph[conveyor.endBuilding]!.add(conveyor.startBuilding);
+    }
+
+    return graph;
+  }
+
+  // Helper: Topological sort for correct processing order
+  List<Building> _topologicalSort(Map<Building, List<Building>> graph) {
+    // Kahn's algorithm for topological sorting
+    // Returns buildings in order: producers first, consumers last
+    // Implementation details omitted for brevity
+    return []; // Placeholder
+  }
+}
+
+class ProductionResult {
+  final Resource resource;
+  final int amount;
+  final bool wasCapped;
+  final DateTime? cappedAt;
+  final String? limitedBy; // 'storage', 'inputs', null
+
+  ProductionResult({
+    required this.resource,
+    required this.amount,
+    required this.wasCapped,
+    this.cappedAt,
+    this.limitedBy,
+  });
+}
+
+class FactoryProductionResult {
+  final Map<Building, ProductionResult> buildingResults;
+  final Duration offlineDuration;
+  final Duration effectiveDuration;
+  final bool wasCapped;
+
+  FactoryProductionResult({
+    required this.buildingResults,
+    required this.offlineDuration,
+    required this.effectiveDuration,
+    required this.wasCapped,
+  });
+
+  int getTotalProduced(ResourceType type) {
+    return buildingResults.values
+        .where((r) => r.resource.id == type.toString())
+        .fold(0, (sum, r) => sum + r.amount);
+  }
+}
+```
+
+**Welcome Back UI System:**
+
+```dart
+// Welcome Back Modal
+class WelcomeBackModal extends StatelessWidget {
+  final FactoryProductionResult productionResult;
+  final bool showAdOffer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Column(
+        children: [
+          // Header
+          Text(
+            'Welcome Back!',
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+
+          // Offline duration
+          Text(
+            'Away for ${_formatDuration(productionResult.offlineDuration)}',
+            style: TextStyle(fontSize: 18, color: Colors.grey),
+          ),
+
+          // Production summary
+          _buildProductionSummary(),
+
+          // Storage cap warning (if applicable)
+          if (productionResult.wasCapped)
+            _buildStorageWarning(),
+
+          // Ad offer (optional)
+          if (showAdOffer)
+            _buildAdOffer(),
+
+          // Collect button
+          ElevatedButton(
+            onPressed: _collectOfflineProduction,
+            child: Text('Collect', style: TextStyle(fontSize: 24)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              minimumSize: Size(200, 60),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductionSummary() {
+    return Column(
+      children: productionResult.buildingResults.entries.map((entry) {
+        final building = entry.key;
+        final result = entry.value;
+
+        return Row(
+          children: [
+            Image.asset(result.resource.iconPath, width: 32, height: 32),
+            Text('+${result.amount} ${result.resource.displayName}'),
+            if (result.wasCapped)
+              Icon(Icons.warning, color: Colors.orange, size: 16),
+          ],
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildStorageWarning() {
+    return Container(
+      color: Colors.orange.withOpacity(0.2),
+      padding: EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Icon(Icons.info, color: Colors.orange),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Some buildings filled storage and stopped producing. Upgrade storage for more offline earnings!',
+              style: TextStyle(color: Colors.orange[900]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdOffer() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.purple[700]!, Colors.purple[400]!],
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Icon(Icons.play_circle, size: 48, color: Colors.white),
+          SizedBox(height: 8),
+          Text(
+            'Watch ad for 2× offline production?',
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text('No Thanks', style: TextStyle(color: Colors.white70)),
+              ),
+              ElevatedButton(
+                onPressed: () => _watchAdForBoost(context),
+                child: Text('Watch Ad', style: TextStyle(fontSize: 18)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.purple[700],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _watchAdForBoost(BuildContext context) async {
+    // Load rewarded ad
+    final adLoaded = await AdManager.loadRewardedAd();
+
+    if (adLoaded) {
+      final watched = await AdManager.showRewardedAd();
+
+      if (watched) {
+        // Double offline production
+        _applyOfflineBoost(2.0);
+
+        // Track analytics
+        FirebaseAnalytics.logEvent('offline_ad_watched', {
+          'offline_duration_minutes': productionResult.offlineDuration.inMinutes,
+          'boost_multiplier': 2.0,
+        });
+
+        Navigator.pop(context, true);
+      }
+    } else {
+      // Ad failed to load, give reward anyway (ethical F2P)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ad unavailable. Bonus applied anyway!')),
+      );
+      _applyOfflineBoost(2.0);
+    }
+  }
+}
+```
+
+---
+
+#### Performance Requirements
+
+- **Calculation Speed:** <50ms to calculate offline production for 20 buildings
+- **UI Load Time:** <200ms to show "Welcome Back!" modal after launch
+- **Storage Check:** O(1) per building (constant time, no loops)
+- **Conveyor Simulation:** O(n) where n = building count (topological sort acceptable)
+
+---
+
+#### UI/UX Specifications
+
+**Welcome Back Modal Design:**
+- **Full-screen modal** (blocks gameplay until acknowledged)
+- **Celebration particles** (sparkles, floating +numbers)
+- **Production breakdown** (each resource with icon + amount)
+- **Storage warnings** (orange alert if any building capped)
+- **Ad offer** (optional, purple gradient box, "Watch Ad" button prominent)
+- **Collect button** (large, green, bottom-center)
+
+**Edge Case Handling:**
+- **Short absence (<5 min):** No modal, silent collection in background
+- **Very long absence (30+ days):** Special "Welcome back after a long time!" message + 1000 gold bonus
+- **First-time return:** Tutorial tooltip explains offline production system
+
+---
+
+#### Acceptance Criteria Summary
+
+**Must Pass Before Launch:**
+
+✅ **O(1) Performance:**
+- Offline production calculates in <50ms for 20 buildings
+- No frame drops when "Welcome Back!" modal appears
+
+✅ **Storage Cap System:**
+- Buildings stop producing when storage full
+- UI clearly indicates which buildings capped
+- Storage upgrade value is obvious to player
+
+✅ **Conveyor Offline Simulation:**
+- Tier 2 supply chains work correctly offline
+- Bottlenecks are detected and reported
+- Complex chains (3+ buildings) calculate correctly
+
+✅ **Ad Reward System:**
+- 2x boost applies correctly to all offline production
+- Ad failure doesn't punish player (ethical F2P)
+- 60-80% of players who see offer watch ad (engagement metric)
+
+✅ **Economy Balance:**
+- Offline caps prevent exploit (12h Tier 1, 24h Tier 2)
+- Long absences don't break economy
+- Returning feels rewarding, not overwhelming
+
+**Analytics to Track:**
+- Average offline duration per session
+- Offline ad watch rate (target: 60%+)
+- Storage cap hit frequency (indicates upgrade need)
+- Return rate after 1 day, 3 days, 7 days (retention)
+- Offline production as % of total economy (balance check)
+
+---
+
+#### Dependencies
+
+**Required Before FR-004:**
+- ✅ FR-001: Core Gameplay Loop (building production must work)
+- ✅ FR-002: Tier 1 Economy (building definitions, storage)
+- ✅ FR-003: Tier 2 Automation (conveyor simulation offline)
+
+**Required After FR-004:**
+- FR-008: Ethical F2P Monetization (ad integration for 2x boost)
+- FR-009: Firebase Backend (sync last_seen timestamp)
+- FR-010: Analytics Tracking (measure offline behavior)
+
+---
+
+#### Open Questions
+
+1. **Offline cap duration:** 12h Tier 1 / 24h Tier 2, or longer (48h)?
+   - **Recommendation:** 12h/24h (prevents exploits, encourages daily engagement)
+
+2. **Ad boost multiplier:** 2x or 3x offline production?
+   - **Recommendation:** 2x (generous but not economy-breaking)
+
+3. **Storage upgrades:** Should be purchasable with gold, or require resources?
+   - **Recommendation:** Gold + Resources (creates resource sink, encourages economy)
+
+4. **Offline production notification:** Push notification after 8 hours "Your factory is full!"?
+   - **Recommendation:** Optional setting, default OFF (respect user preferences)
+
+5. **Conveyor offline behavior:** Should conveyors "transport" resources instantly offline, or simulate 1 tile/second?
+   - **Recommendation:** Instant transport offline (simplifies calculation, players don't care about realism when away)
+
+---
+
+**Status:** ✅ FR-004 Specification Complete
+**Next:** FR-005 Mobile-First UX
+**Status:** ✅ FR-004 Specification Complete
+**Next:** FR-005 Mobile-First UX
+
+---
+
+### FR-005: Mobile-First UX (HIGH - P1)
+
+**Description:** Mobile-First UX ensures TFM feels native on touchscreens with large tap targets (44×44px minimum), haptic feedback, smooth animations (60 FPS), and one-handed gameplay. This differentiates TFM from desktop ports that feel clunky on mobile.
+
+**Priority:** P1 (High - Core to mobile viability)
+**Dependencies:** FR-001, FR-003
+**Estimated Complexity:** Medium
+
+---
+
+#### Key Requirements
+
+- **Tap targets:** 44×44px minimum (Build Mode)
+- **Gestures:** Swipe, pinch, double-tap, long-press
+- **Haptics:** Light (collect), Medium (upgrade), None (fail)
+- **60 FPS:** Snapdragon 660 target
+- **<50ms tap response:** Visual + haptic
+- **One-handed:** 80% thumb-reachable (right-hand mode)
+
+---
+
+**Status:** ✅ FR-005 Specification Complete
+**Next:** FR-006 Progression System
+
+---
+
+### FR-006: Progression System (HIGH - P1)
+
+**Description:** The Progression System defines clear unlock gates between Tier 1 (manual) and Tier 2 (automation), creating the rewarding "aha moment" when conveyors unlock. Players must complete specific goals to progress, maintaining engagement and preventing premature advancement.
+
+**Priority:** P1 (High - Defines retention curve)
+**Dependencies:** FR-001, FR-002, FR-003
+**Estimated Complexity:** Medium
+
+---
+
+#### Tier 1 → Tier 2 Unlock Requirements
+
+**Requirements to Unlock Tier 2:**
+1. All 5 building types placed (Lumbermill, Mine, Farm, Smelter, Workshop)
+2. All buildings upgraded to Level 5 (max Tier 1)
+3. Accumulated 1,000 gold
+4. Produced 100 Tools (demonstrates supply chain mastery)
+5. Played for minimum 4 hours (prevents rush-through)
+
+**Why These Requirements:**
+- **All building types:** Forces exploration of full Tier 1 economy
+- **Level 5 all buildings:** Demonstrates commitment, teaches upgrade value
+- **1,000 gold:** Ensures economic understanding (profit through production)
+- **100 Tools:** Proves multi-step supply chain mastery
+- **4 hour minimum:** Target 5h average, prevents exploits
+
+**Unlock Celebration:**
+- Full-screen animation (fireworks, confetti, 3 seconds)
+- "TIER 2 UNLOCKED! Conveyors Available!"
+- +500 gold bonus
+- Conveyors appear in Build Menu
+- Tutorial prompt: "Connect buildings to automate!"
+
+---
+
+**Status:** ✅ FR-006 Specification Complete
+**Next:** FR-007 Discovery-Based Tutorial
+
+---
+
+### FR-007: Discovery-Based Tutorial (MEDIUM - P2)
+
+**Description:** Discovery-based tutorial teaches through gameplay events and contextual tooltips (NO long text tutorials). Players learn by doing, with gentle nudges at key moments. This "show, don't tell" approach respects player intelligence and feels less intrusive than traditional tutorials.
+
+**Priority:** P2 (Medium - Important for onboarding, but can iterate post-launch)
+**Dependencies:** FR-001, FR-002
+**Estimated Complexity:** Medium
+
+---
+
+#### Tutorial Approach
+
+**First 5 Minutes (Silent Onboarding):**
+1. **Start:** Player has 1 Lumbermill pre-placed
+2. **Pulse animation:** Lumbermill pulses (indicating "tap me")
+3. **First tap:** Player taps → collects Wood → "+5 Wood" appears → haptic feedback
+4. **Arrow appears:** Points to NPC Market button (bottom-center)
+5. **First sale:** Player opens market → sells Wood → "+25 gold" → "Profit!"
+6. **Arrow to upgrade:** Points to Lumbermill → player upgrades → "+20% production"
+
+**No Text Walls:** Zero popup dialogs with paragraphs. Only:
+- **Floating arrows** (pointing to next action)
+- **Brief tooltips** (<10 words, e.g., "Tap to collect")
+- **Celebration text** ("+20% production!")
+- **Event notifications** (contextual learning)
+
+**Learning Through Events (Tier 1):**
+- **Dragon Attack Event (Hour 2):** "Wood supply disrupted! Prices spiked!" → teaches economics
+- **Storage Full (Hour 3):** "Lumbermill full! Upgrade storage?" → teaches storage value
+- **First Supply Chain (Hour 4):** Tooltip appears when Smelter placed: "Needs Wood + Ore → Makes Bars"
+
+**Tier 2 Tutorial (Conveyor Placement):**
+1. Tier 2 unlocks → celebration
+2. Tutorial: "Tap conveyor button" (arrow)
+3. "Tap Lumbermill" (arrow)
+4. "Tap Smelter" (arrow)
+5. AI shows path → "Tap Confirm"
+6. Conveyor builds → Wood flows automatically
+7. "Automation unlocked! Build more conveyors!" → done
+
+---
+
+**Status:** ✅ FR-007 Specification Complete
+**Next:** FR-008 Ethical F2P Monetization
+
+---
+
+### FR-008: Ethical F2P Monetization ($10 Cap) (HIGH - P1)
+
+**Description:** Ethical F2P monetization with **$10 total spending cap** differentiates TFM from predatory mobile games. All content unlockable for $10 or free through grinding. Ads are optional (rewarded video only). No loot boxes, no FOMO mechanics, no pay-to-win. Builds trust and regulatory compliance (EU 2025 laws).
+
+**Priority:** P1 (High - Core business model, differentiator)
+**Dependencies:** FR-004 (Offline ads), FR-009 (IAP backend)
+**Estimated Complexity:** Low-Medium
+
+---
+
+#### Monetization Strategy
+
+**Premium Unlock: $9.99 One-Time Purchase**
+- **Unlocks:** Tier 3 + Tier 4 content (post-MVP)
+- **Includes:** All future content updates (no season passes)
+- **Value:** 30+ hours additional gameplay
+- **Alternative:** Unlock Tier 3/4 by grinding (100 hours total)
+- **Why $9.99:** Mobile premium pricing, fair value proposition
+
+**Ads (Optional, Rewarded Only):**
+- **Offline Boost:** Watch ad → 2× offline production (see FR-004)
+- **Speed Boost:** Watch ad → 2× production speed for 10 minutes
+- **Ad Frequency Cap:** Maximum 6 ads/day (prevents spam)
+- **No forced ads:** NEVER interrupt gameplay with ads
+- **Ethical:** Ad failure doesn't punish player (reward given anyway)
+
+**No Predatory Mechanics:**
+- ❌ No loot boxes / gacha
+- ❌ No limited-time FOMO events
+- ❌ No energy/stamina system
+- ❌ No pay-to-win multiplayer advantages
+- ❌ No subscription tiers
+- ✅ Fixed $10 cap clearly communicated in store
+- ✅ All IAPs visible upfront (transparency)
+
+**Revenue Model:**
+- **Year 1 Conservative (10k downloads, 35% D7):**
+  - IAP: $8k (2% conversion × 10k × $10 × 40% App Store cut = $8k net)
+  - Ads: $18k (60% ad watch rate, $20 eCPM, 6 ads/day average)
+  - **Total: $26k Year 1**
+
+**EU Regulatory Compliance:**
+- Transparent pricing (no hidden costs)
+- No loot box mechanics (2025 EU regulations)
+- Age-appropriate (PEGI 3 / ESRB E for Everyone)
+- Parental controls (in-app purchase restrictions work correctly)
+
+---
+
+**Status:** ✅ FR-008 Specification Complete
+**Next:** FR-009 Firebase Backend
+
+---
+
+### FR-009: Firebase Backend (HIGH - P1)
+
+**Description:** Firebase provides authentication, cloud saves, leaderboards, and analytics infrastructure. Chosen for low cost ($3-45/month at scale), zero server management, and instant scalability. Players can switch devices seamlessly with cloud saves.
+
+**Priority:** P1 (High - Critical infrastructure)
+**Dependencies:** None (foundational service)
+**Estimated Complexity:** Medium
+
+---
+
+#### Firebase Services
+
+**Firebase Authentication:**
+- Anonymous auth (no forced signup)
+- Optional Google Sign-In (cloud save persistence)
+- Optional Apple Sign-In (iOS requirement)
+- Guest → Google upgrade flow (preserve progress)
+
+**Cloud Firestore (Game State Sync):**
+```
+/users/{userId}/
+  - profile: {displayName, createdAt, tier, totalPlayTime}
+  - gameState: {gold, inventory, buildings, conveyors}
+  - progression: {tier1Complete, tier2Unlocked, achievementsUnlocked}
+  - lastSeen: timestamp (for offline production calculation)
+```
+
+**Firebase Analytics:**
+- Automatic event tracking (app_open, session_start, etc.)
+- Custom events (see FR-010)
+- Audience segmentation (Tier 1 vs Tier 2 players)
+- Funnel analysis (tutorial → Tier 1 → Tier 2 → retention)
+
+**Cloud Functions (Optional):**
+- Leaderboard calculation (top factories by efficiency)
+- Daily rewards (cron job, +100 gold/day for returning players)
+- Event triggers (Dragon Attack events every 6 hours)
+
+**Firebase Crashlytics:**
+- Automatic crash reporting
+- Crash-free rate monitoring (target: >99%)
+- Device/OS distribution analytics
+
+**Estimated Costs:**
+- **1k MAU:** Free tier sufficient
+- **10k MAU:** ~$3/month (Firestore reads/writes)
+- **100k MAU:** ~$45/month (still extremely low)
+- **No server management:** Zero DevOps costs
+
+---
+
+**Status:** ✅ FR-009 Specification Complete
+**Next:** FR-010 Analytics & Metrics Tracking
+
+---
+
+### FR-010: Analytics & Metrics Tracking (CRITICAL - P0)
+
+**Description:** Analytics tracking measures critical success metrics (D7 retention, session length, Tier 2 unlock rate, crashes) to validate product-market fit. Without analytics, we fly blind. This is **non-negotiable** for data-driven iteration.
+
+**Priority:** P0 (Blocker - Cannot launch without analytics)
+**Dependencies:** FR-009 (Firebase Analytics)
+**Estimated Complexity:** Low
+
+---
+
+#### Critical Metrics (MVP Launch)
+
+**Retention Metrics:**
+- **D1 Retention:** Target 45%+
+- **D7 Retention:** Target 30-35% (CRITICAL - make-or-break metric)
+- **D30 Retention:** Target 20%+
+- Firebase event: `app_open` (automatic)
+
+**Progression Metrics:**
+- **Tier 2 Unlock Rate:** Target 60%+ of D7 retained users
+- **Time to Tier 2:** Target 5 hours average
+- Firebase event: `tier2_unlocked` with `time_to_unlock_minutes`
+
+**Performance Metrics:**
+- **Average FPS:** Target 60 FPS sustained
+- **Crash Rate:** Target <1%
+- **Load Time:** Target <3s cold start
+- Firebase event: `performance_measured` with `avg_fps`, `crash_count`
+
+**Economic Metrics:**
+- **First Purchase:** How many days until first IAP?
+- **Ad Watch Rate:** Target 60%+ (offline boost)
+- **LTV:** Track lifetime value per cohort
+- Firebase events: `purchase`, `ad_watched`
+
+**Session Metrics:**
+- **Session Length:** Average session duration
+- **Sessions per Day:** How often players return
+- **Daily Playtime:** Total minutes played per day
+- Firebase event: `session_end` with `duration_minutes`
+
+**Custom Events:**
+```dart
+// Key gameplay events
+FirebaseAnalytics.logEvent('building_placed', {
+  'building_type': 'lumbermill',
+  'tier': 1,
+});
+
+FirebaseAnalytics.logEvent('building_upgraded', {
+  'building_type': 'lumbermill',
+  'level': 3,
+});
+
+FirebaseAnalytics.logEvent('conveyor_created', {
+  'length': 12,
+  'resource': 'wood',
+});
+
+FirebaseAnalytics.logEvent('market_sell', {
+  'resource': 'wood',
+  'amount': 50,
+  'gold_earned': 250,
+});
+
+FirebaseAnalytics.logEvent('tier2_unlocked', {
+  'time_to_unlock_minutes': 300, // 5 hours
+});
+```
+
+**Dashboard Priorities:**
+- **Week 1:** Focus on crashes, D1 retention, load times (stability)
+- **Week 2-4:** Focus on D7 retention, Tier 2 unlock rate (engagement)
+- **Month 2+:** Focus on LTV, ad revenue, IAP conversion (monetization)
+
+---
+
+**Status:** ✅ FR-010 Specification Complete
+
+---
+
+## PRD Completion Status
+
+✅ **All 10 Functional Requirements Complete**
+
+1. ✅ FR-001: Core Gameplay Loop (CRITICAL - P0)
+2. ✅ FR-002: Tier 1 Economy System (HIGH - P1)
+3. ✅ FR-003: Tier 2 Automation System (CRITICAL - P0)
+4. ✅ FR-004: Offline Production System (HIGH - P1)
+5. ✅ FR-005: Mobile-First UX (HIGH - P1)
+6. ✅ FR-006: Progression System (HIGH - P1)
+7. ✅ FR-007: Discovery-Based Tutorial (MEDIUM - P2)
+8. ✅ FR-008: Ethical F2P Monetization (HIGH - P1)
+9. ✅ FR-009: Firebase Backend (HIGH - P1)
+10. ✅ FR-010: Analytics & Metrics Tracking (CRITICAL - P0)
+
+**Next Steps:** Validate PRD → Create Epics & Stories → Begin Implementation
