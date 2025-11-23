@@ -112,8 +112,8 @@ development_status:
   07-5-tutorial-testing: backlog
   epic-07-retrospective: optional
 
-  # EPIC-08: Ethical F2P Monetization (P1 - High Priority)
-  epic-08: backlog
+  # EPIC-08: Ethical F2P Monetization (P1 - High Priority) - CONTEXTED
+  epic-08: contexted
   08-1-gold-bundle-offers: backlog
   08-2-cosmetic-building-skins: backlog
   08-3-optional-time-skip: backlog
@@ -157,8 +157,8 @@ development_status:
 # Total Stories: 68
 # Total Story Points: 289 SP
 #
-# Contexted Epics: 2 (epic-02, epic-05)
-# Backlog Epics: 10
+# Contexted Epics: 3 (epic-02, epic-05, epic-08)
+# Backlog Epics: 9
 #
 # Epic Breakdown:
 #   - EPIC-00: 4 stories, 13 SP (P0)
@@ -169,7 +169,7 @@ development_status:
 #   - EPIC-05: 6 stories, 29 SP (P1) - CONTEXTED
 #   - EPIC-06: 4 stories, 18 SP (P1)
 #   - EPIC-07: 5 stories, 21 SP (P2)
-#   - EPIC-08: 5 stories, 23 SP (P1)
+#   - EPIC-08: 5 stories, 23 SP (P1) - CONTEXTED
 #   - EPIC-09: 6 stories, 24 SP (P1)
 #   - EPIC-10: 4 stories, 13 SP (P0)
 #   - EPIC-11: 8 stories, 20 SP (P1)
