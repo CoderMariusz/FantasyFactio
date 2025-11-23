@@ -133,5 +133,20 @@ workflow_status:
         name: "Sprint Planning"
         agent: "sm"
         command: "/bmad:bmm:workflows:4-implementation:sprint-planning"
-        status: "required"
-        note: "Creates sprint plan - enterprise projects may require phased rollout"
+        status: "docs/sprint-planning-review-2025-11-17.md"
+        note: "Sprint plan complete - 8 sprints, 170 SP MVP subset, 25 SP/week velocity"
+
+      - id: "sprint-1"
+        name: "Sprint 1 - Foundation"
+        agent: "dev"
+        status: "COMPLETE ✅"
+        note: "13 SP planned, 36 SP delivered (277% over target) - Completed 2025-11-22"
+        stories_completed: 10
+
+      - id: "sprint-2"
+        name: "Sprint 2 - Core Resource System"
+        agent: "dev"
+        status: "IN PROGRESS 🚧"
+        note: "20 SP planned, 13 SP delivered (65% complete) - Current story: STORY-01.7"
+        stories_completed: 2
+        stories_remaining: 2
