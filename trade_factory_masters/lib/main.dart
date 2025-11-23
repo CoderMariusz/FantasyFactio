@@ -8,6 +8,8 @@ import 'firebase_options.dart';
 import 'domain/entities/resource.dart';
 import 'domain/entities/building.dart';
 import 'domain/entities/player_economy.dart';
+import 'game/components/grid_component.dart';
+import 'game/camera/grid_camera.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,92 +49,150 @@ Future<void> main() async {
   );
 }
 
-/// HelloWorld Flame game for testing 60 FPS rendering
+/// Trade Factory Masters - Isometric factory builder game
+/// Features: 50x50 grid, dual-zoom camera, gesture controls
 class TradeFactoryGame extends FlameGame {
+  late GridComponent gridComponent;
+  late GridCamera gridCamera;
+  late CameraInfoDisplay cameraInfoDisplay;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
+    // Configure camera for isometric world
+    final gridConfig = const GridConfig(
+      gridWidth: 50,
+      gridHeight: 50,
+      tileWidth: 64.0,
+      tileHeight: 32.0,
+      showGridLines: true,
+    );
+
+    // Calculate world bounds
+    final worldBounds = gridConfig.getWorldBounds();
+
+    // Setup camera configuration
+    final cameraConfig = GridCameraConfig(
+      worldSize: Vector2(worldBounds.width, worldBounds.height),
+      minZoom: 0.3,
+      maxZoom: 2.0,
+      zoomTransitionDuration: 0.3,
+      panSpeed: 1.0,
+      enableBounds: true,
+      boundsPadding: 300.0,
+    );
+
+    // Create grid component
+    gridComponent = GridComponent(config: gridConfig);
+    world.add(gridComponent);
+
+    // Create camera controller
+    gridCamera = GridCamera(
+      config: cameraConfig,
+      initialZoomLevel: ZoomLevel.strategic,
+    );
+    world.add(gridCamera);
+
+    // Position camera at center of grid
+    camera.viewfinder.position = gridConfig.gridToScreen(25, 25);
+    camera.viewfinder.zoom = ZoomLevel.strategic.zoom;
+
     // Add FPS counter
-    add(
+    camera.viewport.add(
       FpsTextComponent(
         position: Vector2(10, 10),
       ),
     );
 
-    // Add welcome text
-    add(
+    // Add camera info display
+    cameraInfoDisplay = CameraInfoDisplay(
+      position: Vector2(10, 40),
+      gridCamera: gridCamera,
+      gridComponent: gridComponent,
+    );
+    camera.viewport.add(cameraInfoDisplay);
+
+    // Add instructions
+    camera.viewport.add(
       TextComponent(
-        text: 'Trade Factory Masters',
-        position: Vector2(size.x / 2, size.y / 2 - 50),
-        anchor: Anchor.center,
+        text: 'Double-tap: Toggle zoom | Drag: Pan | Pinch: Zoom',
+        position: Vector2(10, size.y - 30),
         textRenderer: TextPaint(
           style: const TextStyle(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
+            color: Colors.white70,
+            fontSize: 14,
           ),
         ),
       ),
     );
 
-    add(
-      TextComponent(
-        text: 'Flame Engine Initialized ✓',
-        position: Vector2(size.x / 2, size.y / 2 + 20),
-        anchor: Anchor.center,
-        textRenderer: TextPaint(
-          style: const TextStyle(
-            color: Colors.green,
-            fontSize: 24,
-          ),
-        ),
-      ),
-    );
-
-    // Add rotating circle to test rendering
-    add(
-      RotatingCircle(
-        position: Vector2(size.x / 2, size.y / 2 + 100),
-      ),
-    );
+    debugPrint('✅ Grid System initialized (50x50 isometric grid)');
+    debugPrint('✅ Camera System initialized (dual-zoom with gestures)');
   }
 }
 
-/// Simple rotating circle component to verify smooth 60 FPS
-class RotatingCircle extends PositionComponent {
-  RotatingCircle({super.position})
-      : super(
-          size: Vector2.all(100),
-          anchor: Anchor.center,
-        );
+/// Camera and performance info display
+class CameraInfoDisplay extends PositionComponent with HasGameRef {
+  final GridCamera gridCamera;
+  final GridComponent gridComponent;
+
+  CameraInfoDisplay({
+    required super.position,
+    required this.gridCamera,
+    required this.gridComponent,
+  });
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final paint = Paint()
-      ..color = Colors.blue
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
 
-    canvas.drawCircle(
-      Offset(size.x / 2, size.y / 2),
-      40,
-      paint,
+    final state = gridCamera.getCameraState();
+    final metrics = gridComponent.getPerformanceMetrics();
+
+    final textPaint = TextPaint(
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+        fontFamily: 'monospace',
+      ),
     );
 
-    // Draw a dot to see rotation
-    final dotPaint = Paint()..color = Colors.red;
-    canvas.drawCircle(
-      Offset(size.x / 2 + 40, size.y / 2),
-      5,
-      dotPaint,
+    // Display camera state
+    textPaint.render(
+      canvas,
+      'Zoom: ${state['zoomLevel']} (${state['currentZoom']?.toStringAsFixed(2)})',
+      Vector2.zero(),
     );
-  }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-    angle += dt * 2; // Rotate 2 radians per second
+    textPaint.render(
+      canvas,
+      'Position: ${state['position']}',
+      Vector2(0, 20),
+    );
+
+    // Display performance metrics
+    final cullRate = (metrics['cullRate'] as double * 100).toStringAsFixed(1);
+    textPaint.render(
+      canvas,
+      'Tiles: ${metrics['renderedTiles']}/${metrics['totalTiles']} ($cullRate% culled)',
+      Vector2(0, 40),
+    );
+
+    // Display animation status
+    if (state['isAnimating'] == true) {
+      final animTextPaint = TextPaint(
+        style: const TextStyle(
+          color: Colors.yellow,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+      animTextPaint.render(
+        canvas,
+        '⚡ Animating...',
+        Vector2(0, 60),
+      );
+    }
   }
 }
