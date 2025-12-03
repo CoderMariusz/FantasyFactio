@@ -3,8 +3,9 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, offline, retention -->
 
 **Epic:** EPIC-04 - Offline Production
+**Total Stories:** 6
 **Total SP:** 26
-**Duration:** 2 weeks (Sprints 4-5)
+**Sprint:** 6-7
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-04-tech-spec.md](epic-04-tech-spec.md)
 
@@ -12,6 +13,19 @@
 - ✅ EPIC-01 (Core Gameplay Loop)
 - ✅ EPIC-02 (Farm building, resources, skills)
 - ✅ EPIC-03 (Conveyor chains for Tier 2 calculation)
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-04.1 | Offline Production Calculator | 6 | P0 | 📋 Ready |
+| STORY-04.2 | Tier 2 Offline (Conveyor Chains) | 6 | P0 | 📋 Ready |
+| STORY-04.3 | Welcome-Back Modal UI | 5 | P0 | 📋 Ready |
+| STORY-04.4 | Rewarded Video Ad Integration | 4 | P1 | 📋 Ready |
+| STORY-04.5 | Time Validation & Anti-Cheat | 3 | P0 | 📋 Ready |
+| STORY-04.6 | Integration Testing & Persistence | 2 | P1 | 📋 Ready |
 
 ---
 
@@ -769,7 +783,7 @@ Future<void> simulateOffline(Duration duration) async {
 
 ## Implementation Order
 
-**Recommended Sprint 4-5:**
+**Recommended Sprint 6-7:**
 
 **Week 1:** Core System
 1. STORY-04.1: Offline Calculator (6 SP)

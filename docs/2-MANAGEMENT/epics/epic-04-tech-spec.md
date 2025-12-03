@@ -2,7 +2,7 @@
 
 **Epic:** EPIC-04 - Offline Production
 **Total SP:** 26
-**Duration:** 2 weeks (Sprints 4-5)
+**Duration:** 2 weeks (Sprints 6-7)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 
