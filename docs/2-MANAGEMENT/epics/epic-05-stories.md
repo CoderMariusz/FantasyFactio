@@ -137,6 +137,8 @@ GestureDetector(
 
 ## STORY-05.2: Camera System (5 SP)
 
+> **Note:** This story includes camera animation work deferred from EPIC-01 STORY-01.6 (`moveTo()` smooth animation).
+
 ### Objective
 Implement GridCamera with dual zoom modes, smooth animations, pan bounds, and momentum.
 
@@ -193,6 +195,11 @@ The camera system provides two main modes: Planning (0.5×) for overview and Bui
    - Animate zoom level change
    - Haptic feedback at start
    - Button icon swaps
+
+✅ moveTo() animation (from EPIC-01):
+   - Smooth camera movement to position
+   - Duration: 400ms
+   - Curve: ease-in-out
 ```
 
 #### AC4: Pan Bounds
@@ -234,8 +241,10 @@ The camera system provides two main modes: Planning (0.5×) for overview and Bui
 
 ### Implementation Notes
 
+**Files to Extend (from EPIC-01):**
+- `lib/game/camera/grid_camera.dart` - Add moveTo() animation (deferred from EPIC-01)
+
 **Files to Create:**
-- `lib/game/camera/grid_camera.dart` - Camera entity
 - `lib/game/camera/camera_controller.dart` - Control logic
 - `lib/game/camera/zoom_mode.dart` - Mode enum
 - `test/game/camera/grid_camera_test.dart` - Tests

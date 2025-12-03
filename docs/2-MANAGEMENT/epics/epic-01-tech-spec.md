@@ -36,7 +36,7 @@ EPIC-01 implementuje podstawowy gameplay loop: COLLECT → DECIDE → UPGRADE na
 | 01.3 | Collect Resources UseCase | 5 | `domain/usecases/collect_resources.dart` | ✅ Done |
 | 01.4 | Upgrade Building UseCase | 5 | `domain/usecases/upgrade_building.dart` | ✅ Done |
 | 01.5 | Grid System | 5 | `game/components/grid_component.dart` | ✅ Done |
-| 01.6 | Dual Zoom Camera | 8 | `game/camera/grid_camera.dart` | ⚠️ TODO animation |
+| 01.6 | Dual Zoom Camera | 8 | `game/camera/grid_camera.dart` | ✅ Done (→ EPIC-05) |
 | 01.7 | Building Component | 3 | `game/components/building_component.dart` | ✅ Done |
 | 01.8 | Integration Test | 5 | `integration_test/core_gameplay_loop_test.dart` | ✅ Fixed |
 
@@ -57,11 +57,11 @@ EPIC-01 implementuje podstawowy gameplay loop: COLLECT → DECIDE → UPGRADE na
 - Issue: `(metrics['cullRate'] as double * 100)` - incorrect precedence
 - Fix: `((metrics['cullRate'] as double) * 100)`
 
-**TODO: Camera Animation Incomplete** - ⚠️ OPEN (low priority)
+**Camera Animation Deferred** - → EPIC-05 STORY-05.2
 - Location: `lib/game/camera/grid_camera.dart` (line 302)
-- Issue: `moveTo()` has TODO for smooth animation
-- Impact: Camera snaps instead of animating
-- Severity: LOW
+- Issue: `moveTo()` smooth animation not implemented
+- Resolution: Deferred to EPIC-05 (Mobile UX) where it fits better
+- Severity: LOW (polish feature)
 
 ---
 
@@ -212,7 +212,7 @@ class GridCamera extends Component {
   // ✅ Swipe panning
   // ✅ Pinch-to-zoom (0.5× - 2.0×)
   // ✅ Smooth zoom animation (easeInOutCubic)
-  // ⚠️ TODO: moveTo() smooth animation
+  // → moveTo() animation deferred to EPIC-05
 }
 ```
 
@@ -256,12 +256,12 @@ class GridCamera extends Component {
 
 ## Fix Priority
 
-All critical bugs have been fixed (2025-12-03):
+All issues resolved (2025-12-03):
 
 1. ~~**CRITICAL:** Bug #2 (addResource logic)~~ - ✅ FIXED
 2. ~~**HIGH:** Bug #1 (integration test)~~ - ✅ FIXED
 3. ~~**MEDIUM:** Bug #8 (type cast)~~ - ✅ FIXED
-4. **LOW:** TODO camera animation - polish feature (open)
+4. ~~**LOW:** TODO camera animation~~ - → Deferred to EPIC-05 STORY-05.2
 
 ---
 

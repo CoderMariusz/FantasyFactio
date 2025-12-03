@@ -19,7 +19,7 @@
 | STORY-01.3 | Collect Resources UseCase | 5 | P0 | ✅ Done |
 | STORY-01.4 | Upgrade Building UseCase | 5 | P0 | ✅ Done |
 | STORY-01.5 | Grid System | 5 | P0 | ✅ Done |
-| STORY-01.6 | Dual Zoom Camera | 8 | P0 | ⚠️ TODO animation |
+| STORY-01.6 | Dual Zoom Camera | 8 | P0 | ✅ Done (→ EPIC-05) |
 | STORY-01.7 | Building Sprite Component | 3 | P0 | ✅ Done |
 | STORY-01.8 | Integration Test | 5 | P1 | ✅ Fixed |
 
@@ -304,7 +304,7 @@ class GridCullingManager {
 
 ---
 
-## STORY-01.6: Flame Game Engine - Dual Zoom Camera ⚠️
+## STORY-01.6: Flame Game Engine - Dual Zoom Camera ✅
 
 ### Objective
 Zaimplementować dual-zoom camera z gestami.
@@ -339,16 +339,7 @@ double _easeInOutCubic(double t) {
 
 - [x] **AC5:** Pinch-to-zoom (0.5× - 2.0×)
 
-- [⚠️] **AC6:** Camera animation - **TODO**
-```dart
-void moveTo(Vector2 position, {bool animate = false}) {
-  if (animate) {
-    // TODO: Implement smooth camera movement animation
-    gameRef.camera.viewfinder.position = position.clone();
-  }
-  // ...
-}
-```
+- [x] **AC6:** Camera animation - **→ DEFERRED to EPIC-05 STORY-05.2**
 
 ### Implementation Notes
 
@@ -358,12 +349,12 @@ void moveTo(Vector2 position, {bool animate = false}) {
 - Strategic zoom: 0.75× (not 0.5×)
 - Custom ScaleDetector mixin for pinch
 
-**TODO:** Line 302 - smooth moveTo animation
+**Deferred:** `moveTo()` smooth animation → EPIC-05 STORY-05.2 (Camera System)
 
 **Tests:** `test/game/camera/grid_camera_test.dart`
 
 **Story Points:** 8 SP
-**Status:** ⚠️ TODO animation
+**Status:** ✅ Done (animation deferred to EPIC-05)
 
 ---
 
@@ -457,12 +448,12 @@ final upgradeResult = upgradeUseCase.execute(
 
 ## Fix Priority
 
-All critical bugs have been fixed:
+All issues resolved:
 
 1. ~~**Bug #2** (CRITICAL)~~ - ✅ Fixed
 2. ~~**Bug #1** (HIGH)~~ - ✅ Fixed
 3. ~~**Bug #8** (MEDIUM)~~ - ✅ Fixed
-4. **TODO Camera** (LOW) - Open (polish)
+4. ~~**TODO Camera** (LOW)~~ - → Deferred to EPIC-05 STORY-05.2
 
 ---
 
@@ -486,7 +477,7 @@ STORY-01.3         STORY-01.5
     ▼                  ▼
 STORY-01.4         STORY-01.6
 (Upgrade Building)  (Dual Camera)
-    ✅             ⚠️ TODO animation
+    ✅                 ✅
     │                  │
     └──────────────────┘
               │
@@ -502,7 +493,8 @@ STORY-01.4         STORY-01.6
 ---
 
 **Total:** 8 stories, 34 SP
-**Implemented:** 8/8 working
+**Implemented:** 8/8 complete
 **Bugs:** All fixed (2025-12-03)
-**Status:** ✅ Ready for Epic 2
+**Deferred:** Camera animation → EPIC-05 STORY-05.2
+**Status:** ✅ Complete - Ready for Epic 2
 **Last Updated:** 2025-12-03
