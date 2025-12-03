@@ -1,0 +1,14 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+firebase-debug.log
+
+# Claude Code settings (local)
+.claude/settings.local.json
+
+# Build artifacts
+build/
