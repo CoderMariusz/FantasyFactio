@@ -5,7 +5,7 @@
 **Epic:** EPIC-01 - Core Gameplay Loop
 **Total SP:** 34
 **Duration:** 2 weeks (Sprint 1)
-**Status:** ✅ Implemented (with bugs)
+**Status:** ✅ Implemented (bugs fixed)
 **Date:** 2025-12-03
 **Priority:** P0 (Critical Path)
 
@@ -32,36 +32,32 @@ EPIC-01 implementuje podstawowy gameplay loop: COLLECT → DECIDE → UPGRADE na
 | Story | Title | SP | Files | Status |
 |-------|-------|-----|-------|--------|
 | 01.1 | Building Entity | 3 | `domain/entities/building.dart` | ✅ Done |
-| 01.2 | Resource & PlayerEconomy | 3 | `domain/entities/player_economy.dart`, `resource.dart` | ⚠️ Bug #2 |
+| 01.2 | Resource & PlayerEconomy | 3 | `domain/entities/player_economy.dart`, `resource.dart` | ✅ Fixed |
 | 01.3 | Collect Resources UseCase | 5 | `domain/usecases/collect_resources.dart` | ✅ Done |
 | 01.4 | Upgrade Building UseCase | 5 | `domain/usecases/upgrade_building.dart` | ✅ Done |
 | 01.5 | Grid System | 5 | `game/components/grid_component.dart` | ✅ Done |
 | 01.6 | Dual Zoom Camera | 8 | `game/camera/grid_camera.dart` | ⚠️ TODO animation |
 | 01.7 | Building Component | 3 | `game/components/building_component.dart` | ✅ Done |
-| 01.8 | Integration Test | 5 | `integration_test/core_gameplay_loop_test.dart` | ❌ Bug #1 |
+| 01.8 | Integration Test | 5 | `integration_test/core_gameplay_loop_test.dart` | ✅ Fixed |
 
-### Known Issues (Must Fix)
+### Known Issues - FIXED ✅
 
-**Bug #1: Integration Test Won't Compile**
-- Location: `integration_test/core_gameplay_loop_test.dart` (lines 167, 278, 326, 388)
+**Bug #1: Integration Test Won't Compile** - ✅ FIXED (2025-12-03)
+- Location: `integration_test/core_gameplay_loop_test.dart`
 - Issue: Using parameter name `buildingId` instead of `building`
-- Impact: Cannot run integration tests
-- Severity: HIGH
+- Fix: Changed to `building: buildingObject` in all 4 locations
 
-**Bug #2: Resource Inventory Logic Broken**
-- Location: `lib/domain/entities/player_economy.dart` (lines 52-56)
-- Issue: `addResource()` returns unchanged economy if resource doesn't exist
-- Expected: Should create new Resource if not in inventory
-- Impact: Resources won't be added to inventory
-- Severity: CRITICAL
+**Bug #2: Resource Inventory Logic Broken** - ✅ FIXED (2025-12-03)
+- Location: `lib/domain/entities/player_economy.dart`
+- Issue: `addResource()` returned unchanged economy if resource didn't exist
+- Fix: Now creates new Resource with default values when not in inventory
 
-**Bug #8: Type Cast Syntax Error**
+**Bug #8: Type Cast Syntax Error** - ✅ FIXED (2025-12-03)
 - Location: `lib/main.dart` (line 325)
 - Issue: `(metrics['cullRate'] as double * 100)` - incorrect precedence
 - Fix: `((metrics['cullRate'] as double) * 100)`
-- Severity: MEDIUM
 
-**TODO: Camera Animation Incomplete**
+**TODO: Camera Animation Incomplete** - ⚠️ OPEN (low priority)
 - Location: `lib/game/camera/grid_camera.dart` (line 302)
 - Issue: `moveTo()` has TODO for smooth animation
 - Impact: Camera snaps instead of animating
@@ -260,13 +256,15 @@ class GridCamera extends Component {
 
 ## Fix Priority
 
-1. **CRITICAL:** Bug #2 (addResource logic) - blocks core gameplay
-2. **HIGH:** Bug #1 (integration test) - blocks testing
-3. **MEDIUM:** Bug #8 (type cast) - causes runtime error
-4. **LOW:** TODO camera animation - polish feature
+All critical bugs have been fixed (2025-12-03):
+
+1. ~~**CRITICAL:** Bug #2 (addResource logic)~~ - ✅ FIXED
+2. ~~**HIGH:** Bug #1 (integration test)~~ - ✅ FIXED
+3. ~~**MEDIUM:** Bug #8 (type cast)~~ - ✅ FIXED
+4. **LOW:** TODO camera animation - polish feature (open)
 
 ---
 
-**Status:** ✅ Implemented with bugs
+**Status:** ✅ Implemented - all critical bugs fixed
 **Last Updated:** 2025-12-03
 **Version:** 1.0

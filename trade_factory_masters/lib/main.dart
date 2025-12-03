@@ -322,7 +322,7 @@ class CameraInfoDisplay extends PositionComponent with HasGameRef {
     );
 
     // Display performance metrics
-    final cullRate = (metrics['cullRate'] as double * 100).toStringAsFixed(1);
+    final cullRate = ((metrics['cullRate'] as double) * 100).toStringAsFixed(1);
     textPaint.render(
       canvas,
       'Tiles: ${metrics['renderedTiles']}/${metrics['totalTiles']} ($cullRate% culled)',

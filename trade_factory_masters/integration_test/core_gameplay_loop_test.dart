@@ -162,9 +162,13 @@ void main() {
           reason: 'Should have enough gold to upgrade');
 
       final upgradeUseCase = UpgradeBuildingUseCase();
+      // Add building to economy before upgrading
+      final economyWithBuilding = updatedEconomy.copyWith(
+        buildings: [testBuilding],
+      );
       final upgradeResult = upgradeUseCase.execute(
-        economy: updatedEconomy,
-        buildingId: testBuilding.id,
+        economy: economyWithBuilding,
+        building: testBuilding,
       );
 
       expect(upgradeResult.isSuccess, isTrue,
@@ -192,12 +196,12 @@ void main() {
       // ========================================
       debugPrint('💵 TEST: Verifying gold deduction...');
 
-      final expectedGold = updatedEconomy.gold - upgradeCost;
+      final expectedGold = economyWithBuilding.gold - upgradeCost;
       expect(upgradedEconomy.gold, equals(expectedGold),
           reason: 'Gold should be deducted by upgrade cost');
 
       debugPrint(
-          '✅ TEST: Gold deducted: ${updatedEconomy.gold} → ${upgradedEconomy.gold} (-$upgradeCost)');
+          '✅ TEST: Gold deducted: ${economyWithBuilding.gold} → ${upgradedEconomy.gold} (-$upgradeCost)');
 
       // ========================================
       // STEP 8: Verify Production Rate Increase
@@ -275,7 +279,7 @@ void main() {
       final upgradeUseCase = UpgradeBuildingUseCase();
       final result = upgradeUseCase.execute(
         economy: economyWithBuilding,
-        buildingId: expensiveBuilding.id,
+        building: expensiveBuilding,
       );
 
       expect(result.isFailure, isTrue,
@@ -323,7 +327,7 @@ void main() {
       final upgradeUseCase = UpgradeBuildingUseCase();
       final result = upgradeUseCase.execute(
         economy: economyWithBuilding,
-        buildingId: maxLevelBuilding.id,
+        building: maxLevelBuilding,
       );
 
       expect(result.isFailure, isTrue,
@@ -385,7 +389,7 @@ void main() {
             currentEconomy.buildings.first.upgradeConfig.maxLevel) {
           final upgradeResult = upgradeUseCase.execute(
             economy: currentEconomy,
-            buildingId: currentEconomy.buildings.first.id,
+            building: currentEconomy.buildings.first,
           );
 
           if (upgradeResult.isSuccess) {
