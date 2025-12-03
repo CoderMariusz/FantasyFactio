@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Top-Down Underground Conveyor Entry -->
+
+  <!-- Base frame -->
+  <rect x="0" y="0" width="64" height="64" fill="#3D3D3D"/>
+
+  <!-- Rails (yellow) -->
+  <rect x="10" y="0" width="10" height="32" fill="#E6A000"/>
+  <rect x="44" y="0" width="10" height="32" fill="#E6A000"/>
+
+  <!-- Belt surface (entry part) -->
+  <rect x="20" y="0" width="24" height="28" fill="#2A2A2A"/>
+
+  <!-- Underground hole -->
+  <rect x="8" y="28" width="48" height="32" fill="#1A1A1A" rx="4"/>
+  <rect x="12" y="32" width="40" height="24" fill="#0D0D0D" rx="2"/>
+
+  <!-- Entry ramp -->
+  <polygon points="20,28 44,28 40,36 24,36" fill="#2A2A2A"/>
+
+  <!-- Yellow warning stripes -->
+  <g fill="#FFD700">
+    <rect x="12" y="28" width="8" height="4"/>
+    <rect x="28" y="28" width="8" height="4"/>
+    <rect x="44" y="28" width="8" height="4"/>
+  </g>
+
+  <!-- Arrow pointing down -->
+  <polygon points="32,40 24,32 28,32 28,24 36,24 36,32 40,32" fill="#FF6B00"/>
+
+  <!-- Metal frame around hole -->
+  <rect x="8" y="28" width="48" height="4" fill="#5A5A5A"/>
+  <rect x="8" y="56" width="48" height="4" fill="#4A4A4A"/>
+  <rect x="8" y="28" width="4" height="32" fill="#5A5A5A"/>
+  <rect x="52" y="28" width="4" height="32" fill="#5A5A5A"/>
+
+  <!-- Roller bolts -->
+  <g fill="#5A5A5A">
+    <circle cx="14" cy="8" r="1.5"/>
+    <circle cx="50" cy="8" r="1.5"/>
+  </g>
+
+  <!-- Direction arrow on belt -->
+  <polygon points="32,16 26,24 30,24 30,20 34,20 34,24 38,24" fill="#FFD700" opacity="0.8"/>
+</svg>

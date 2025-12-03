@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 
 void main() {
   group('GridConfig', () {
-    test('default configuration creates 50x50 grid', () {
+    test('default configuration creates 50x50 grid with 32px tiles', () {
       const config = GridConfig();
 
       expect(config.gridWidth, equals(50));
       expect(config.gridHeight, equals(50));
-      expect(config.tileWidth, equals(64.0));
+      expect(config.tileSize, equals(32.0));
+      // Backwards compatibility
+      expect(config.tileWidth, equals(32.0));
       expect(config.tileHeight, equals(32.0));
     });
 
@@ -18,17 +20,15 @@ void main() {
       const config = GridConfig(
         gridWidth: 100,
         gridHeight: 100,
-        tileWidth: 128.0,
-        tileHeight: 64.0,
+        tileSize: 64.0,
       );
 
       expect(config.gridWidth, equals(100));
       expect(config.gridHeight, equals(100));
-      expect(config.tileWidth, equals(128.0));
-      expect(config.tileHeight, equals(64.0));
+      expect(config.tileSize, equals(64.0));
     });
 
-    group('gridToScreen conversion', () {
+    group('gridToScreen conversion (top-down)', () {
       const config = GridConfig();
 
       test('converts (0,0) to origin', () {
@@ -41,32 +41,27 @@ void main() {
       test('converts (1,0) correctly', () {
         final screenPos = config.gridToScreen(1, 0);
 
-        // screenX = (gridX - gridY) * (tileWidth / 2)
-        // screenX = (1 - 0) * 32 = 32
+        // Top-down: screenX = gridX * tileSize = 1 * 32 = 32
         expect(screenPos.x, equals(32.0));
-
-        // screenY = (gridX + gridY) * (tileHeight / 2)
-        // screenY = (1 + 0) * 16 = 16
-        expect(screenPos.y, equals(16.0));
+        // Top-down: screenY = gridY * tileSize = 0 * 32 = 0
+        expect(screenPos.y, equals(0.0));
       });
 
       test('converts (0,1) correctly', () {
         final screenPos = config.gridToScreen(0, 1);
 
-        // screenX = (0 - 1) * 32 = -32
-        expect(screenPos.x, equals(-32.0));
-
-        // screenY = (0 + 1) * 16 = 16
-        expect(screenPos.y, equals(16.0));
+        // Top-down: screenX = 0 * 32 = 0
+        expect(screenPos.x, equals(0.0));
+        // Top-down: screenY = 1 * 32 = 32
+        expect(screenPos.y, equals(32.0));
       });
 
-      test('converts (5,5) to center area', () {
+      test('converts (5,5) correctly', () {
         final screenPos = config.gridToScreen(5, 5);
 
-        // screenX = (5 - 5) * 32 = 0
-        expect(screenPos.x, equals(0.0));
-
-        // screenY = (5 + 5) * 16 = 160
+        // Top-down: screenX = 5 * 32 = 160
+        expect(screenPos.x, equals(160.0));
+        // Top-down: screenY = 5 * 32 = 160
         expect(screenPos.y, equals(160.0));
       });
     });
@@ -114,13 +109,16 @@ void main() {
       });
     });
 
-    test('getWorldBounds returns correct bounding box', () {
+    test('getWorldBounds returns correct bounding box for top-down', () {
       const config = GridConfig();
       final bounds = config.getWorldBounds();
 
       expect(bounds, isA<Rect>());
-      expect(bounds.width, greaterThan(0));
-      expect(bounds.height, greaterThan(0));
+      // Top-down: width = gridWidth * tileSize = 50 * 32 = 1600
+      expect(bounds.width, equals(1600.0));
+      expect(bounds.height, equals(1600.0));
+      expect(bounds.left, equals(0.0));
+      expect(bounds.top, equals(0.0));
     });
   });
 
@@ -244,11 +242,12 @@ void main() {
       expect(grid.isValidPosition(-1, -1), isFalse);
     });
 
-    test('gridToScreen delegates to config', () {
+    test('gridToScreen delegates to config (top-down)', () {
       final grid = GridComponent();
       final screenPos = grid.gridToScreen(5, 5);
 
-      expect(screenPos.x, equals(0.0));
+      // Top-down: x = 5 * 32 = 160, y = 5 * 32 = 160
+      expect(screenPos.x, equals(160.0));
       expect(screenPos.y, equals(160.0));
     });
 

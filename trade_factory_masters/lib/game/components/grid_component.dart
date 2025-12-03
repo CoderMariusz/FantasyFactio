@@ -9,9 +9,8 @@ class GridConfig {
   final int gridWidth;
   final int gridHeight;
 
-  /// Tile size in pixels (isometric diamond size)
-  final double tileWidth;
-  final double tileHeight;
+  /// Tile size in pixels (square tiles for top-down view)
+  final double tileSize;
 
   /// Grid line colors
   final Color primaryLineColor;
@@ -23,29 +22,26 @@ class GridConfig {
   const GridConfig({
     this.gridWidth = 50,
     this.gridHeight = 50,
-    this.tileWidth = 64.0,
-    this.tileHeight = 32.0,
+    this.tileSize = 32.0,
     this.primaryLineColor = const Color(0xFF333333),
     this.secondaryLineColor = const Color(0xFF222222),
     this.showGridLines = true,
   });
 
-  /// Convert grid coordinates to isometric screen coordinates
-  /// Formula for isometric projection:
-  /// screenX = (gridX - gridY) * (tileWidth / 2)
-  /// screenY = (gridX + gridY) * (tileHeight / 2)
+  /// Backwards compatibility getters
+  double get tileWidth => tileSize;
+  double get tileHeight => tileSize;
+
+  /// Convert grid coordinates to top-down screen coordinates
+  /// Simple orthogonal projection: screenX = gridX * tileSize, screenY = gridY * tileSize
   Vector2 gridToScreen(int gridX, int gridY) {
-    final screenX = (gridX - gridY) * (tileWidth / 2);
-    final screenY = (gridX + gridY) * (tileHeight / 2);
-    return Vector2(screenX, screenY);
+    return Vector2(gridX * tileSize, gridY * tileSize);
   }
 
   /// Convert screen coordinates to grid coordinates
   /// Inverse of gridToScreen transformation
   Vector2 screenToGrid(double screenX, double screenY) {
-    final gridX = (screenX / (tileWidth / 2) + screenY / (tileHeight / 2)) / 2;
-    final gridY = (screenY / (tileHeight / 2) - screenX / (tileWidth / 2)) / 2;
-    return Vector2(gridX, gridY);
+    return Vector2(screenX / tileSize, screenY / tileSize);
   }
 
   /// Check if grid coordinates are valid
@@ -55,17 +51,12 @@ class GridConfig {
 
   /// Get world bounds (in screen coordinates)
   Rect getWorldBounds() {
-    final topLeft = gridToScreen(0, 0);
-    final topRight = gridToScreen(gridWidth - 1, 0);
-    final bottomLeft = gridToScreen(0, gridHeight - 1);
-    final bottomRight = gridToScreen(gridWidth - 1, gridHeight - 1);
-
-    final minX = math.min(topLeft.x, bottomLeft.x);
-    final maxX = math.max(topRight.x, bottomRight.x);
-    final minY = math.min(topLeft.y, topRight.y);
-    final maxY = math.max(bottomLeft.y, bottomRight.y);
-
-    return Rect.fromLTRB(minX, minY, maxX, maxY);
+    return Rect.fromLTWH(
+      0,
+      0,
+      gridWidth * tileSize,
+      gridHeight * tileSize,
+    );
   }
 }
 
@@ -163,14 +154,11 @@ class VisibleGridRange {
       'VisibleGridRange(x: $minX-$maxX, y: $minY-$maxY, tiles: $tileCount)';
 }
 
-/// Main grid component for rendering isometric grid
+/// Main grid component for rendering top-down grid (Factorio-style)
 /// Handles grid rendering with spatial culling for performance
 class GridComponent extends Component with HasGameReference {
   final GridConfig config;
   late final GridCullingManager cullingManager;
-
-  /// Cached tile vertices for rendering
-  final Map<String, List<Offset>> _tileCache = {};
 
   /// Performance metrics
   int _renderedTiles = 0;
@@ -186,21 +174,6 @@ class GridComponent extends Component with HasGameReference {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _buildTileCache();
-  }
-
-  /// Pre-build tile diamond vertices for performance
-  void _buildTileCache() {
-    final halfWidth = config.tileWidth / 2;
-    final halfHeight = config.tileHeight / 2;
-
-    // Diamond shape for isometric tile
-    _tileCache['diamond'] = [
-      Offset(0, -halfHeight), // Top
-      Offset(halfWidth, 0), // Right
-      Offset(0, halfHeight), // Bottom
-      Offset(-halfWidth, 0), // Left
-    ];
   }
 
   /// Render the grid with spatial culling
@@ -230,7 +203,7 @@ class GridComponent extends Component with HasGameReference {
     _renderVisibleTiles(canvas, visibleRange);
   }
 
-  /// Render tiles within visible range
+  /// Render tiles within visible range (top-down squares)
   void _renderVisibleTiles(Canvas canvas, VisibleGridRange range) {
     final primaryPaint = Paint()
       ..color = config.primaryLineColor
@@ -242,7 +215,7 @@ class GridComponent extends Component with HasGameReference {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5;
 
-    final diamondVertices = _tileCache['diamond']!;
+    final tileSize = config.tileSize;
 
     for (int y = range.minY; y <= range.maxY; y++) {
       for (int x = range.minX; x <= range.maxX; x++) {
@@ -253,34 +226,16 @@ class GridComponent extends Component with HasGameReference {
         // Use primary lines every 5 tiles, secondary otherwise
         final paint = (x % 5 == 0 || y % 5 == 0) ? primaryPaint : secondaryPaint;
 
-        // Draw diamond shape
-        _drawDiamond(canvas, screenPos, diamondVertices, paint);
+        // Draw square tile (top-down view)
+        final rect = Rect.fromLTWH(
+          screenPos.x,
+          screenPos.y,
+          tileSize,
+          tileSize,
+        );
+        canvas.drawRect(rect, paint);
       }
     }
-  }
-
-  /// Draw isometric diamond tile
-  void _drawDiamond(
-    Canvas canvas,
-    Vector2 position,
-    List<Offset> vertices,
-    Paint paint,
-  ) {
-    final path = Path();
-    path.moveTo(
-      position.x + vertices[0].dx,
-      position.y + vertices[0].dy,
-    );
-
-    for (int i = 1; i < vertices.length; i++) {
-      path.lineTo(
-        position.x + vertices[i].dx,
-        position.y + vertices[i].dy,
-      );
-    }
-
-    path.close();
-    canvas.drawPath(path, paint);
   }
 
   /// Get performance metrics

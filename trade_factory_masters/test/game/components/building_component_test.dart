@@ -32,8 +32,7 @@ void main() {
       gridConfig = const GridConfig(
         gridWidth: 50,
         gridHeight: 50,
-        tileWidth: 64.0,
-        tileHeight: 32.0,
+        tileSize: 32.0,
         showGridLines: true,
       );
 
@@ -114,25 +113,21 @@ void main() {
       expect(backToGrid.y, closeTo(gridPos.y.toDouble(), 0.1));
     });
 
-    test('Building size calculation is correct', () {
-      final baseWidth = gridConfig.tileWidth * 0.8;
-      final baseHeight = gridConfig.tileHeight * 1.5;
+    test('Building size calculation is correct (square for top-down)', () {
+      // Top-down view uses square buildings
+      final baseSize = gridConfig.tileSize * 0.9;
 
       // Level 1 building
       final level1Scale = 1.0 + (1 - 1) * 0.01; // = 1.0
-      final level1Width = baseWidth * level1Scale;
-      final level1Height = baseHeight * level1Scale;
+      final level1Size = baseSize * level1Scale;
 
-      expect(level1Width, equals(baseWidth));
-      expect(level1Height, equals(baseHeight));
+      expect(level1Size, equals(baseSize));
 
       // Level 10 building
       final level10Scale = 1.0 + (10 - 1) * 0.01; // = 1.09
-      final level10Width = baseWidth * level10Scale;
-      final level10Height = baseHeight * level10Scale;
+      final level10Size = baseSize * level10Scale;
 
-      expect(level10Width, greaterThan(level1Width));
-      expect(level10Height, greaterThan(level1Height));
+      expect(level10Size, greaterThan(level1Size));
     });
 
     test('Resource collection respects time elapsed', () {

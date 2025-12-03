@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Top-Down Conveyor Belt - Factorio Style (North-South) -->
+
+  <!-- Base frame -->
+  <rect x="0" y="0" width="64" height="64" fill="#3D3D3D"/>
+
+  <!-- Left rail (yellow) -->
+  <rect x="0" y="0" width="10" height="64" fill="#E6A000"/>
+  <rect x="2" y="0" width="2" height="64" fill="#FFB81C"/>
+
+  <!-- Right rail (yellow) -->
+  <rect x="54" y="0" width="10" height="64" fill="#E6A000"/>
+  <rect x="60" y="0" width="2" height="64" fill="#FFB81C"/>
+
+  <!-- Belt surface (dark) -->
+  <rect x="10" y="0" width="44" height="64" fill="#2A2A2A"/>
+
+  <!-- Belt segments/rollers -->
+  <g fill="#4A4A4A">
+    <rect x="12" y="4" width="40" height="4" rx="1"/>
+    <rect x="12" y="16" width="40" height="4" rx="1"/>
+    <rect x="12" y="28" width="40" height="4" rx="1"/>
+    <rect x="12" y="40" width="40" height="4" rx="1"/>
+    <rect x="12" y="52" width="40" height="4" rx="1"/>
+  </g>
+
+  <!-- Direction arrows (yellow chevrons) -->
+  <g fill="#FFD700">
+    <polygon points="32,10 24,18 28,18 28,22 36,22 36,18 40,18"/>
+    <polygon points="32,34 24,42 28,42 28,46 36,46 36,42 40,42"/>
+  </g>
+
+  <!-- Roller bolts -->
+  <g fill="#5A5A5A">
+    <circle cx="14" cy="6" r="1.5"/>
+    <circle cx="50" cy="6" r="1.5"/>
+    <circle cx="14" cy="30" r="1.5"/>
+    <circle cx="50" cy="30" r="1.5"/>
+    <circle cx="14" cy="54" r="1.5"/>
+    <circle cx="50" cy="54" r="1.5"/>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Top-Down Mining Building - Brown with Pickaxe -->
+
+  <!-- Building base -->
+  <rect x="4" y="4" width="56" height="56" rx="4" fill="#8B4513"/>
+
+  <!-- Inner floor -->
+  <rect x="8" y="8" width="48" height="48" rx="2" fill="#A0522D"/>
+
+  <!-- Mine shaft (dark hole) -->
+  <circle cx="32" cy="32" r="16" fill="#2D1810"/>
+  <circle cx="32" cy="32" r="12" fill="#1A0F0A"/>
+
+  <!-- Support beams (X pattern) -->
+  <line x1="20" y1="20" x2="44" y2="44" stroke="#5D2E0D" stroke-width="4"/>
+  <line x1="44" y1="20" x2="20" y2="44" stroke="#5D2E0D" stroke-width="4"/>
+
+  <!-- Center platform -->
+  <circle cx="32" cy="32" r="6" fill="#6B3510"/>
+
+  <!-- Pickaxe icon -->
+  <g transform="translate(24, 24)">
+    <line x1="8" y1="0" x2="8" y2="16" stroke="#4A3728" stroke-width="3" stroke-linecap="round"/>
+    <path d="M2,2 L14,2 L12,6 L4,6 Z" fill="#708090"/>
+  </g>
+
+  <!-- Corner reinforcements -->
+  <rect x="4" y="4" width="8" height="8" fill="#5D2E0D"/>
+  <rect x="52" y="4" width="8" height="8" fill="#5D2E0D"/>
+  <rect x="4" y="52" width="8" height="8" fill="#5D2E0D"/>
+  <rect x="52" y="52" width="8" height="8" fill="#5D2E0D"/>
+</svg>

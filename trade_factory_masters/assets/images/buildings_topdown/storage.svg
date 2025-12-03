@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Top-Down Storage Building - Green Warehouse -->
+
+  <!-- Building base -->
+  <rect x="4" y="4" width="56" height="56" rx="2" fill="#228B22"/>
+
+  <!-- Roof pattern -->
+  <rect x="8" y="8" width="48" height="48" fill="#2EAE2E"/>
+
+  <!-- Roof ridges -->
+  <line x1="8" y1="20" x2="56" y2="20" stroke="#1A6B1A" stroke-width="2"/>
+  <line x1="8" y1="32" x2="56" y2="32" stroke="#1A6B1A" stroke-width="2"/>
+  <line x1="8" y1="44" x2="56" y2="44" stroke="#1A6B1A" stroke-width="2"/>
+
+  <!-- Crates inside (visible through skylights) -->
+  <rect x="12" y="12" width="12" height="12" fill="#8B4513" rx="1"/>
+  <rect x="26" y="12" width="12" height="12" fill="#A0522D" rx="1"/>
+  <rect x="40" y="12" width="12" height="12" fill="#8B4513" rx="1"/>
+
+  <rect x="12" y="36" width="12" height="12" fill="#A0522D" rx="1"/>
+  <rect x="26" y="36" width="12" height="12" fill="#8B4513" rx="1"/>
+  <rect x="40" y="36" width="12" height="12" fill="#A0522D" rx="1"/>
+
+  <!-- Door (south side) -->
+  <rect x="24" y="52" width="16" height="8" fill="#165C16"/>
+  <circle cx="36" cy="56" r="2" fill="#FFD700"/>
+
+  <!-- Skylight -->
+  <rect x="26" y="24" width="12" height="8" fill="#87CEEB" opacity="0.6"/>
+
+  <!-- Border -->
+  <rect x="4" y="4" width="56" height="56" rx="2" fill="none" stroke="#165C16" stroke-width="2"/>
+</svg>

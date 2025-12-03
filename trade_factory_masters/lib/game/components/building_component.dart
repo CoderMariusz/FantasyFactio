@@ -8,7 +8,7 @@ import '../../domain/usecases/collect_resources.dart';
 import 'grid_component.dart';
 
 /// Building sprite component for Trade Factory Masters
-/// Renders buildings on the isometric grid with tap detection and animations
+/// Renders buildings on the top-down grid (Factorio-style) with tap detection and animations
 class BuildingComponent extends PositionComponent with TapCallbacks {
   // Visual constants
   static const double _pulseMinAlpha = 0.5;
@@ -17,8 +17,7 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
   static const double _indicatorOffsetX = 5.0;
   static const double _indicatorOffsetY = 5.0;
   static const double _indicatorRadius = 4.0;
-  static const double _widthMultiplier = 0.8;
-  static const double _heightMultiplier = 1.5;
+  static const double _sizeMultiplier = 0.9; // Square buildings fill 90% of tile
   static const double _levelScaleIncrement = 0.01;
   static const double _pulseScaleMax = 1.2;
   static const double _pulseScaleDuration = 0.15;
@@ -47,14 +46,16 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     await super.onLoad();
 
     // Convert grid position to screen coordinates
+    // For top-down view, position is at the center of the tile
     final screenPos = gridConfig.gridToScreen(
       building.gridPosition.x,
       building.gridPosition.y,
     );
 
-    position = screenPos;
+    // Offset to center of tile (top-down grid starts at top-left corner)
+    position = screenPos + Vector2(gridConfig.tileSize / 2, gridConfig.tileSize / 2);
 
-    // Set size based on building type and level
+    // Set size based on building type and level (square for top-down)
     size = _calculateBuildingSize();
 
     debugPrint(
@@ -62,16 +63,15 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     );
   }
 
-  /// Calculate building size based on type and level
+  /// Calculate building size based on type and level (square for top-down view)
   Vector2 _calculateBuildingSize() {
-    // Base size is tile size
-    final baseWidth = gridConfig.tileWidth * _widthMultiplier;
-    final baseHeight = gridConfig.tileHeight * _heightMultiplier;
+    // Base size is square, filling most of the tile
+    final baseSize = gridConfig.tileSize * _sizeMultiplier;
 
     // Scale slightly with level (10% increase at max level)
     final levelScale = 1.0 + (building.level - 1) * _levelScaleIncrement;
 
-    return Vector2(baseWidth * levelScale, baseHeight * levelScale);
+    return Vector2.all(baseSize * levelScale);
   }
 
   @override

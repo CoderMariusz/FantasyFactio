@@ -127,7 +127,7 @@ class GameScreen extends StatelessWidget {
   }
 }
 
-/// Trade Factory Masters - Isometric factory builder game
+/// Trade Factory Masters - Top-down factory builder game (Factorio-style)
 /// Features: 50x50 grid, dual-zoom camera, gesture controls
 class TradeFactoryGame extends FlameGame {
   late GridComponent gridComponent;
@@ -141,12 +141,11 @@ class TradeFactoryGame extends FlameGame {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // Configure camera for isometric world
+    // Configure grid for top-down world
     final gridConfig = const GridConfig(
       gridWidth: GridConstants.gridWidth,
       gridHeight: GridConstants.gridHeight,
-      tileWidth: GridConstants.tileWidth,
-      tileHeight: GridConstants.tileHeight,
+      tileSize: GridConstants.tileSize,
       showGridLines: GridConstants.showGridLines,
     );
 
@@ -208,7 +207,7 @@ class TradeFactoryGame extends FlameGame {
       ),
     );
 
-    debugPrint('✅ Grid System initialized (50x50 isometric grid)');
+    debugPrint('✅ Grid System initialized (50x50 top-down grid)');
     debugPrint('✅ Camera System initialized (dual-zoom with gestures)');
 
     // Initialize player economy with starting resources

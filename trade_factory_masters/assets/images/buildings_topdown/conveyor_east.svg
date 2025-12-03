@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Top-Down Conveyor Belt - East-West direction -->
+
+  <!-- Base frame -->
+  <rect x="0" y="0" width="64" height="64" fill="#3D3D3D"/>
+
+  <!-- Top rail (yellow) -->
+  <rect x="0" y="0" width="64" height="10" fill="#E6A000"/>
+  <rect x="0" y="2" width="64" height="2" fill="#FFB81C"/>
+
+  <!-- Bottom rail (yellow) -->
+  <rect x="0" y="54" width="64" height="10" fill="#E6A000"/>
+  <rect x="0" y="60" width="64" height="2" fill="#FFB81C"/>
+
+  <!-- Belt surface (dark) -->
+  <rect x="0" y="10" width="64" height="44" fill="#2A2A2A"/>
+
+  <!-- Belt segments/rollers (vertical) -->
+  <g fill="#4A4A4A">
+    <rect x="4" y="12" width="4" height="40" rx="1"/>
+    <rect x="16" y="12" width="4" height="40" rx="1"/>
+    <rect x="28" y="12" width="4" height="40" rx="1"/>
+    <rect x="40" y="12" width="4" height="40" rx="1"/>
+    <rect x="52" y="12" width="4" height="40" rx="1"/>
+  </g>
+
+  <!-- Direction arrows (yellow, pointing right) -->
+  <g fill="#FFD700">
+    <polygon points="18,32 10,24 10,28 6,28 6,36 10,36 10,40"/>
+    <polygon points="42,32 34,24 34,28 30,28 30,36 34,36 34,40"/>
+  </g>
+
+  <!-- Roller bolts -->
+  <g fill="#5A5A5A">
+    <circle cx="6" cy="14" r="1.5"/>
+    <circle cx="6" cy="50" r="1.5"/>
+    <circle cx="30" cy="14" r="1.5"/>
+    <circle cx="30" cy="50" r="1.5"/>
+    <circle cx="54" cy="14" r="1.5"/>
+    <circle cx="54" cy="50" r="1.5"/>
+  </g>
+</svg>

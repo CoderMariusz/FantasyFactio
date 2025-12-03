@@ -10,11 +10,8 @@ class GridConstants {
   /// Default grid height in tiles
   static const int gridHeight = 50;
 
-  /// Tile width in pixels (for isometric projection)
-  static const double tileWidth = 64.0;
-
-  /// Tile height in pixels (for isometric projection)
-  static const double tileHeight = 32.0;
+  /// Tile size in pixels (square tiles for top-down view)
+  static const double tileSize = 32.0;
 
   /// Whether to show grid lines by default
   static const bool showGridLines = true;
@@ -58,11 +55,8 @@ class EconomyConstants {
 
 /// Building configuration constants
 class BuildingConstants {
-  /// Building size multiplier relative to tile width
-  static const double widthMultiplier = 0.8;
-
-  /// Building height multiplier relative to tile height
-  static const double heightMultiplier = 1.5;
+  /// Building size multiplier relative to tile size (square buildings)
+  static const double sizeMultiplier = 0.9;
 
   /// Level scale increment (percentage per level)
   static const double levelScaleIncrement = 0.01;
