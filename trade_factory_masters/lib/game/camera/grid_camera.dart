@@ -89,6 +89,12 @@ class GridCamera extends Component
   Vector2? _panStartPosition;
   Vector2? _lastPanPosition;
 
+  /// Position animation state
+  Vector2? _targetPosition;
+  Vector2? _previousPosition;
+  double _positionProgress = 1.0;
+  bool _isPositionAnimating = false;
+
   /// Pinch zoom state
   double? _initialPinchZoom;
   double? _pinchStartDistance;
@@ -113,6 +119,7 @@ class GridCamera extends Component
   void update(double dt) {
     super.update(dt);
     _updateZoomAnimation(dt);
+    _updatePositionAnimation(dt);
   }
 
   /// Update smooth zoom animation
@@ -139,6 +146,29 @@ class GridCamera extends Component
     return t < 0.5
         ? 4 * t * t * t
         : 1 - math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  /// Update smooth position animation
+  void _updatePositionAnimation(double dt) {
+    if (!_isPositionAnimating || _targetPosition == null || _previousPosition == null) return;
+
+    _positionProgress += dt / config.zoomTransitionDuration;
+
+    if (_positionProgress >= 1.0) {
+      _positionProgress = 1.0;
+      _isPositionAnimating = false;
+      gameRef.camera.viewfinder.position = _targetPosition!.clone();
+    } else {
+      // Smooth easing function (ease-in-out)
+      final easedProgress = _easeInOutCubic(_positionProgress);
+      final currentPosition = _previousPosition! +
+          (_targetPosition! - _previousPosition!) * easedProgress;
+      gameRef.camera.viewfinder.position = currentPosition;
+    }
+
+    if (config.enableBounds) {
+      _applyBounds();
+    }
   }
 
   /// Apply zoom to camera with bounds checking
@@ -299,15 +329,15 @@ class GridCamera extends Component
   /// Move camera to specific world position
   void moveTo(Vector2 position, {bool animate = false}) {
     if (animate) {
-      // TODO: Implement smooth camera movement animation
-      // For now, just snap to position
-      gameRef.camera.viewfinder.position = position.clone();
+      _previousPosition = gameRef.camera.viewfinder.position.clone();
+      _targetPosition = position.clone();
+      _positionProgress = 0.0;
+      _isPositionAnimating = true;
     } else {
       gameRef.camera.viewfinder.position = position.clone();
-    }
-
-    if (config.enableBounds) {
-      _applyBounds();
+      if (config.enableBounds) {
+        _applyBounds();
+      }
     }
   }
 
@@ -330,7 +360,7 @@ class GridCamera extends Component
   Vector2 get position => gameRef.camera.viewfinder.position;
 
   /// Check if camera is currently animating
-  bool get isAnimating => _isAnimating;
+  bool get isAnimating => _isAnimating || _isPositionAnimating;
 
   /// Get camera state for debugging
   Map<String, dynamic> getCameraState() {
