@@ -169,7 +169,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 10, y: 10),
         production: const ProductionConfig(
           baseRate: 5.0,
-          resourceType: 'Wood',
+          resourceType: ResourceIds.wood,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 100,
@@ -187,7 +187,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 15, y: 10),
         production: const ProductionConfig(
           baseRate: 3.0,
-          resourceType: 'Iron Bar',
+          resourceType: ResourceIds.ironBar,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 150,
@@ -205,7 +205,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 20, y: 10),
         production: const ProductionConfig(
           baseRate: 0.0,
-          resourceType: 'None',
+          resourceType: 'None', // Storage doesn't produce
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 200,
@@ -223,7 +223,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 10, y: 15),
         production: const ProductionConfig(
           baseRate: 4.0,
-          resourceType: 'Stone',
+          resourceType: ResourceIds.stone,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 100,
@@ -241,7 +241,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 25, y: 25),
         production: const ProductionConfig(
           baseRate: 2.0,
-          resourceType: 'Gold',
+          resourceType: ResourceIds.gold,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 500,

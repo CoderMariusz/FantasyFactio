@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
+import '../../config/game_config.dart';
 
 /// Camera zoom levels for dual-zoom system
 enum ZoomLevel {
@@ -52,12 +53,12 @@ class GridCameraConfig {
 
   const GridCameraConfig({
     required this.worldSize,
-    this.minZoom = 0.5,
-    this.maxZoom = 2.0,
-    this.zoomTransitionDuration = 0.3,
-    this.panSpeed = 1.0,
+    this.minZoom = CameraConstants.minZoom,
+    this.maxZoom = CameraConstants.maxZoom,
+    this.zoomTransitionDuration = CameraConstants.zoomTransitionDuration,
+    this.panSpeed = CameraConstants.panSpeed,
     this.enableBounds = true,
-    this.boundsPadding = 200.0,
+    this.boundsPadding = CameraConstants.boundsPadding,
   });
 }
 

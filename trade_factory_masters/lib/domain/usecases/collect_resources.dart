@@ -6,6 +6,9 @@ import '../entities/building.dart';
 /// Calculates production based on elapsed time since last collection
 /// and updates player's economy with new resources
 class CollectResourcesUseCase {
+  // Domain-level constants (framework-independent)
+  static const int _minimumCollectionSeconds = 60;
+  static const double _storageHoursMultiplier = 10.0;
   /// Execute the resource collection for a specific building
   ///
   /// Calculates resources based on:
@@ -29,19 +32,34 @@ class CollectResourcesUseCase {
         economy: economy,
         resourcesCollected: 0,
         wasCapped: false,
+        tooSoon: false,
       );
     }
 
     // Calculate time elapsed
     final elapsed = now.difference(building.lastCollected);
+
+    // Check minimum collection time (prevents spam-tapping)
+    if (elapsed.inSeconds < _minimumCollectionSeconds) {
+      return CollectResourcesResult(
+        economy: economy,
+        resourcesCollected: 0,
+        wasCapped: false,
+        tooSoon: true,
+        secondsUntilNextCollection:
+            _minimumCollectionSeconds - elapsed.inSeconds,
+      );
+    }
+
     final hoursElapsed = elapsed.inMinutes / 60.0;
 
     // Calculate production (productionRate already includes level multiplier)
     final rawProduction = hoursElapsed * building.productionRate;
 
     // Apply storage capacity limit
-    // Storage capacity = base production rate × 10 (equivalent to 10 hours storage)
-    final storageCapacity = building.production.baseRate * 10;
+    // Storage capacity = base production rate × multiplier (equivalent to X hours storage)
+    final storageCapacity =
+        building.production.baseRate * _storageHoursMultiplier;
     final cappedProduction = min(rawProduction, storageCapacity);
     final resourceAmount = cappedProduction.toInt();
 
@@ -65,6 +83,7 @@ class CollectResourcesUseCase {
         economy: updatedEconomy,
         resourcesCollected: resourceAmount,
         wasCapped: wasCapped,
+        tooSoon: false,
       );
     }
 
@@ -77,6 +96,7 @@ class CollectResourcesUseCase {
       economy: finalEconomy,
       resourcesCollected: resourceAmount,
       wasCapped: wasCapped,
+      tooSoon: false,
     );
   }
 }
@@ -92,10 +112,18 @@ class CollectResourcesResult {
   /// Whether production was capped by storage capacity
   final bool wasCapped;
 
+  /// Whether collection was attempted too soon (minimum cooldown not met)
+  final bool tooSoon;
+
+  /// Seconds remaining until next collection is available (only set if tooSoon is true)
+  final int? secondsUntilNextCollection;
+
   const CollectResourcesResult({
     required this.economy,
     required this.resourcesCollected,
     required this.wasCapped,
+    required this.tooSoon,
+    this.secondsUntilNextCollection,
   });
 
   @override
@@ -105,13 +133,19 @@ class CollectResourcesResult {
           runtimeType == other.runtimeType &&
           economy == other.economy &&
           resourcesCollected == other.resourcesCollected &&
-          wasCapped == other.wasCapped;
+          wasCapped == other.wasCapped &&
+          tooSoon == other.tooSoon &&
+          secondsUntilNextCollection == other.secondsUntilNextCollection;
 
   @override
   int get hashCode =>
-      economy.hashCode ^ resourcesCollected.hashCode ^ wasCapped.hashCode;
+      economy.hashCode ^
+      resourcesCollected.hashCode ^
+      wasCapped.hashCode ^
+      tooSoon.hashCode ^
+      secondsUntilNextCollection.hashCode;
 
   @override
   String toString() =>
-      'CollectResourcesResult(collected: $resourcesCollected, wasCapped: $wasCapped)';
+      'CollectResourcesResult(collected: $resourcesCollected, wasCapped: $wasCapped, tooSoon: $tooSoon)';
 }

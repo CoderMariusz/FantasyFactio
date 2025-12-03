@@ -86,3 +86,31 @@ class DisplayConstants {
 
   DisplayConstants._(); // Prevent instantiation
 }
+
+/// Resource type identifiers
+/// Use these instead of magic strings for resource types
+class ResourceIds {
+  static const String wood = 'Wood';
+  static const String stone = 'Stone';
+  static const String ironOre = 'Iron Ore';
+  static const String coal = 'Coal';
+  static const String copperOre = 'Copper Ore';
+  static const String ironBar = 'Iron Bar';
+  static const String copperBar = 'Copper Bar';
+  static const String steel = 'Steel';
+  static const String gold = 'Gold';
+
+  ResourceIds._(); // Prevent instantiation
+}
+
+/// Collection mechanics constants
+class CollectionConstants {
+  /// Minimum seconds between collections to get resources
+  /// Prevents spam-tapping with no effect
+  static const int minimumCollectionSeconds = 60;
+
+  /// Storage capacity multiplier (hours of production stored)
+  static const double storageHoursMultiplier = 10.0;
+
+  CollectionConstants._(); // Prevent instantiation
+}

@@ -247,14 +247,17 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     debugPrint('🔨 Building tapped: ${building.type} L${building.level}');
 
     // Trigger resource collection
-    _collectResources();
+    final success = _collectResources();
 
-    // Play pulse animation
-    _playPulseAnimation();
+    // Play pulse animation only if collection was successful
+    if (success) {
+      _playPulseAnimation();
+    }
   }
 
   /// Collect resources from this building
-  void _collectResources() {
+  /// Returns true if collection was successful, false if too soon
+  bool _collectResources() {
     _isCollecting = true;
 
     final useCase = CollectResourcesUseCase();
@@ -263,17 +266,28 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
       building: building,
     );
 
+    // Handle too soon case
+    if (result.tooSoon) {
+      debugPrint(
+        '⏳ Too soon to collect! Wait ${result.secondsUntilNextCollection}s',
+      );
+      _showCooldownText(result.secondsUntilNextCollection ?? 0);
+      _isCollecting = false;
+      return false;
+    }
+
     debugPrint(
       '💰 Resources collected: ${result.resourcesCollected} ${building.production.resourceType} (capped: ${result.wasCapped})',
     );
 
     // Show floating text animation
-    _showFloatingText(result.resourcesCollected, building.production.resourceType);
+    _showFloatingText(result.resourcesCollected.toDouble(), building.production.resourceType);
 
     // Notify callback
     onResourcesCollected?.call(building, result);
 
     _isCollecting = false;
+    return true;
   }
 
   /// Play pulse animation on tap
@@ -294,8 +308,19 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
   /// Show floating text animation ("+X Resource")
   void _showFloatingText(double amount, String resourceType) {
     final floatingText = FloatingTextComponent(
-      text: '+${amount.toStringAsFixed(1)} $resourceType',
+      text: '+${amount.toStringAsFixed(0)} $resourceType',
       startPosition: position + Vector2(0, -size.y / 2),
+    );
+
+    parent?.add(floatingText);
+  }
+
+  /// Show cooldown text when collection is attempted too soon
+  void _showCooldownText(int secondsRemaining) {
+    final floatingText = FloatingTextComponent(
+      text: 'Wait ${secondsRemaining}s',
+      startPosition: position + Vector2(0, -size.y / 2),
+      color: const Color(0xFFFF9800), // Orange color for cooldown
     );
 
     parent?.add(floatingText);
@@ -323,16 +348,17 @@ class FloatingTextComponent extends TextComponent {
   FloatingTextComponent({
     required String text,
     required Vector2 startPosition,
+    Color color = Colors.greenAccent,
   }) : super(
           text: text,
           position: startPosition,
           anchor: Anchor.center,
           textRenderer: TextPaint(
-            style: const TextStyle(
-              color: Colors.greenAccent,
+            style: TextStyle(
+              color: color,
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              shadows: [
+              shadows: const [
                 Shadow(
                   color: Colors.black,
                   offset: Offset(1, 1),
