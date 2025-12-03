@@ -146,37 +146,42 @@ class BuildingTypeAdapter extends TypeAdapter<BuildingType> {
   BuildingType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return BuildingType.collector;
+        return BuildingType.mining;
       case 1:
-        return BuildingType.processor;
-      case 2:
         return BuildingType.storage;
+      case 2:
+        return BuildingType.smelter;
       case 3:
         return BuildingType.conveyor;
       case 4:
-        return BuildingType.market;
+        return BuildingType.workshop;
+      case 5:
+        return BuildingType.farm;
       default:
-        return BuildingType.collector;
+        return BuildingType.mining;
     }
   }
 
   @override
   void write(BinaryWriter writer, BuildingType obj) {
     switch (obj) {
-      case BuildingType.collector:
+      case BuildingType.mining:
         writer.writeByte(0);
         break;
-      case BuildingType.processor:
+      case BuildingType.storage:
         writer.writeByte(1);
         break;
-      case BuildingType.storage:
+      case BuildingType.smelter:
         writer.writeByte(2);
         break;
       case BuildingType.conveyor:
         writer.writeByte(3);
         break;
-      case BuildingType.market:
+      case BuildingType.workshop:
         writer.writeByte(4);
+        break;
+      case BuildingType.farm:
+        writer.writeByte(5);
         break;
     }
   }

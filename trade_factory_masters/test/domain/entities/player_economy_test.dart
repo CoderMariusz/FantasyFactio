@@ -86,11 +86,12 @@ void main() {
         expect(updated.inventory['wood']!.amount, equals(1000));
       });
 
-      test('returns same economy if resource not in inventory', () {
+      test('creates new resource if not in inventory', () {
         final updated = testEconomy.addResource('iron', 100);
 
-        expect(updated, equals(testEconomy));
-        expect(updated.inventory.containsKey('iron'), isFalse);
+        expect(updated.inventory.containsKey('iron'), isTrue);
+        expect(updated.inventory['iron']!.amount, equals(100));
+        expect(testEconomy.inventory.containsKey('iron'), isFalse); // Original unchanged
       });
 
       test('handles adding to full resource', () {
@@ -186,8 +187,8 @@ void main() {
     group('addBuilding', () {
       test('adds building to empty list', () {
         final building = Building(
-          id: 'collector_1',
-          type: BuildingType.collector,
+          id: 'mining_1',
+          type: BuildingType.mining,
           level: 1,
           gridPosition: const GridPosition(x: 5, y: 10),
           production: const ProductionConfig(
@@ -204,14 +205,14 @@ void main() {
         final updated = testEconomy.addBuilding(building);
 
         expect(updated.buildings.length, equals(1));
-        expect(updated.buildings[0].id, equals('collector_1'));
+        expect(updated.buildings[0].id, equals('mining_1'));
         expect(testEconomy.buildings, isEmpty); // Original unchanged
       });
 
       test('adds building to existing list', () {
         final building1 = Building(
-          id: 'collector_1',
-          type: BuildingType.collector,
+          id: 'mining_1',
+          type: BuildingType.mining,
           level: 1,
           gridPosition: const GridPosition(x: 5, y: 10),
           production: const ProductionConfig(

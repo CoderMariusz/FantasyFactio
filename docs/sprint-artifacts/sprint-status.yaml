@@ -1,0 +1,180 @@
+# Sprint Status - Trade Factory Masters
+# Generated: 2025-11-23
+# Project: FantasyFactio
+# Tracking System: file-system
+# Story Location: docs/sprint-artifacts/stories
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created by epic-tech-context workflow (required before stories can be drafted)
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder by create-story
+#   - ready-for-dev: Draft approved and story context created by story-ready
+#   - in-progress: Developer actively working on implementation by dev-story
+#   - review: Implementation complete, ready for review by code-review
+#   - done: Story completed by story-done
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done by retrospective
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - SM typically drafts next story ONLY after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', dev reviews, then Dev moves to 'done'
+
+generated: 2025-11-23
+project: FantasyFactio
+project_key: trade-factory-masters
+tracking_system: file-system
+story_location: docs/sprint-artifacts/stories
+
+development_status:
+  # EPIC-00: Project Setup (P0 - Critical Path) - COMPLETED
+  epic-00: done
+  00-1-flutter-project-init: done
+  00-2-flame-integration: done
+  00-3-riverpod-setup: done
+  00-4-firebase-config: done
+  epic-00-retrospective: completed
+
+  # EPIC-01: Core Gameplay Loop (P0 - Critical Path) - COMPLETED
+  # Note: All critical bugs fixed on 2025-12-03
+  epic-01: done
+  01-1-building-entity: done
+  01-2-resource-entity: done
+  01-3-collect-resources-usecase: done
+  01-4-upgrade-building-usecase: done
+  01-5-flame-grid-component: done
+  01-6-building-component: done
+  01-7-tap-detection: done
+  01-8-game-state-provider: done
+  epic-01-retrospective: completed
+
+  # EPIC-02: Tier 1 Economy (P1 - High Priority) - CONTEXTED
+  epic-02: contexted
+  02-1-building-definitions: backlog
+  02-2-resource-definitions: backlog
+  02-3-npc-market-ui: backlog
+  02-4-market-transaction-usecase: backlog
+  02-5-building-placement-system: backlog
+  02-6-economic-balance-validation: backlog
+  epic-02-retrospective: optional
+
+  # EPIC-03: Tier 2 Automation (P0 - Critical Path)
+  epic-03: backlog
+  03-1-conveyor-entity: backlog
+  03-2-a-star-pathfinding: backlog
+  03-3-resource-flow-system: backlog
+  03-4-conveyor-placement-ui: backlog
+  03-5-conveyor-component-rendering: backlog
+  03-6-tier-2-unlock: backlog
+  03-7-automation-testing: backlog
+  epic-03-retrospective: optional
+
+  # EPIC-04: Offline Production (P1 - High Priority)
+  epic-04: backlog
+  04-1-offline-production-calculation: backlog
+  04-2-last-seen-timestamp: backlog
+  04-3-welcome-back-dialog: backlog
+  04-4-storage-cap-handling: backlog
+  04-5-offline-production-testing: backlog
+  epic-04-retrospective: optional
+
+  # EPIC-05: Mobile-First UX (P1 - High Priority) - CONTEXTED
+  epic-05: contexted
+  05-1-touch-controls-gesture-system: backlog
+  05-2-haptic-feedback-system: backlog
+  05-3-performance-optimization-60fps: backlog
+  05-4-one-handed-ui-layout: backlog
+  05-5-accessibility-contrast-tap-targets: backlog
+  05-6-animation-system-polish: backlog
+  epic-05-retrospective: optional
+
+  # EPIC-06: Progression System (P1 - High Priority)
+  epic-06: backlog
+  06-1-tier-unlock-requirements: backlog
+  06-2-progression-tracking: backlog
+  06-3-milestone-achievements: backlog
+  06-4-progression-ui-indicators: backlog
+  epic-06-retrospective: optional
+
+  # EPIC-07: Discovery Tutorial (P2 - Nice-to-Have)
+  epic-07: backlog
+  07-1-tutorial-state-machine: backlog
+  07-2-contextual-tooltips: backlog
+  07-3-progressive-disclosure: backlog
+  07-4-tutorial-skip-functionality: backlog
+  07-5-tutorial-testing: backlog
+  epic-07-retrospective: optional
+
+  # EPIC-08: Ethical F2P Monetization (P1 - High Priority) - CONTEXTED
+  epic-08: contexted
+  08-1-gold-bundle-offers: backlog
+  08-2-cosmetic-building-skins: backlog
+  08-3-optional-time-skip: backlog
+  08-4-iap-integration: backlog
+  08-5-monetization-analytics: backlog
+  epic-08-retrospective: optional
+
+  # EPIC-09: Firebase Backend (P1 - High Priority)
+  epic-09: backlog
+  09-1-firebase-auth-setup: backlog
+  09-2-firestore-schema-implementation: backlog
+  09-3-security-rules: backlog
+  09-4-cloud-functions-validation: backlog
+  09-5-offline-sync-strategy: backlog
+  09-6-backend-testing: backlog
+  epic-09-retrospective: optional
+
+  # EPIC-10: Analytics & Metrics (P0 - Critical Path)
+  epic-10: backlog
+  10-1-firebase-analytics-integration: backlog
+  10-2-custom-event-tracking: backlog
+  10-3-metrics-dashboard: backlog
+  10-4-analytics-testing: backlog
+  epic-10-retrospective: optional
+
+  # EPIC-11: Testing & Quality (P1 - High Priority)
+  epic-11: backlog
+  11-1-unit-test-framework: backlog
+  11-2-integration-test-suite: backlog
+  11-3-widget-test-coverage: backlog
+  11-4-performance-test-suite: backlog
+  11-5-e2e-test-scenarios: backlog
+  11-6-ci-cd-pipeline: backlog
+  11-7-code-quality-tools: backlog
+  11-8-test-coverage-reporting: backlog
+  epic-11-retrospective: optional
+
+# Summary Statistics
+# ===================
+# Total Epics: 12
+# Total Stories: 68
+# Total Story Points: 289 SP
+#
+# Completed Epics: 2 (epic-00, epic-01) - 47 SP
+# Contexted Epics: 3 (epic-02, epic-05, epic-08)
+# Backlog Epics: 7
+#
+# Progress: 47 SP / 289 SP (16.3%)
+# Last Updated: 2025-12-03
+#
+# Epic Breakdown:
+#   - EPIC-00: 4 stories, 13 SP (P0) - DONE ✅
+#   - EPIC-01: 8 stories, 34 SP (P0) - DONE ✅
+#   - EPIC-02: 6 stories, 26 SP (P1) - CONTEXTED
+#   - EPIC-03: 7 stories, 42 SP (P0)
+#   - EPIC-04: 5 stories, 26 SP (P1)
+#   - EPIC-05: 6 stories, 29 SP (P1) - CONTEXTED
+#   - EPIC-06: 4 stories, 18 SP (P1)
+#   - EPIC-07: 5 stories, 21 SP (P2)
+#   - EPIC-08: 5 stories, 23 SP (P1) - CONTEXTED
+#   - EPIC-09: 6 stories, 24 SP (P1)
+#   - EPIC-10: 4 stories, 13 SP (P0)
+#   - EPIC-11: 8 stories, 20 SP (P1)
