@@ -165,7 +165,7 @@ class VisibleGridRange {
 
 /// Main grid component for rendering isometric grid
 /// Handles grid rendering with spatial culling for performance
-class GridComponent extends Component with HasGameRef {
+class GridComponent extends Component with HasGameReference {
   final GridConfig config;
   late final GridCullingManager cullingManager;
 
@@ -211,7 +211,7 @@ class GridComponent extends Component with HasGameRef {
     if (!config.showGridLines) return;
 
     // Get camera viewport for culling
-    final camera = gameRef.camera;
+    final camera = game.camera;
     final viewport = camera.viewport;
 
     // Calculate viewport in world coordinates

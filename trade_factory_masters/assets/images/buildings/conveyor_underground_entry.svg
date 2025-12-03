@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 32" width="64" height="32">
+  <!-- Isometric Underground Conveyor Entry - like Factorio underground belt -->
+
+  <!-- Base/frame - dark metal -->
+  <polygon points="32,0 64,16 32,32 0,16" fill="#3D3D3D"/>
+
+  <!-- Left edge rail (yellow/orange) -->
+  <polygon points="32,0 8,12 8,16 32,4" fill="#E6A000"/>
+
+  <!-- Right edge rail (yellow/orange) -->
+  <polygon points="32,0 56,12 56,16 32,4" fill="#FFB81C"/>
+
+  <!-- Underground hole (dark) -->
+  <polygon points="32,8 16,16 32,24 48,16" fill="#1A1A1A"/>
+  <polygon points="32,12 20,18 32,24 44,18" fill="#0D0D0D"/>
+
+  <!-- Entry ramp -->
+  <polygon points="32,4 20,12 32,16 44,12" fill="#2A2A2A"/>
+
+  <!-- Yellow stripes (warning/direction) -->
+  <g fill="#FFD700" opacity="0.9">
+    <polygon points="28,6 26,8 30,10 32,8"/>
+    <polygon points="36,6 38,8 34,10 32,8"/>
+  </g>
+
+  <!-- Arrow pointing down into hole -->
+  <polygon points="32,14 26,12 32,20 38,12" fill="#FF6B00" opacity="0.8"/>
+
+  <!-- Metal frame around hole -->
+  <line x1="16" y1="16" x2="32" y2="8" stroke="#5A5A5A" stroke-width="2"/>
+  <line x1="48" y1="16" x2="32" y2="8" stroke="#6A6A6A" stroke-width="2"/>
+  <line x1="16" y1="16" x2="32" y2="24" stroke="#4A4A4A" stroke-width="2"/>
+  <line x1="48" y1="16" x2="32" y2="24" stroke="#5A5A5A" stroke-width="2"/>
+
+  <!-- Metallic highlights on rails -->
+  <line x1="32" y1="0" x2="56" y2="12" stroke="#FFD54F" stroke-width="0.5" opacity="0.5"/>
+</svg>

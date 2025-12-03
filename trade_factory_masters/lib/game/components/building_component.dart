@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import '../../domain/entities/building.dart';
 import '../../domain/entities/player_economy.dart';
 import '../../domain/usecases/collect_resources.dart';
@@ -116,7 +115,7 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
 
     // Draw outline
     final outlinePaint = Paint()
-      ..color = buildingColor.withOpacity(0.8)
+      ..color = buildingColor.withValues(alpha: 0.8)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 
@@ -196,7 +195,7 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     final pulseAlpha = (_pulseMinAlpha + _pulseAmplitude * (now % _pulseDuration / _pulseDuration));
 
     final indicatorPaint = Paint()
-      ..color = Colors.green.withOpacity(pulseAlpha)
+      ..color = Colors.green.withValues(alpha: pulseAlpha)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(
@@ -341,15 +340,17 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
 }
 
 /// Floating text component for resource collection feedback
-class FloatingTextComponent extends TextComponent {
+class FloatingTextComponent extends TextComponent with HasPaint {
   static const double floatDistance = 50.0;
   static const double floatDuration = 1.5;
+  final Color _textColor;
 
   FloatingTextComponent({
     required String text,
     required Vector2 startPosition,
     Color color = Colors.greenAccent,
-  }) : super(
+  })  : _textColor = color,
+        super(
           text: text,
           position: startPosition,
           anchor: Anchor.center,
@@ -369,11 +370,14 @@ class FloatingTextComponent extends TextComponent {
           ),
         );
 
+  double _opacity = 1.0;
+  double _elapsed = 0.0;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // Float up and fade out
+    // Float up effect
     final moveEffect = MoveEffect.by(
       Vector2(0, -floatDistance),
       EffectController(
@@ -382,17 +386,36 @@ class FloatingTextComponent extends TextComponent {
       ),
     );
 
-    final fadeEffect = OpacityEffect.fadeOut(
-      EffectController(
-        duration: floatDuration,
-        curve: Curves.easeIn,
+    add(moveEffect);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    // Manual fade out
+    _elapsed += dt;
+    _opacity = (1.0 - (_elapsed / floatDuration)).clamp(0.0, 1.0);
+
+    // Update text color with new opacity
+    textRenderer = TextPaint(
+      style: TextStyle(
+        color: _textColor.withValues(alpha: _opacity),
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        shadows: [
+          Shadow(
+            color: Colors.black.withValues(alpha: _opacity),
+            offset: const Offset(1, 1),
+            blurRadius: 3,
+          ),
+        ],
       ),
-      onComplete: () {
-        removeFromParent();
-      },
     );
 
-    add(moveEffect);
-    add(fadeEffect);
+    // Remove when fully faded
+    if (_elapsed >= floatDuration) {
+      removeFromParent();
+    }
   }
 }

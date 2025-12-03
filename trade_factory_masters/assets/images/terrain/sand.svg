@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 32" width="64" height="32">
+  <!-- Isometric Sand Tile -->
+
+  <!-- Main diamond shape -->
+  <polygon points="32,0 64,16 32,32 0,16" fill="#F4A460"/>
+
+  <!-- Lighter sand patches (sun-bleached) -->
+  <ellipse cx="40" cy="12" rx="6" ry="3" fill="#FFDAB9" opacity="0.4"/>
+  <ellipse cx="20" cy="18" rx="5" ry="2" fill="#FFDAB9" opacity="0.35"/>
+  <ellipse cx="48" cy="20" rx="4" ry="2" fill="#FFDAB9" opacity="0.3"/>
+
+  <!-- Darker sand patches (shadows/dips) -->
+  <ellipse cx="28" cy="14" rx="4" ry="2" fill="#C47B3D" opacity="0.3"/>
+  <ellipse cx="44" cy="16" rx="3" ry="1.5" fill="#C47B3D" opacity="0.25"/>
+
+  <!-- Sand grains/texture dots -->
+  <circle cx="16" cy="14" r="0.8" fill="#DEB887" opacity="0.5"/>
+  <circle cx="24" cy="10" r="0.6" fill="#D2B48C" opacity="0.4"/>
+  <circle cx="40" cy="18" r="0.7" fill="#DEB887" opacity="0.5"/>
+  <circle cx="52" cy="14" r="0.5" fill="#D2B48C" opacity="0.4"/>
+  <circle cx="32" cy="20" r="0.8" fill="#DEB887" opacity="0.45"/>
+
+  <!-- Wind ripple lines -->
+  <path d="M14,16 Q18,15 22,16" stroke="#C47B3D" stroke-width="0.5" fill="none" opacity="0.3"/>
+  <path d="M38,14 Q42,13 46,14" stroke="#C47B3D" stroke-width="0.5" fill="none" opacity="0.25"/>
+
+  <!-- Edge shading -->
+  <line x1="0" y1="16" x2="32" y2="32" stroke="#C47B3D" stroke-width="1" opacity="0.4"/>
+  <line x1="32" y1="32" x2="64" y2="16" stroke="#FFDAB9" stroke-width="0.5" opacity="0.3"/>
+</svg>

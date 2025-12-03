@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Isometric Farm - Gold/Yellow with Thatched Roof -->
+
+  <!-- Main building - Left face (shadow) -->
+  <polygon points="32,34 4,50 4,60 32,44" fill="#916E15"/>
+
+  <!-- Main building - Right face (light) -->
+  <polygon points="32,34 60,50 60,60 32,44" fill="#E8BA40"/>
+
+  <!-- Main building - Top face -->
+  <polygon points="32,24 4,40 32,56 60,40" fill="#DAA520"/>
+
+  <!-- Thatched roof - main -->
+  <polygon points="32,8 0,28 32,48 64,28" fill="#D2691E"/>
+
+  <!-- Thatched roof texture lines -->
+  <line x1="16" y1="18" x2="16" y2="38" stroke="#8B4513" stroke-width="1" opacity="0.5"/>
+  <line x1="32" y1="8" x2="32" y2="48" stroke="#8B4513" stroke-width="1" opacity="0.5"/>
+  <line x1="48" y1="18" x2="48" y2="38" stroke="#8B4513" stroke-width="1" opacity="0.5"/>
+
+  <!-- Roof ridge -->
+  <line x1="0" y1="28" x2="32" y2="8" stroke="#A0522D" stroke-width="2"/>
+  <line x1="32" y1="8" x2="64" y2="28" stroke="#A0522D" stroke-width="2"/>
+
+  <!-- Wheat/grain bundle decoration -->
+  <g transform="translate(26, 16)">
+    <!-- Stalks -->
+    <line x1="4" y1="12" x2="2" y2="4" stroke="#F4A460" stroke-width="1.5"/>
+    <line x1="6" y1="12" x2="6" y2="2" stroke="#F4A460" stroke-width="1.5"/>
+    <line x1="8" y1="12" x2="10" y2="4" stroke="#F4A460" stroke-width="1.5"/>
+    <!-- Grain heads -->
+    <ellipse cx="2" cy="3" rx="1.5" ry="2" fill="#FFD700"/>
+    <ellipse cx="6" cy="1" rx="1.5" ry="2" fill="#FFD700"/>
+    <ellipse cx="10" cy="3" rx="1.5" ry="2" fill="#FFD700"/>
+  </g>
+
+  <!-- Barn door -->
+  <polygon points="32,48 22,54 32,60 42,54" fill="#5D2E0D"/>
+  <line x1="32" y1="48" x2="32" y2="60" stroke="#3D1E08" stroke-width="1"/>
+
+  <!-- Side window -->
+  <polygon points="50,42 50,50 56,46 56,38" fill="#87CEEB"/>
+
+  <!-- Fence posts -->
+  <line x1="8" y1="52" x2="8" y2="58" stroke="#8B4513" stroke-width="2"/>
+  <line x1="56" y1="52" x2="56" y2="58" stroke="#8B4513" stroke-width="2"/>
+</svg>

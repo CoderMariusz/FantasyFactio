@@ -90,15 +90,28 @@ class DisplayConstants {
 /// Resource type identifiers
 /// Use these instead of magic strings for resource types
 class ResourceIds {
+  // Raw resources
   static const String wood = 'Wood';
   static const String stone = 'Stone';
   static const String ironOre = 'Iron Ore';
   static const String coal = 'Coal';
   static const String copperOre = 'Copper Ore';
+  static const String copper = 'Copper Ore'; // Alias for copperOre
+  static const String cotton = 'Cotton'; // Wata
+  static const String salt = 'Salt'; // Sól
+  static const String clay = 'Clay'; // Glina
+
+  // Processed resources
   static const String ironBar = 'Iron Bar';
   static const String copperBar = 'Copper Bar';
   static const String steel = 'Steel';
+
+  // Currency
   static const String gold = 'Gold';
+
+  // Crafted items
+  static const String hammer = 'Hammer';
+  static const String concrete = 'Concrete'; // Beton
 
   ResourceIds._(); // Prevent instantiation
 }

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Isometric Storage Building - Green Warehouse -->
+
+  <!-- Left face (shadow) -->
+  <polygon points="32,28 4,44 4,56 32,40" fill="#165C16"/>
+
+  <!-- Right face (light) -->
+  <polygon points="32,28 60,44 60,56 32,40" fill="#2EAE2E"/>
+
+  <!-- Top face -->
+  <polygon points="32,16 4,32 32,48 60,32" fill="#228B22"/>
+
+  <!-- Roof -->
+  <polygon points="32,8 4,24 32,40 60,24" fill="#1A6B1A"/>
+
+  <!-- Door (left side) -->
+  <polygon points="16,44 16,54 24,50 24,40" fill="#0D3D0D"/>
+
+  <!-- Door frame -->
+  <line x1="16" y1="44" x2="16" y2="54" stroke="#4A3728" stroke-width="1"/>
+  <line x1="24" y1="40" x2="24" y2="50" stroke="#4A3728" stroke-width="1"/>
+
+  <!-- Crate icon on roof -->
+  <g transform="translate(26, 20)">
+    <rect x="0" y="0" width="12" height="10" fill="#8B4513" rx="1"/>
+    <line x1="6" y1="0" x2="6" y2="10" stroke="#5D2E0D" stroke-width="1"/>
+    <line x1="0" y1="5" x2="12" y2="5" stroke="#5D2E0D" stroke-width="1"/>
+  </g>
+
+  <!-- Window (right side) -->
+  <polygon points="44,38 44,46 52,42 52,34" fill="#87CEEB"/>
+  <line x1="48" y1="36" x2="48" y2="44" stroke="#165C16" stroke-width="1"/>
+</svg>

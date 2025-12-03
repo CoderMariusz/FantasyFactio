@@ -1,29 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(flutter --version:*)",
-      "Bash(git --version:*)",
-      "Bash(firebase --version:*)",
-      "Bash(npm install:*)",
-      "Bash(gh:*)",
-      "Bash(flutter create:*)",
-      "Bash(flutter pub add:*)",
-      "Bash(flutter analyze:*)",
-      "Bash(flutter test:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(dart pub global activate:*)",
-      "Bash(dart pub global run:*)",
-      "Bash(chmod:*)",
-      "Bash(trade_factory_masters/.gitignore)",
-      "Bash(flutter devices:*)",
-      "Bash(flutter emulators:*)",
-      "Bash(flutter doctor:*)",
-      "Bash(flutter pub get:*)",
-      "Bash(flutter run:*)",
-      "Bash(timeout:*)",
-      "Bash(git restore:*)"
+      "Bash(Select-Object -First 10 -ExpandProperty FullName)",
+      "Bash(powershell:*)",
+      "Bash(nc:*)",
+      "Bash(ls:*)",
+      "Bash(cd:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

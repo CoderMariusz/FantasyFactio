@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Isometric Smelter - Blue Furnace with Chimney and Flame -->
+
+  <!-- Main building - Left face (shadow) -->
+  <polygon points="32,32 8,46 8,58 32,44" fill="#2B4799"/>
+
+  <!-- Main building - Right face (light) -->
+  <polygon points="32,32 56,46 56,58 32,44" fill="#5A82FF"/>
+
+  <!-- Main building - Top face -->
+  <polygon points="32,20 8,34 32,48 56,34" fill="#4169E1"/>
+
+  <!-- Chimney - back left -->
+  <polygon points="18,10 12,14 12,30 18,26" fill="#2B4799"/>
+  <polygon points="18,10 24,14 24,30 18,26" fill="#5A82FF"/>
+  <polygon points="18,6 12,10 18,14 24,10" fill="#4169E1"/>
+
+  <!-- Smoke from chimney -->
+  <ellipse cx="18" cy="4" rx="3" ry="2" fill="#C0C0C0" opacity="0.6"/>
+  <ellipse cx="16" cy="1" rx="2" ry="1.5" fill="#D3D3D3" opacity="0.4"/>
+
+  <!-- Furnace opening with flame -->
+  <polygon points="32,48 24,53 32,58 40,53" fill="#1A1A2E"/>
+
+  <!-- Flame -->
+  <g transform="translate(28, 50)">
+    <ellipse cx="4" cy="4" rx="3" ry="5" fill="#FF6B35"/>
+    <ellipse cx="4" cy="3" rx="2" ry="3" fill="#FFD700"/>
+    <ellipse cx="4" cy="2" rx="1" ry="2" fill="#FFFFE0"/>
+  </g>
+
+  <!-- Metal bars decoration on right side -->
+  <line x1="44" y1="38" x2="52" y2="42" stroke="#708090" stroke-width="2"/>
+  <line x1="44" y1="42" x2="52" y2="46" stroke="#708090" stroke-width="2"/>
+  <line x1="44" y1="46" x2="52" y2="50" stroke="#708090" stroke-width="2"/>
+</svg>

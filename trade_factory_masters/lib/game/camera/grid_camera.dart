@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
 import '../../config/game_config.dart';
 
@@ -65,7 +64,7 @@ class GridCameraConfig {
 /// Dual-zoom camera system with gesture support
 /// Supports double-tap zoom toggle, swipe panning, and pinch zoom
 class GridCamera extends Component
-    with HasGameRef, TapCallbacks, DoubleTapCallbacks, DragCallbacks, ScaleDetector {
+    with HasGameReference, TapCallbacks, DoubleTapCallbacks, DragCallbacks, ScaleDetector {
   final GridCameraConfig config;
 
   /// Current zoom level (dual-zoom system)
@@ -80,16 +79,6 @@ class GridCamera extends Component
   /// Previous zoom (for animation)
   double _previousZoom = ZoomLevel.strategic.zoom;
 
-  /// Last tap time for double-tap detection
-  DateTime? _lastTapTime;
-
-  /// Double-tap threshold in milliseconds
-  static const int _doubleTapThreshold = 300;
-
-  /// Pan gesture state
-  Vector2? _panStartPosition;
-  Vector2? _lastPanPosition;
-
   /// Position animation state
   Vector2? _targetPosition;
   Vector2? _previousPosition;
@@ -98,7 +87,6 @@ class GridCamera extends Component
 
   /// Pinch zoom state
   double? _initialPinchZoom;
-  double? _pinchStartDistance;
 
   /// Is currently performing a zoom animation
   bool _isAnimating = false;
@@ -109,6 +97,10 @@ class GridCamera extends Component
   })  : _currentZoomLevel = initialZoomLevel,
         _targetZoom = initialZoomLevel.zoom,
         _previousZoom = initialZoomLevel.zoom;
+
+  /// Accept all touch events (camera controller covers entire screen)
+  @override
+  bool containsLocalPoint(Vector2 point) => true;
 
   @override
   Future<void> onLoad() async {
@@ -158,13 +150,13 @@ class GridCamera extends Component
     if (_positionProgress >= 1.0) {
       _positionProgress = 1.0;
       _isPositionAnimating = false;
-      gameRef.camera.viewfinder.position = _targetPosition!.clone();
+      game.camera.viewfinder.position = _targetPosition!.clone();
     } else {
       // Smooth easing function (ease-in-out)
       final easedProgress = _easeInOutCubic(_positionProgress);
       final currentPosition = _previousPosition! +
           (_targetPosition! - _previousPosition!) * easedProgress;
-      gameRef.camera.viewfinder.position = currentPosition;
+      game.camera.viewfinder.position = currentPosition;
     }
 
     if (config.enableBounds) {
@@ -175,7 +167,7 @@ class GridCamera extends Component
   /// Apply zoom to camera with bounds checking
   void _applyCameraZoom(double zoom) {
     final clampedZoom = zoom.clamp(config.minZoom, config.maxZoom);
-    gameRef.camera.viewfinder.zoom = clampedZoom;
+    game.camera.viewfinder.zoom = clampedZoom;
 
     if (config.enableBounds) {
       _applyBounds();
@@ -184,7 +176,7 @@ class GridCamera extends Component
 
   /// Apply camera bounds to keep within world limits
   void _applyBounds() {
-    final camera = gameRef.camera;
+    final camera = game.camera;
     final viewport = camera.viewport;
     final position = camera.viewfinder.position;
     final zoom = camera.viewfinder.zoom;
@@ -217,55 +209,38 @@ class GridCamera extends Component
 
   /// Handle drag for panning
   @override
-  void onDragStart(DragStartEvent event) {
-    super.onDragStart(event);
-    _panStartPosition = event.localPosition;
-    _lastPanPosition = event.localPosition;
-  }
-
-  @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
 
-    if (_lastPanPosition == null) return;
+    final cameraComponent = game.camera;
+    final zoom = cameraComponent.viewfinder.zoom;
 
-    final delta = event.localPosition - _lastPanPosition!;
-    final camera = gameRef.camera;
-    final zoom = camera.viewfinder.zoom;
+    // Use canvasDelta for Flame 1.33+ API
+    final delta = event.canvasDelta;
 
-    // Apply pan with speed multiplier and zoom compensation
-    camera.viewfinder.position.add(
-      Vector2(
-        -delta.x / zoom * config.panSpeed,
-        -delta.y / zoom * config.panSpeed,
-      ),
+    final movement = Vector2(
+      -delta.x / zoom * config.panSpeed,
+      -delta.y / zoom * config.panSpeed,
     );
+
+    // Get current position and create new position
+    final currentPos = cameraComponent.viewfinder.position;
+    final newPos = currentPos + movement;
+
+    // Assign new position directly
+    cameraComponent.viewfinder.position = newPos;
 
     if (config.enableBounds) {
       _applyBounds();
     }
-
-    _lastPanPosition = event.localPosition;
   }
 
-  @override
-  void onDragEnd(DragEndEvent event) {
-    super.onDragEnd(event);
-    _panStartPosition = null;
-    _lastPanPosition = null;
-  }
 
   /// Handle pinch-to-zoom
   @override
   void onScaleStart(ScaleStartInfo info) {
     super.onScaleStart(info);
-    _initialPinchZoom = gameRef.camera.viewfinder.zoom;
-
-    // Calculate initial distance between touch points
-    if (info.pointerCount == 2) {
-      // This will be handled by onScaleUpdate
-      _pinchStartDistance = 1.0; // Will be updated in first onScaleUpdate
-    }
+    _initialPinchZoom = game.camera.viewfinder.zoom;
   }
 
   @override
@@ -287,7 +262,6 @@ class GridCamera extends Component
   void onScaleEnd(ScaleEndInfo info) {
     super.onScaleEnd(info);
     _initialPinchZoom = null;
-    _pinchStartDistance = null;
   }
 
   // ============================================================================
@@ -306,7 +280,7 @@ class GridCamera extends Component
     _targetZoom = level.zoom;
 
     if (animate) {
-      _previousZoom = gameRef.camera.viewfinder.zoom;
+      _previousZoom = game.camera.viewfinder.zoom;
       _zoomProgress = 0.0;
       _isAnimating = true;
     } else {
@@ -319,7 +293,7 @@ class GridCamera extends Component
     _targetZoom = zoom.clamp(config.minZoom, config.maxZoom);
 
     if (animate) {
-      _previousZoom = gameRef.camera.viewfinder.zoom;
+      _previousZoom = game.camera.viewfinder.zoom;
       _zoomProgress = 0.0;
       _isAnimating = true;
     } else {
@@ -330,12 +304,12 @@ class GridCamera extends Component
   /// Move camera to specific world position
   void moveTo(Vector2 position, {bool animate = false}) {
     if (animate) {
-      _previousPosition = gameRef.camera.viewfinder.position.clone();
+      _previousPosition = game.camera.viewfinder.position.clone();
       _targetPosition = position.clone();
       _positionProgress = 0.0;
       _isPositionAnimating = true;
     } else {
-      gameRef.camera.viewfinder.position = position.clone();
+      game.camera.viewfinder.position = position.clone();
       if (config.enableBounds) {
         _applyBounds();
       }
@@ -355,10 +329,10 @@ class GridCamera extends Component
   ZoomLevel get currentZoomLevel => _currentZoomLevel;
 
   /// Get current zoom value
-  double get currentZoom => gameRef.camera.viewfinder.zoom;
+  double get currentZoom => game.camera.viewfinder.zoom;
 
   /// Get current camera position
-  Vector2 get position => gameRef.camera.viewfinder.position;
+  Vector2 get position => game.camera.viewfinder.position;
 
   /// Check if camera is currently animating
   bool get isAnimating => _isAnimating || _isPositionAnimating;

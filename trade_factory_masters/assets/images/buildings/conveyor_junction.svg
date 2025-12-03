@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 32" width="64" height="32">
+  <!-- Isometric Conveyor Belt - T-Junction/Splitter -->
+
+  <!-- Base/frame - dark metal -->
+  <polygon points="32,0 64,16 32,32 0,16" fill="#3D3D3D"/>
+
+  <!-- Frame rails (yellow/orange) - cross pattern -->
+  <!-- Vertical rails -->
+  <polygon points="28,2 36,2 40,16 32,20 24,16" fill="#E6A000"/>
+  <!-- Horizontal rails left -->
+  <polygon points="4,14 28,6 28,10 8,16" fill="#FFB81C"/>
+  <!-- Horizontal rails right -->
+  <polygon points="60,14 36,6 36,10 56,16" fill="#FFB81C"/>
+
+  <!-- Belt surfaces -->
+  <!-- Main vertical belt -->
+  <polygon points="32,4 40,8 32,28 24,24" fill="#2A2A2A"/>
+  <!-- Left branch -->
+  <polygon points="8,15 28,9 28,13 12,17" fill="#2A2A2A"/>
+  <!-- Right branch -->
+  <polygon points="56,15 36,9 36,13 52,17" fill="#2A2A2A"/>
+
+  <!-- Center hub (metal plate) -->
+  <polygon points="32,10 40,14 32,18 24,14" fill="#5A5A5A"/>
+  <polygon points="32,8 38,12 32,16 26,12" fill="#6A6A6A"/>
+
+  <!-- Direction arrows -->
+  <g fill="#FFD700" opacity="0.9">
+    <!-- Down arrow -->
+    <polygon points="32,20 28,22 32,26 36,22"/>
+    <!-- Left arrow -->
+    <polygon points="16,16 12,15 12,17 16,18"/>
+    <!-- Right arrow -->
+    <polygon points="48,16 52,15 52,17 48,18"/>
+  </g>
+
+  <!-- Roller lines -->
+  <g stroke="#4A4A4A" stroke-width="1.5" opacity="0.6">
+    <line x1="30" y1="22" x2="34" y2="24"/>
+    <line x1="14" y1="16" x2="22" y2="14"/>
+    <line x1="42" y1="14" x2="50" y2="16"/>
+  </g>
+
+  <!-- Highlight -->
+  <line x1="32" y1="0" x2="36" y2="2" stroke="#FFD54F" stroke-width="1" opacity="0.6"/>
+</svg>

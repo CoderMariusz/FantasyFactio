@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'config/game_config.dart';
 import 'domain/entities/resource.dart';
@@ -13,6 +14,7 @@ import 'domain/usecases/collect_resources.dart';
 import 'game/components/grid_component.dart';
 import 'game/camera/grid_camera.dart';
 import 'game/components/building_component.dart';
+import 'ui/components/resource_hud.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +35,10 @@ Future<void> main() async {
   debugPrint('✅ Hive initialized with 8 adapters registered');
 
   // Initialize Firebase (optional - app works in offline mode if Firebase unavailable)
-  bool firebaseInitialized = false;
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    firebaseInitialized = true;
     debugPrint('✅ Firebase initialized successfully');
 
     // Test Firebase Auth (Anonymous Sign-In)
@@ -65,6 +65,8 @@ class MyApp extends StatelessWidget {
       title: 'Trade Factory Masters',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        // Use Roboto font which supports Polish characters (ą, ę, ż, ź, ó, ł, etc.)
+        textTheme: GoogleFonts.robotoTextTheme(),
       ),
       home: const HomeScreen(),
     );
@@ -131,6 +133,7 @@ class TradeFactoryGame extends FlameGame {
   late GridComponent gridComponent;
   late GridCamera gridCamera;
   late CameraInfoDisplay cameraInfoDisplay;
+  late ResourceHUD resourceHUD;
   late PlayerEconomy playerEconomy;
   final List<BuildingComponent> buildingComponents = [];
 
@@ -220,7 +223,15 @@ class TradeFactoryGame extends FlameGame {
     // Add test buildings to the game
     _addTestBuildings(gridConfig);
 
+    // Add Resource HUD at top of screen (after economy is initialized)
+    resourceHUD = ResourceHUD(
+      economy: playerEconomy,
+      screenSize: size,
+    );
+    camera.viewport.add(resourceHUD);
+
     debugPrint('✅ Player economy initialized (1000 gold, ${buildingComponents.length} buildings)');
+    debugPrint('✅ Resource HUD initialized');
   }
 
   /// Add test buildings for BATCH 4 demonstration
@@ -348,11 +359,14 @@ class TradeFactoryGame extends FlameGame {
 
     // Update camera info display to show new economy state
     cameraInfoDisplay.updateEconomy(playerEconomy);
+
+    // Update Resource HUD
+    resourceHUD.updateEconomy(playerEconomy);
   }
 }
 
 /// Camera and performance info display
-class CameraInfoDisplay extends PositionComponent with HasGameRef {
+class CameraInfoDisplay extends PositionComponent with HasGameReference {
   final GridCamera gridCamera;
   final GridComponent gridComponent;
   PlayerEconomy? _economy;
