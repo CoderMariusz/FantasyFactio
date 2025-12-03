@@ -3,8 +3,9 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, monetization, iap, ads -->
 
 **Epic:** EPIC-08 - Ethical F2P Monetization
+**Total Stories:** 7
 **Total SP:** 23
-**Duration:** 2 weeks (Sprint 8)
+**Sprint:** 8 (shared with EPIC-05)
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-08-tech-spec.md](epic-08-tech-spec.md)
 
@@ -15,6 +16,20 @@
 - ⚠️ EPIC-04 (Offline Production - for ad boost placement)
 
 **Design Philosophy:** "Profitable without being predatory" - $10 lifetime cap, no loot boxes, no FOMO.
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-08.1 | IAP Product Catalog & Domain | 2 | P0 | 📋 Ready |
+| STORY-08.2 | Purchase Manager & Cap Enforcement | 4 | P0 | 📋 Ready |
+| STORY-08.3 | Platform IAP Integration | 5 | P0 | 📋 Ready |
+| STORY-08.4 | Receipt Validation & Cloud Functions | 4 | P0 | 📋 Ready |
+| STORY-08.5 | Rewarded Video Ads | 3 | P1 | 📋 Ready |
+| STORY-08.6 | Shop UI | 3 | P0 | 📋 Ready |
+| STORY-08.7 | Analytics & Integration Testing | 2 | P1 | 📋 Ready |
 
 ---
 

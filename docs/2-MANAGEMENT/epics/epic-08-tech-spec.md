@@ -4,7 +4,7 @@
 
 **Epic:** EPIC-08 - Ethical F2P Monetization
 **Total SP:** 23
-**Duration:** 1 week (Sprint 10)
+**Duration:** 1-2 weeks (Sprint 8, shared with EPIC-05)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 **Priority:** P1 (High)
