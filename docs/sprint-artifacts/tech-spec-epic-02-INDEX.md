@@ -25,17 +25,20 @@ This technical specification is split into **4 focused documents** for easy navi
 **Read time:** 15-20 minutes
 **Audience:** Game developers, designers
 
-### Part 2: Advanced Systems
+### Part 2: Game Systems (Epic 2 Specific)
 📄 **[tech-spec-epic-02-SYSTEMS.md](tech-spec-epic-02-SYSTEMS.md)**
-- Conveyor System (transport, filtering)
 - NPC Trading System (3 NPCs)
-- Offline Production (80% efficiency)
 - Grid Expansion (20→30→40)
-- Storage Filtering (port configuration)
+- Storage Filtering (basic)
 
-**Size:** ~900 lines
-**Read time:** 25-30 minutes
-**Audience:** Senior developers, architects
+**Moved to Other Epics:**
+- ~~Conveyor System~~ → [epic-03-tech-spec.md](../2-MANAGEMENT/epics/epic-03-tech-spec.md)
+- ~~Offline Production~~ → [epic-04-tech-spec.md](../2-MANAGEMENT/epics/epic-04-tech-spec.md)
+- ~~Advanced Filtering~~ → [epic-03-tech-spec.md](../2-MANAGEMENT/epics/epic-03-tech-spec.md)
+
+**Size:** ~400 lines (reorganized)
+**Read time:** 15 minutes
+**Audience:** Developers
 
 ### Part 3: User Interface
 📄 **[tech-spec-epic-02-UI.md](tech-spec-epic-02-UI.md)**
@@ -95,11 +98,12 @@ This technical specification is split into **4 focused documents** for easy navi
 | Building definitions | CORE.md | Buildings |
 | Grid mechanics | CORE.md | Grid System |
 | Skills system | CORE.md | Skill Progression |
-| Item transport | SYSTEMS.md | Conveyor System |
 | NPC trading | SYSTEMS.md | NPC Trading System |
-| Offline mechanics | SYSTEMS.md | Offline Production |
 | Grid expansion | SYSTEMS.md | Grid Expansion |
-| Storage configuration | SYSTEMS.md | Storage Filtering |
+| Basic storage filtering | SYSTEMS.md | Storage Filtering |
+| **Item transport** | **epic-03-tech-spec.md** | Conveyor System (EPIC-03) |
+| **Offline mechanics** | **epic-04-tech-spec.md** | Offline Production (EPIC-04) |
+| **Advanced filtering** | **epic-03-tech-spec.md** | Storage Filtering (EPIC-03) |
 | Home dashboard | UI.md | Hub Screen |
 | World map | UI.md | Grid World Screen |
 | Resource gathering | UI.md | Biom Gathering Screen |
@@ -368,10 +372,21 @@ A: 1000g in 120 minutes. Verified achievable via three phases.
 
 ---
 
+## 🔄 Related Epic Tech-Specs
+
+| Epic | File | Contents |
+|------|------|----------|
+| **EPIC-02** | This document | Tier 1 Economy (Core, NPC, Grid) |
+| **EPIC-03** | [epic-03-tech-spec.md](../2-MANAGEMENT/epics/epic-03-tech-spec.md) | Automation (Conveyors, Filtering) |
+| **EPIC-04** | [epic-04-tech-spec.md](../2-MANAGEMENT/epics/epic-04-tech-spec.md) | Offline Production |
+| **EPIC-05** | [epic-05-tech-spec.md](../2-MANAGEMENT/epics/epic-05-tech-spec.md) | Mobile-First UX |
+
+---
+
 ## ✨ Last Updated
 
 **Date:** 2025-12-03
-**Version:** 3.0 (Split into 4 documents)
+**Version:** 4.0 (Reorganized - systems moved to respective epics)
 **Status:** ✅ Complete & Ready for Implementation
 
 ---

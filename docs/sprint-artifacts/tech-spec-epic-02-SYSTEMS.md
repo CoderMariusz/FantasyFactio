@@ -1,167 +1,30 @@
-# Epic 2: Tier 1 Economy - Advanced Systems
+# Epic 2: Tier 1 Economy - Game Systems
 
 **Part 2 of 3** | [Index & Navigation](tech-spec-epic-02-INDEX.md) | [Core Mechanics](tech-spec-epic-02-CORE.md) | [UI Screens](tech-spec-epic-02-UI.md)
 
 **Project:** Trade Factory Masters
 **Epic:** EPIC-02 - Tier 1 Economy
 **Date:** 2025-12-03
-**Status:** ✅ COMPLETE
+**Status:** ✅ COMPLETE (Reorganized)
 
 ---
 
 ## Overview
 
-Part 2 covers the **5 advanced game systems** that define EPIC-02's complex mechanics. These systems build on the core entities (resources, buildings, grid) and provide the depth that makes the economy feel alive and strategic.
+Part 2 covers the **3 game systems** specific to EPIC-02's Tier 1 economy. Systems that belong to later epics have been moved to their respective tech-specs.
 
-**Systems Covered:**
-1. Conveyor System - Item transportation and distribution
-2. NPC Trading System - Commerce with dynamic NPCs
-3. Offline Production System - Passive income mechanics
-4. Grid Expansion System - World growth progression
-5. Storage Item Filtering System - Advanced inventory management
+**Systems Covered in This File:**
+1. NPC Trading System - Commerce with dynamic NPCs
+2. Grid Expansion System - World growth progression
+3. Storage Item Filtering System - Basic inventory management
 
----
-
-## 1. Conveyor System (Complete)
-
-### Overview
-
-**Purpose:** Transport items between buildings and filter flows based on player rules
-
-**Core Mechanics:**
-- Linear 1×1 tiles transporting items in cardinal directions
-- Speed: 0.5 items per second (1 item per 2 seconds)
-- Max 2 layers allowed per tile (3+ layers invalid)
-- Supports 4-directional placement (N, S, E, W)
-- Custom filtering with splitter outputs
-- Capacity: 10 items max per tile
-
-### Conveyor Specifications
-
-**Cost & Placement:**
-- Cost: 2 Drewno + 1 Żelazo per tile (5s craft time each)
-- Unlock: After first żelazo smelted
-- Can place ANYWHERE (no biom restrictions)
-- Max 2 layers: Layer 1 under buildings (darker), Layer 2 over buildings (bright)
-
-**Transport Mechanics:**
-```
-Movement Rate: 0.5 items/second
-Direction: 4-way (North, South, East, West)
-Queuing: FIFO (first in, first out)
-Capacity per tile: 10 items (backpressure stops input)
-```
-
-**Connection Rules:**
-- Connects to building INPUT/OUTPUT ports
-- Connects to other conveyor tiles in direction
-- Invalid connections blocked with red visual feedback
-- No connection = item falls to ground (dropped)
-
-### Filtering System
-
-**3-Mode Filtering:**
-
-**Mode 1: Accept All (Default)**
-- All items pass through without restriction
-- Connects to any output
-
-**Mode 2: Whitelist (Include-Only)**
-- Specify 1-3 resource types to accept
-- All others blocked (backed up on conveyor)
-- Example: Coal + Iron Ore only (blocks Copper)
-
-**Mode 3: Blacklist (Exclude)**
-- Specify 1-3 resource types to reject
-- All others pass through
-- Example: Block Sól (allow everything else)
-
-**Mode 4: Single Type**
-- Accept ONLY one specific resource
-- All others blocked
-- Example: Wood ONLY
-
-### Splitter System
-
-**Purpose:** Distribute items across multiple outputs
-
-**Mechanics:**
-```
-1 Input → Multiple Outputs (2-3 directions)
-Distribution: Round-robin to available outputs
-If destination full: Try next output, then wait
-If all full: Backpressure stops input
-
-Example:
-Input from Smelter → Output A (Workshop), Output B (Farm)
-Coal goes round-robin: Coal #1→A, Coal #2→B, Coal #3→A...
-```
-
-**Splitter Rules:**
-- Max 3 output directions per splitter
-- Must have at least 1 valid output
-- Item loses on missing outputs (falls to ground)
-- Visual feedback: Highlight active output (green)
-
-### Layering System
-
-**Layer 1 (Under Buildings):**
-- Slightly darker visually
-- Conveyors appear beneath structures
-- Can be covered by buildings
-- Used for main distribution lines
-
-**Layer 2 (Over Buildings):**
-- Bright and clearly visible
-- Conveyors appear above structures
-- Used for overflow or secondary routes
-- 2-layer max per tile enforced
-
-**Invalid Layering:**
-- 3+ layers on same tile: RED visual feedback
-- Player prevented from placing 3rd layer
-- Error message: "Maximum conveyor layers reached"
-
-### Visual Feedback
-
-**Item Flow Indicators:**
-- Green highlight: Item moving normally
-- Yellow highlight: Item waiting in queue (backpressure)
-- Red highlight: Invalid connection or blocked
-- Animated item icons: Show direction and progress
-- Smoke effect: Overload (too many items)
-
-### Implementation Notes
-
-**Data Structure:**
-```dart
-class ConveyorTile {
-  Vector2 position;
-  Direction direction;        // N, S, E, W
-  int layer;                  // 1 or 2
-  List<ResourceStack> queue;  // Items in transit (max 10)
-  FilterMode filterMode;      // ALLOW_ALL, WHITELIST, BLACKLIST, SINGLE
-  List<String> filterList;    // Resource types to filter
-  SplitterConfig? splitter;   // If multi-output
-}
-```
-
-**Cycle Logic:**
-```
-Every 2 seconds (2000ms / 0.5 items/sec):
-1. Check each tile's queue
-2. For each item in queue:
-   - Check filter rules
-   - If passes: Move to next tile OR building input
-   - If blocked: Stay in queue (backpressure)
-   - If no destination: Drop to ground
-3. Check input ports for new items
-4. Render flow visualization
-```
+**Systems Moved to Other Epics:**
+- ❌ ~~Conveyor System~~ → **[EPIC-03: tech-spec](../2-MANAGEMENT/epics/epic-03-tech-spec.md)** (Automation)
+- ❌ ~~Offline Production~~ → **[EPIC-04: tech-spec](../2-MANAGEMENT/epics/epic-04-tech-spec.md)** (Offline Systems)
 
 ---
 
-## 2. NPC Trading System
+## 1. NPC Trading System
 
 ### Overview
 
@@ -290,125 +153,7 @@ Player → Tap NPC → NPC Dialog Screen
 
 ---
 
-## 3. Offline Production System
-
-### Overview
-
-**Purpose:** Reward players for returning, provide passive income, create session motivation
-
-**Core Mechanic:** Farm produces at 80% efficiency while offline
-
-### Offline Production Calculation
-
-**Formula:**
-```
-offlineTimeSeconds = returnTime - lastLogoutTime
-
-itemsProcessedInQueue = MIN(
-  farm.inputBuffer.length,
-  (offlineTimeSeconds / itemCycleTime) * 0.80
-)
-
-goldEarned = itemsProcessedInQueue * baseValue * (1.0 + tradingSkillBonus)
-```
-
-**Example Calculation:**
-```
-Player logs out with Farm queue:
-- 50 Węgiel in input
-- 30 Ruda Żelaza in input
-- Item cycle time: 3 seconds
-
-Offline for: 2 hours (7,200 seconds)
-
-Processing calculation:
-- Items that could process: 7,200s / 3s = 2,400 items
-- At 80% efficiency: 2,400 * 0.80 = 1,920 items
-- Limited by queue: MIN(1,920, 80) = 80 items
-- All 50 Węgiel + 30 Ruda processed
-
-Gold earned:
-- Węgiel (base 1g): 50 * 1g * 1.0 = 50g
-- Ruda (base 1g): 30 * 1g * 1.0 = 30g
-- Total: 80g earned offline
-```
-
-**Key Rules:**
-- 80% efficiency (not 100%, encourages active play)
-- Capped by input buffer length (can't create items)
-- Respects farm processing speed
-- Trading skill multiplier applies
-- NO overflow losses (items stay in queue if can't process)
-- NO decay for storage items (safe to log off)
-
-### Welcome-Back Notification System
-
-**Trigger:** When player logs in after offline time > 5 minutes
-
-**Notification Screen Elements:**
-
-1. **Title & Time Display**
-   ```
-   "Welcome Back!"
-   "Away for: 2 hours 34 minutes"
-   ```
-
-2. **Earnings Breakdown**
-   ```
-   Farm Production Summary:
-   ├─ Węgiel (50 items): 50g
-   ├─ Ruda Żelaza (30 items): 30g
-   ├─ Trading Skill Bonus (+15%): +12g
-   └─ TOTAL: 92g
-   ```
-
-3. **Gold Animation**
-   - Duration: 2 seconds
-   - Counter animates from 0 → 92g
-   - Coins fall from top, accumulate at bottom
-   - Satisfying sound effects (clink, accumulate, complete)
-   - +XP notification (earned 18 XP from 18 trades)
-
-4. **Action Buttons**
-   - [OK] - Close and start playing
-   - [View Breakdown] - More details (optional)
-   - [Continue Offline] - Stay offline longer (future feature)
-
-### Offline Calculation Timing
-
-**When Calculated:**
-- On game launch, if lastLogoutTime exists
-- Before any player action
-- Used to populate welcome notification
-- Farm input buffer updated
-
-**Storage of Calculation:**
-```
-PlayerData {
-  lastLogoutTime: DateTime
-  lastSessionGold: int (calculated offline gold)
-  lastOfflineMinutes: int (time away)
-  farmQueueAtLogout: List<Resource> (saved)
-}
-```
-
-**Edge Cases:**
-- Device time changed backward: Use 0 minutes offline
-- Farm building demolished: No offline production
-- Game crash: Last logoutTime not updated (no production)
-- Time > 30 days: Cap at 30 days max (prevent exploits)
-
-### Premium Features (Future)
-
-These are outlined in tech-spec but NOT in MVP:
-- Offline production > 100% (premium boost)
-- Skip welcome notification (premium setting)
-- Offline time multiplier (2x production, premium)
-- Scheduled farming (set production for specific hours)
-
----
-
-## 4. Grid Expansion System
+## 2. Grid Expansion System
 
 ### Overview
 
@@ -504,18 +249,6 @@ Additional bioms:
 Total distribution remains ~6-8% each
 ```
 
-**New Bioms Added (40×40 Expansion):**
-```
-New tiles: 700
-Additional bioms:
-├─ Koppalnia: +12 tiles
-├─ Las: +18 tiles
-├─ Góry: +18 tiles
-└─ Jezioro: +12 tiles
-
-Total distribution consistent ~6-8% each
-```
-
 ### Expansion Animation
 
 **Visual Sequence (1.5 seconds total):**
@@ -552,17 +285,17 @@ Total for max grid: <1 MB (acceptable)
 
 ---
 
-## 5. Storage Item Filtering System
+## 3. Storage Item Filtering System (Basic)
+
+> **Note:** Advanced filtering (multi-port, network configurations) moved to **[EPIC-03: tech-spec](../2-MANAGEMENT/epics/epic-03-tech-spec.md)**
 
 ### Overview
 
-**Purpose:** Enable advanced factory automation with strategic item routing
+**Purpose:** Enable basic inventory management for Tier 1 economy
 
-**Architecture:**
+**Architecture (Basic):**
 - Global accept/reject filter (per storage)
-- Per-port input/output filtering (4 modes each)
-- Advanced multi-storage networks possible
-- Visual feedback and error recovery
+- Simple whitelist/blacklist
 
 ### Global Storage Filter
 
@@ -573,7 +306,7 @@ Total for max grid: <1 MB (acceptable)
 When item arrives at storage input:
 1. Check global filter
    ├─ IF accepted → Enter storage
-   └─ IF rejected → Bounce back on conveyor
+   └─ IF rejected → Stay on ground / source
 
 Global filter options:
 ├─ ACCEPT_ALL (default)
@@ -595,227 +328,13 @@ Storage Settings Menu:
 [Save] [Cancel]
 ```
 
-### Per-Port Filtering
-
-**Architecture:**
-```
-Storage has 2 sides (or 4 sides depending on design):
-- Input Port (left): Items flowing IN
-- Output Port (right): Items flowing OUT
-
-Each port has own filter configuration
-```
-
-**4 Filtering Modes per Port:**
-
-**Mode 1: Accept All (ALLOW_ALL)**
-- Default mode
-- All items pass through
-- No filtering applied
-- Visual: Green checkmark
-
-**Mode 2: Whitelist (ACCEPT_ONLY)**
-- Specify 1-3 resource types
-- ONLY these items pass
-- All others blocked/backed up
-- Visual: Green items, red items rejected
-- Example: Accept ONLY [Coal, Iron Ore]
-
-**Mode 3: Blacklist (REJECT)**
-- Specify 1-3 resource types
-- These items BLOCKED
-- All others pass through
-- Visual: Red X for blocked items
-- Example: Reject [Copper, Miedź]
-
-**Mode 4: Single Type (SINGLE)**
-- Accept ONLY one specific item
-- Strictest mode
-- All others rejected
-- Visual: Clear indicator of single type
-- Example: [Coal] ONLY
-
-### Filtering Logic Flow
-
-**Input Port Filtering:**
-```
-Item → Arrives at storage input
-       │
-       ├→ Check global filter
-       │  ├─ ACCEPT_ALL? YES → Enter storage
-       │  ├─ Whitelist matches? YES → Enter storage
-       │  └─ Blacklist matches? YES → Reject (bounce back)
-       │
-       └→ If rejected → Bounce back on input conveyor
-                        Backpressure stops source
-```
-
-**Output Port Filtering:**
-```
-Item → Ready to leave storage
-       │
-       ├→ Check output port filter
-       │  ├─ ALLOW_ALL? YES → Exit to conveyor
-       │  ├─ Whitelist matches? YES → Exit to conveyor
-       │  ├─ Blacklist blocks? YES → Try next port
-       │  └─ SINGLE type match? YES → Exit to conveyor
-       │
-       ├→ If no port accepts → Stay in storage
-       ├→ If port full (backpressure) → Try next port
-       └→ If all ports blocked → Item queued (visual indicator)
-```
-
-### Advanced Network Example
-
-**3-Storage Production Network:**
-
-```
-Flow:
-  Mining → Conveyor → [STORAGE A] → Conveyor → [SMELTER]
-                            ↓
-                      Filters coal+ore
-
-  Smelter → Conveyor → [STORAGE B] → Conveyor → [WORKSHOP]
-                            ↓
-                      Filters smelted items
-
-  Workshop → Conveyor → [STORAGE C] → Conveyor → [FARM]
-                            ↓
-                      Filters finished goods
-```
-
-**Detailed Configuration:**
-
-**STORAGE A (Input from Mining):**
-```
-Global: ACCEPT_ALL
-Input Port (from conveyor):
-  Mode: WHITELIST
-  Items: [Coal, Iron Ore, Wood]
-
-Output Port (to Smelter):
-  Mode: WHITELIST
-  Items: [Coal, Iron Ore]
-  Purpose: Only ore+fuel go to smelter
-```
-
-**STORAGE B (Output from Smelter):**
-```
-Global: ACCEPT_LIST
-  Items: [Żelazo, Miedź Ref., Beton]
-  Purpose: Only smelted items enter
-
-Input Port (from conveyor):
-  Mode: SINGLE
-  Item: [Żelazo]
-  Purpose: Only iron ingots stored here
-
-Output Port (to Workshop):
-  Mode: ALLOW_ALL
-  Purpose: Send to workshop freely
-```
-
-**STORAGE C (Output from Workshop):**
-```
-Global: REJECT_LIST
-  Items: [Coal, Iron Ore]
-  Purpose: Raw materials never enter
-
-Input Port (from conveyor):
-  Mode: WHITELIST
-  Items: [Młotek, Narzędzia, Materiały]
-  Purpose: Only finished goods
-
-Output Port (to Farm):
-  Mode: SINGLE
-  Item: [Any item, for monetization]
-  Purpose: Farm accepts one type at a time
-```
-
-### Visual Feedback System
-
-**Item Flow Indicators:**
-
-**Green Items:** Accepted, flowing normally
-```
-Visual: Green highlight, smooth movement
-Sound: Light chime as items move
-```
-
-**Yellow Items:** Queued, waiting (backpressure)
-```
-Visual: Yellow highlight, pulsing animation
-Sound: None (normal wait state)
-```
-
-**Red Items:** Rejected, bouncing back
-```
-Visual: Red X overlay, bounce-back animation
-Sound: Error buzz
-Message: "This storage doesn't accept [Coal]"
-```
-
-**Port Status Indicators:**
-```
-Port open (green): ✓ Items can flow
-Port closed (red): ✗ No items accept
-Port full (yellow): ⚠ Waiting for space
-```
-
-### Error Handling & Recovery
-
-**Scenario 1: Item Stuck in Storage**
-```
-Cause: All output ports reject item
-Display: "⚠ Coal stuck in Storage A"
-Action: Tap notification → Storage settings
-Fix: Change output port filters to accept Coal
-Recovery: Item immediately exits (auto-retry)
-```
-
-**Scenario 2: Conveyor Backpressure**
-```
-Cause: Storage full, can't accept items
-Display: Yellow pulsing items on conveyor
-Action: Automatic retry every 5 seconds
-Fix: Player empties storage, backpressure releases
-Recovery: Items resume flowing
-```
-
-**Scenario 3: No Valid Routes**
-```
-Cause: No conveyor connected to output port
-Display: Items accumulate in storage (warning)
-Action: Tap storage → "No output connected"
-Fix: Build conveyor to output port
-Recovery: Items start exiting
-```
-
-### Filtering Progression Difficulty
-
-**Early Game (First Storage):**
-- Simple: ACCEPT_ALL mode only
-- No filtering complexity
-- Player learns basic transport
-
-**Mid Game (After Smelter):**
-- Introduce: WHITELIST mode
-- Example: "Only accept smelted items"
-- Player controls item types
-
-**Late Game (Before Farm):**
-- Introduce: BLACKLIST and SINGLE modes
-- Complex: Multi-storage networks
-- Advanced players build sophisticated factories
-
 ### Implementation Notes
 
 **Data Structure:**
 ```dart
 class StorageFilter {
-  FilterMode mode;           // ALLOW_ALL, WHITELIST, BLACKLIST, SINGLE
-  List<String> filteredItems; // Resource types (if whitelist/blacklist)
-  String singleItem;         // If SINGLE mode
+  FilterMode mode;           // ALLOW_ALL, WHITELIST, BLACKLIST
+  List<String> filteredItems; // Resource types
   DateTime lastModified;
 }
 
@@ -824,7 +343,6 @@ class StorageBuilding {
   Vector2 position;
   List<ResourceStack> inventory;
   StorageFilter globalFilter;
-  Map<String, StorageFilter> portFilters; // 'input', 'output_n'
 }
 ```
 
@@ -838,80 +356,19 @@ bool canAcceptItem(Resource item, StorageFilter filter) {
       return filter.filteredItems.contains(item.type);
     case BLACKLIST:
       return !filter.filteredItems.contains(item.type);
-    case SINGLE:
-      return item.type == filter.singleItem;
   }
 }
 ```
 
 ---
 
-## System Interactions
-
-**Production Chain with Filtering:**
-```
-Mining → Conveyor[Coal+Ore filter] → Storage A
-    ↓
-Smelter ← Conveyor[Iron+Copper routes]
-    ↓
-Smelted → Conveyor → Storage B[smelted filter]
-    ↓
-Workshop ← Conveyor[iron items only]
-    ↓
-Finished → Conveyor → Storage C[finished only]
-    ↓
-Farm ← Conveyor[all items accepted]
-```
-
-**Offline Production with NPC:**
-- Farm fills queue from storage
-- Player logs off
-- Returns after 2 hours
-- Offline: Farm processes 80% of queue
-- NPC Kupiec adjusts price down (oversupply of gold)
-- Welcome notification shows earnings
-- Grid expansion may have triggered
-
----
-
-## Dependencies and Integration
-
-**Depends On (EPIC-02 Part 1):**
-- ✅ Resources (7 types defined)
-- ✅ Buildings (6 types including storage/farm/smelter)
-- ✅ Grid System (placement, biom rules)
-- ✅ Skills (Trading skill affects NPC prices & farm income)
-- ✅ Conveyor building type
-
-**Blocks (EPIC-03):**
-- → Automation system (uses conveyor + filtering)
-- → Production chains (uses offline mechanics)
-
-**Integration Points:**
-- NPC prices logged to analytics (future insights)
-- Grid expansion triggers achievements
-- Offline production persists across sessions
-- Filtering enables complex automation strategies
-
----
-
 ## Quick Reference: Formulas
-
-### Offline Production
-```
-itemsProcessedOffline = MIN(
-  queueLength,
-  (offlineSeconds / cycleTime) * 0.80
-)
-
-goldOffline = itemsProcessed * baseValue * (1 + tradingBonusPercent)
-```
 
 ### NPC Price Calculation
 ```
 finalPrice = basePrice * demandMultiplier * (1 + 0.05 * tradingLevel)
 
-demandMultiplier = 1.0 - (timesOldThisSession * 0.02) + (minutesSinceLast * 0.01)
+demandMultiplier = 1.0 - (timesSoldThisSession * 0.02) + (minutesSinceLast * 0.01)
 ```
 
 ### Grid Expansion Cost
@@ -920,12 +377,16 @@ Expansion 1: 50 beton = 50 * 56s = 2,800s ≈ 47 minutes
 Expansion 2: 100 beton = 100 * 56s = 5,600s ≈ 93 minutes
 ```
 
-### Conveyor Movement
-```
-itemsPerSecond = 0.5
-timePerItem = 2 seconds
-capacityPerTile = 10 items
-```
+---
+
+## Cross-References
+
+| System | Location | Purpose |
+|--------|----------|---------|
+| **Conveyor System** | [epic-03-tech-spec.md](../2-MANAGEMENT/epics/epic-03-tech-spec.md) | Full automation transport |
+| **Offline Production** | [epic-04-tech-spec.md](../2-MANAGEMENT/epics/epic-04-tech-spec.md) | Passive income calculation |
+| **Advanced Filtering** | [epic-03-tech-spec.md](../2-MANAGEMENT/epics/epic-03-tech-spec.md) | Multi-port, splitter filtering |
+| **Mobile UX** | [epic-05-tech-spec.md](../2-MANAGEMENT/epics/epic-05-tech-spec.md) | Touch controls, animations |
 
 ---
 
@@ -935,20 +396,13 @@ capacityPerTile = 10 items
 - [ ] NPC Kupiec price fluctuation (demand model)
 - [ ] Inżynier barter offers (no fluctuation)
 - [ ] Nomada offer selection (randomization + weighting)
-- [ ] Offline production calculation (formula accuracy)
-- [ ] Offline time limits (min 5 min, max 30 days)
 - [ ] Grid expansion triggers (capacity AND scarcity)
-- [ ] Conveyor filter modes (all 4 modes work)
-- [ ] Storage filter logic (whitelist/blacklist behavior)
-- [ ] Backpressure mechanics (items queue correctly)
+- [ ] Basic storage filter logic (whitelist/blacklist)
 
 ### Integration Tests
 - [ ] NPC trade updates player gold
-- [ ] Offline production persists across sessions
 - [ ] Grid expansion preserves all buildings
-- [ ] Welcome notification shows correct amount
-- [ ] Conveyor + filtering chain works end-to-end
-- [ ] 3-storage network produces correctly
+- [ ] Storage filter blocks correct items
 
 ---
 
@@ -958,6 +412,6 @@ capacityPerTile = 10 items
 
 ---
 
-**Status:** ✅ Complete
+**Status:** ✅ Complete (Reorganized)
 **Last Updated:** 2025-12-03
-**Version:** 1.0 (5 major systems, fully specified)
+**Version:** 2.0 (Systems moved to respective epics)
