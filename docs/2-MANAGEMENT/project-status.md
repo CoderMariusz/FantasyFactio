@@ -3,9 +3,9 @@
 <!-- AI-INDEX: status, progress, metrics, sprint, epic -->
 
 **Project:** FantasyFactio (Trade Factory Masters)
-**Date:** 2025-12-02
-**Overall Progress:** 🔴 16% (47/289 SP) - Epic 1 Complete But Buggy
-**Current Phase:** 🔄 Bug Fix & Documentation Reorganization
+**Date:** 2025-12-03
+**Overall Progress:** 🔴 16% (47/289 SP) - Epic 1 Complete But Buggy, Epic 2 Fully Planned
+**Current Phase:** 🔄 Epic 2 Detailed Planning Complete, Ready for Implementation
 
 ---
 
@@ -50,7 +50,7 @@
 |------|------|----|----|-------|
 | **EPIC-00** | Project Setup | 13 | ✅ Done (buggy) | Flutter + Firebase + CI/CD setup |
 | **EPIC-01** | Core Gameplay | 34 | ✅ Done (buggy) | Grid system, building mechanics (3 bugs) |
-| **EPIC-02** | Tier 1 Economy | 26 | ⏳ Ready | Tech context complete, ready to start |
+| **EPIC-02** | Tier 1 Economy | 26 | ✅ Planned | 6 detailed stories (1176 lines) ready for implementation |
 | **EPIC-03** | Automation | 42 | 📋 Planning | Tech context in progress |
 | **EPIC-04** | Offline Production | 26 | 📋 Planning | Tech context in progress |
 | **EPIC-05** | Mobile-First UX | 29 | ⏳ Ready | Tech context complete |
@@ -132,6 +132,10 @@ See: `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md` - Bug #3
 
 - [x] Deep dive analysis of Epic 1
 - [x] Document all issues and fixes
+- [x] Deep dive analysis of Epic 2 (found 15 issues)
+- [x] Create consolidated Game Design Document (910 lines)
+- [x] Update Epic 2 technical specification (737 lines)
+- [x] Create 6 detailed Epic 2 stories (1176 lines, 26 SP)
 - [ ] Fix Bug #1 (5 min)
 - [ ] Fix Bug #2 (30 min)
 - [ ] Fix Bug #3 (2 min)
@@ -245,6 +249,28 @@ See: `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md` - Bug #3
 
 ## Recent Changes
 
+### 2025-12-03: Epic 2 Full Planning Complete
+- ✅ Created comprehensive Game Design Document (910 lines)
+  - 7 resources fully specified with gather times and values
+  - 6 buildings with complete production specs
+  - 20+ recipes with exact inputs/outputs
+  - Conveyor system fully detailed
+  - 3 NPCs with complete mechanics
+  - Grid system with expansion (20×20 → 30×30 → 40×40)
+  - Complete 120-minute timeline verified
+- ✅ Updated Epic 2 technical specification (737 lines)
+  - Consolidated all inconsistencies from previous docs
+  - Resolved 15 identified issues
+  - Ready for implementation
+- ✅ Created 6 detailed Epic 2 stories (1176 lines, 26 SP total)
+  - STORY-02.1: Resource Definitions (2 SP)
+  - STORY-02.2: Building Definitions (3 SP)
+  - STORY-02.3: NPC Trading System (5 SP)
+  - STORY-02.4: Grid & Building Placement (8 SP)
+  - STORY-02.5: Production & Inventory (5 SP)
+  - STORY-02.6: Economic Balance & Testing (3 SP)
+- ✅ All stories have complete acceptance criteria and implementation notes
+
 ### 2025-12-02: Documentation Reorganization
 - ✅ Created CLAUDE.md (AI entry point)
 - ✅ Reorganized docs/ to BMAD V6
@@ -253,6 +279,8 @@ See: `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md` - Bug #3
 - ✅ 9 issues documented in EPIC-1-ISSUES.md
 - ✅ Created START-HERE.md for humans
 - ✅ Created BMAD-STRUCTURE.md for documentation guidelines
+- ✅ Deep dive analysis of Epic 2 completed
+- ✅ 15 issues documented in EPIC-2-DEEP-DIVE.md
 
 ### 2025-11-23: Epic 1 Completion (with bugs)
 - ✅ All 12 stories coded
@@ -294,6 +322,10 @@ See: `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md` - Bug #3
 
 ### Immediate (This Week)
 
+- [x] Deep dive analysis of Epic 2
+- [x] Create Game Design Document (authoritative specification)
+- [x] Update Epic 2 technical specification
+- [x] Create 6 detailed Epic 2 stories (26 SP total)
 - [ ] Fix Bug #1 - Integration test parameter
 - [ ] Fix Bug #2 - Resource inventory logic
 - [ ] Fix Bug #3 - Type cast syntax
@@ -322,8 +354,11 @@ See: `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md` - Bug #3
 | AI Guide | `/CLAUDE.md` |
 | File Index | `.claude/FILE-MAP.md` |
 | Code Patterns | `.claude/PATTERNS.md` |
+| Game Design Document | `/docs/1-BASELINE/product/GAME-DESIGN-DOCUMENT.md` (910 lines) |
 | Issues | `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md` |
-| Epic Details | `/docs/2-MANAGEMENT/epics/epic-*.md` |
+| Epic 1 Details | `/docs/2-MANAGEMENT/epics/epic-01-core-gameplay.md` |
+| Epic 2 Technical Spec | `/docs/sprint-artifacts/tech-spec-epic-02-UPDATED.md` (737 lines) |
+| Epic 2 Stories | `/docs/2-MANAGEMENT/epics/epic-02-stories.md` (1176 lines, 6 stories) |
 | Backlog | `/docs/2-MANAGEMENT/MVP-TODO.md` |
 
 ---
