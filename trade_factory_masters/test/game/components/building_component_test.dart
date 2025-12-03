@@ -42,7 +42,7 @@ void main() {
 
       testBuilding = Building(
         id: 'test_building_1',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 10, y: 10),
         production: const ProductionConfig(
@@ -115,11 +115,12 @@ void main() {
       () => FlameTester(Flame.new),
       (game) async {
         final buildingTypes = [
-          BuildingType.collector,
-          BuildingType.processor,
+          BuildingType.mining,
+          BuildingType.smelter,
           BuildingType.storage,
           BuildingType.conveyor,
-          BuildingType.market,
+          BuildingType.workshop,
+          BuildingType.farm,
         ];
 
         for (final type in buildingTypes) {
@@ -176,7 +177,7 @@ void main() {
         final buildings = [
           Building(
             id: 'building_1',
-            type: BuildingType.collector,
+            type: BuildingType.mining,
             level: 1,
             gridPosition: const GridPosition(x: 10, y: 10),
             production: const ProductionConfig(
@@ -193,12 +194,12 @@ void main() {
           ),
           Building(
             id: 'building_2',
-            type: BuildingType.processor,
+            type: BuildingType.smelter,
             level: 3,
             gridPosition: const GridPosition(x: 15, y: 10),
             production: const ProductionConfig(
               baseRate: 3.0,
-              resourceType: 'Planks',
+              resourceType: 'Iron Bar',
             ),
             upgradeConfig: const UpgradeConfig(
               baseCost: 150,

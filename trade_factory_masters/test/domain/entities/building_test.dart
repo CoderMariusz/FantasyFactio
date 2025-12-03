@@ -104,7 +104,7 @@ void main() {
       testTime = DateTime(2024, 1, 1, 12, 0);
       testBuilding = Building(
         id: 'building_1',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 5, y: 10),
         production: const ProductionConfig(
@@ -252,7 +252,7 @@ void main() {
       test('equal buildings have same hash code', () {
         final building1 = Building(
           id: 'test_1',
-          type: BuildingType.collector,
+          type: BuildingType.mining,
           level: 1,
           gridPosition: const GridPosition(x: 0, y: 0),
           production: const ProductionConfig(
@@ -268,7 +268,7 @@ void main() {
 
         final building2 = Building(
           id: 'test_1',
-          type: BuildingType.collector,
+          type: BuildingType.mining,
           level: 1,
           gridPosition: const GridPosition(x: 0, y: 0),
           production: const ProductionConfig(
@@ -298,7 +298,7 @@ void main() {
       final str = testBuilding.toString();
       expect(str, contains('Building'));
       expect(str, contains('building_1'));
-      expect(str, contains('collector'));
+      expect(str, contains('mining'));
       expect(str, contains('level: 1'));
     });
 
@@ -325,12 +325,13 @@ void main() {
 
   group('BuildingType', () {
     test('has all expected types', () {
-      expect(BuildingType.values, hasLength(5));
-      expect(BuildingType.values, contains(BuildingType.collector));
-      expect(BuildingType.values, contains(BuildingType.processor));
+      expect(BuildingType.values, hasLength(6));
+      expect(BuildingType.values, contains(BuildingType.mining));
+      expect(BuildingType.values, contains(BuildingType.smelter));
       expect(BuildingType.values, contains(BuildingType.storage));
       expect(BuildingType.values, contains(BuildingType.conveyor));
-      expect(BuildingType.values, contains(BuildingType.market));
+      expect(BuildingType.values, contains(BuildingType.workshop));
+      expect(BuildingType.values, contains(BuildingType.farm));
     });
   });
 }

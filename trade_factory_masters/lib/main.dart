@@ -152,10 +152,10 @@ class TradeFactoryGame extends FlameGame {
   /// Add test buildings for BATCH 4 demonstration
   void _addTestBuildings(GridConfig gridConfig) {
     final testBuildings = [
-      // Collector at (10, 10) - Lumbermill
+      // Mining at (10, 10) - Wood Mining
       Building(
         id: 'building_1',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 10, y: 10),
         production: const ProductionConfig(
@@ -170,15 +170,15 @@ class TradeFactoryGame extends FlameGame {
         lastCollected: DateTime.now().subtract(const Duration(hours: 2)),
         isActive: true,
       ),
-      // Processor at (15, 10) - Sawmill
+      // Smelter at (15, 10) - Processes ore
       Building(
         id: 'building_2',
-        type: BuildingType.processor,
+        type: BuildingType.smelter,
         level: 3,
         gridPosition: const GridPosition(x: 15, y: 10),
         production: const ProductionConfig(
           baseRate: 3.0,
-          resourceType: 'Planks',
+          resourceType: 'Iron Bar',
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 150,
@@ -206,10 +206,10 @@ class TradeFactoryGame extends FlameGame {
         lastCollected: DateTime.now(),
         isActive: true,
       ),
-      // Collector at (10, 15) - Mine
+      // Mining at (10, 15) - Stone Mining
       Building(
         id: 'building_4',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 5,
         gridPosition: const GridPosition(x: 10, y: 15),
         production: const ProductionConfig(
@@ -224,10 +224,10 @@ class TradeFactoryGame extends FlameGame {
         lastCollected: DateTime.now().subtract(const Duration(minutes: 30)),
         isActive: true,
       ),
-      // Market at (25, 25) - Center
+      // Farm at (25, 25) - Converts items to gold
       Building(
         id: 'building_5',
-        type: BuildingType.market,
+        type: BuildingType.farm,
         level: 1,
         gridPosition: const GridPosition(x: 25, y: 25),
         production: const ProductionConfig(

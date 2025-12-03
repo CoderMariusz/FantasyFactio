@@ -94,7 +94,7 @@ void main() {
 
       final testBuilding = Building(
         id: 'test_building_1',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 10, y: 10),
         production: const ProductionConfig(
@@ -256,7 +256,7 @@ void main() {
 
       final expensiveBuilding = Building(
         id: 'expensive_building',
-        type: BuildingType.processor,
+        type: BuildingType.smelter,
         level: 1,
         gridPosition: const GridPosition(x: 5, y: 5),
         production: const ProductionConfig(
@@ -304,7 +304,7 @@ void main() {
 
       final maxLevelBuilding = Building(
         id: 'max_level_building',
-        type: BuildingType.storage,
+        type: BuildingType.workshop,
         level: 10, // Already at max level
         gridPosition: const GridPosition(x: 15, y: 15),
         production: const ProductionConfig(
@@ -355,7 +355,7 @@ void main() {
 
       final building = Building(
         id: 'perf_test_building',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 20, y: 20),
         production: const ProductionConfig(

@@ -120,19 +120,21 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     }
   }
 
-  /// Get building color based on type
+  /// Get building color based on type (6 building types)
   Color _getBuildingColor() {
     switch (building.type) {
-      case BuildingType.collector:
+      case BuildingType.mining:
         return const Color(0xFF8B4513); // Brown
-      case BuildingType.processor:
+      case BuildingType.smelter:
         return const Color(0xFF4169E1); // Royal Blue
       case BuildingType.storage:
         return const Color(0xFF228B22); // Forest Green
       case BuildingType.conveyor:
         return const Color(0xFFFF8C00); // Dark Orange
-      case BuildingType.market:
+      case BuildingType.workshop:
         return const Color(0xFF9370DB); // Medium Purple
+      case BuildingType.farm:
+        return const Color(0xFFDAA520); // Goldenrod
     }
   }
 
@@ -156,19 +158,21 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     );
   }
 
-  /// Get icon for building type
+  /// Get icon for building type (6 building types)
   String _getBuildingIcon() {
     switch (building.type) {
-      case BuildingType.collector:
+      case BuildingType.mining:
         return '⛏️';
-      case BuildingType.processor:
-        return '⚙️';
+      case BuildingType.smelter:
+        return '🔥';
       case BuildingType.storage:
         return '📦';
       case BuildingType.conveyor:
         return '➡️';
-      case BuildingType.market:
-        return '💰';
+      case BuildingType.workshop:
+        return '⚙️';
+      case BuildingType.farm:
+        return '🌾';
     }
   }
 

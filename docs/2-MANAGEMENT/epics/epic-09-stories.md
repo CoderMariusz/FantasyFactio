@@ -14,11 +14,11 @@
 
 | Story ID | Title | SP | Priority | Dependencies |
 |----------|-------|-----|----------|--------------|
-| STORY-09.1 | Firebase Authentication Flow | 5 | P1 | STORY-00.2 |
-| STORY-09.2 | Firestore Cloud Save Schema | 5 | P1 | STORY-09.1 |
-| STORY-09.3 | Offline-First Architecture | 8 | P1 | STORY-00.4, STORY-09.2 |
-| STORY-09.4 | Security Rules Anti-Cheat | 5 | P1 | STORY-09.2 |
-| STORY-09.5 | Cloud Functions (Optional) | 3 | P2 | STORY-09.2 |
+| STORY-09.1 | Firebase Authentication Flow | 5 | P0 | STORY-00.2 |
+| STORY-09.2 | Firestore Cloud Save Schema | 5 | P0 | STORY-09.1 |
+| STORY-09.3 | Offline-First Architecture | 6 | P0 | STORY-00.4, STORY-09.2 |
+| STORY-09.4 | Security Rules Anti-Cheat | 3 | P0 | STORY-09.2 |
+| STORY-09.5 | Cloud Functions (REQUIRED) | 3 | P0 | STORY-09.2 |
 | STORY-09.6 | Firebase Cost Monitoring | 2 | P1 | STORY-09.2 |
 
 ---
@@ -351,64 +351,99 @@ test('Gold increase >10k rejected', () async {
 
 ---
 
-## STORY-09.5: Cloud Functions - Server Logic (Optional)
+## STORY-09.5: Cloud Functions - Server Logic (REQUIRED for MVP)
 
 ### Objective
-Zaimplementować opcjonalne Cloud Functions dla logiki serwerowej (leaderboards, receipt validation).
+Zaimplementować Cloud Functions dla server-side walidacji (time validation, receipt validation).
 
 ### User Story
 **As a** developer
-**I want** optional Cloud Functions for server logic
-**So that** I can implement leaderboards later
+**I want** Cloud Functions for server-side validation
+**So that** players can't cheat offline production and IAP is secure
 
 ### Description
-Opcjonalne funkcje: daily leaderboard calculation, IAP receipt validation, inactive user cleanup.
+**REQUIRED dla MVP:** Funkcje time validation (anti-cheat dla offline produkcji) i receipt validation (weryfikacja zakupów IAP).
 
 ### Acceptance Criteria
 
-- [ ] **AC1:** Cloud Function: `validateReceipt` (IAP receipt validation)
+- [ ] **AC1:** Cloud Function: `validateOfflineProduction` (time anti-cheat)
 ```javascript
-// functions/src/index.js
-exports.validateReceipt = functions.https.onCall(async (data, context) => {
-  const { receiptData, platform } = data;
-  // ... receipt validation logic
+// functions/src/index.ts
+exports.validateOfflineProduction = functions.https.onCall(async (data, context) => {
+  const { userId, claimedHours, lastSeen, buildings } = data;
+
+  // Server-side time check
+  const serverTime = admin.firestore.Timestamp.now();
+  const timeDelta = serverTime.seconds - lastSeen;
+  const maxHours = Math.min(claimedHours, 24); // 24h cap
+
+  // Validate reasonable production
+  if (claimedHours > timeDelta / 3600 * 1.1) { // 10% tolerance
+    return { valid: false, reason: 'time_manipulation' };
+  }
+
+  return { valid: true, approvedHours: maxHours };
 });
 ```
 
-- [ ] **AC2:** Cloud Function: `cleanupInactiveUsers` (delete users inactive >1 year)
+- [ ] **AC2:** Cloud Function: `validateReceipt` (IAP receipt validation)
 ```javascript
-exports.cleanupInactiveUsers = functions.pubsub
-  .schedule('every 24 hours')
-  .onRun(async (context) => {
-    const oneYearAgo = Date.now() - (365 * 24 * 60 * 60 * 1000);
-    const usersRef = admin.firestore().collection('users');
+exports.validateReceipt = functions.https.onCall(async (data, context) => {
+  const { platform, receipt, productId, userId } = data;
 
-    const snapshot = await usersRef
-      .where('lastSeen', '<', oneYearAgo)
-      .get();
+  // Validate with platform (Google Play / Apple App Store)
+  const isValid = await validateWithPlatform(platform, receipt);
 
-    snapshot.forEach(doc => doc.ref.delete());
+  if (isValid) {
+    await admin.firestore()
+      .collection('users')
+      .doc(userId)
+      .collection('purchases')
+      .add({
+        productId,
+        timestamp: admin.firestore.Timestamp.now(),
+        verified: true,
+      });
+  }
+
+  return { valid: isValid };
+});
+```
+
+- [ ] **AC3:** Cloud Function: `detectSuspiciousActivity` (triggered on game state write)
+```javascript
+exports.detectSuspiciousActivity = functions.firestore
+  .document('users/{userId}/gameState')
+  .onWrite(async (change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    if (after.gold - before.gold > 50000) {
+      await flagUser(context.params.userId, 'impossible_gold_gain');
+    }
   });
 ```
 
-- [ ] **AC3:** Cloud Function: `calculateLeaderboard` (triggered daily)
-
 - [ ] **AC4:** Deploy to Firebase (Node.js 18 runtime)
 
-- [ ] **AC5:** Cost: ~$5/month at 10k MAU
+- [ ] **AC5:** Dart client wrapper for Cloud Functions calls
 
 ### Implementation Notes
 
-**Note:** This story is optional for MVP. Can be deferred to post-MVP.
+**THIS STORY IS REQUIRED FOR MVP.** Cloud Functions are critical for:
+- Time validation (offline production anti-cheat)
+- Receipt validation (IAP security)
+- Suspicious activity detection
 
 ### Definition of Done
 - [ ] Cloud Functions deployed
-- [ ] Receipt validation works
-- [ ] Scheduled cleanup runs daily
+- [ ] Time validation works (blocks time manipulation)
+- [ ] Receipt validation works (verifies IAP)
+- [ ] Dart client wrapper tests pass
 
-**Story Points:** 3 SP (optional, deferred to post-MVP)
-**Priority:** P2
-**Sprint:** Sprint 8 (optional)
+**Story Points:** 3 SP
+**Priority:** P0 (REQUIRED)
+**Sprint:** Sprint 9
 
 ---
 

@@ -33,10 +33,10 @@ void main() {
         lastSeen: testTime,
       );
 
-      // Create test building (Lumbermill, level 1)
+      // Create test building (Mining, level 1)
       testBuilding = Building(
-        id: 'lumbermill_1',
-        type: BuildingType.collector,
+        id: 'mining_1',
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 5, y: 5),
         production: const ProductionConfig(
@@ -277,7 +277,7 @@ void main() {
         expect(result.economy.inventory['wood']!.amount, equals(1000));
       });
 
-      test('handles resource not in inventory', () {
+      test('handles resource not in inventory - creates new resource', () {
         // Economy without wood resource
         final economyNoWood = testEconomy.copyWith(
           inventory: const {},
@@ -289,9 +289,10 @@ void main() {
           currentTime: testTime,
         );
 
-        // Should return economy unchanged (addResource returns same if not found)
-        expect(result.economy.inventory, isEmpty);
-        expect(result.resourcesCollected, equals(10)); // Still calculates correctly
+        // Should create new resource with collected amount
+        expect(result.economy.inventory.containsKey('wood'), isTrue);
+        expect(result.economy.inventory['wood']!.amount, equals(10));
+        expect(result.resourcesCollected, equals(10));
       });
     });
 
@@ -324,8 +325,8 @@ void main() {
 
       test('updates correct building when multiple buildings exist', () {
         final building2 = Building(
-          id: 'lumbermill_2',
-          type: BuildingType.collector,
+          id: 'mining_2',
+          type: BuildingType.mining,
           level: 1,
           gridPosition: const GridPosition(x: 10, y: 10),
           production: const ProductionConfig(

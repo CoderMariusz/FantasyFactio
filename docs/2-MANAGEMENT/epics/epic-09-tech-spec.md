@@ -60,6 +60,13 @@ EPIC-09 implementuje pełną integrację Firebase: autentykację (Anonymous → 
 - ✅ Firestore quota monitoring
 - ✅ Cost optimization strategy
 
+**Cloud Functions (REQUIRED for MVP):**
+- ✅ Time validation function (anti-cheat for offline production)
+- ✅ Receipt validation function (IAP verification)
+- ✅ Server-side gold increment validation
+- ✅ Suspicious activity detection
+- ✅ Function deployment via Firebase CLI
+
 ### Out of Scope
 
 - ❌ Real-time multiplayer sync (v2.0)
@@ -219,6 +226,83 @@ service cloud.firestore {
 │   5. Update cache if cloud is newer                        │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Cloud Functions Architecture
+
+```javascript
+// functions/src/index.ts
+
+/**
+ * Time Validation (Anti-Cheat for Offline Production)
+ * Called when player claims offline resources
+ * Validates that claimed time is reasonable
+ */
+export const validateOfflineProduction = functions.https.onCall(async (data, context) => {
+  const { userId, claimedHours, lastSeen, buildings } = data;
+
+  // Server-side time check
+  const serverTime = admin.firestore.Timestamp.now();
+  const timeDelta = serverTime.seconds - lastSeen;
+  const maxHours = Math.min(claimedHours, 24); // 24h cap
+
+  // Validate reasonable production
+  if (claimedHours > timeDelta / 3600 * 1.1) { // 10% tolerance
+    return { valid: false, reason: 'time_manipulation' };
+  }
+
+  return { valid: true, approvedHours: maxHours };
+});
+
+/**
+ * Receipt Validation (IAP Verification)
+ * Called after in-app purchase completion
+ * Validates purchase receipt with platform
+ */
+export const validateReceipt = functions.https.onCall(async (data, context) => {
+  const { platform, receipt, productId, userId } = data;
+
+  // Validate with platform (Google Play / Apple App Store)
+  const isValid = await validateWithPlatform(platform, receipt);
+
+  if (isValid) {
+    // Update user's purchase history
+    await admin.firestore()
+      .collection('users')
+      .doc(userId)
+      .collection('purchases')
+      .add({
+        productId,
+        timestamp: admin.firestore.Timestamp.now(),
+        verified: true,
+      });
+  }
+
+  return { valid: isValid };
+});
+
+/**
+ * Suspicious Activity Detection
+ * Triggered on unusual game state changes
+ */
+export const detectSuspiciousActivity = functions.firestore
+  .document('users/{userId}/gameState')
+  .onWrite(async (change, context) => {
+    const before = change.before.data();
+    const after = change.after.data();
+
+    // Check for impossible gold gains
+    if (after.gold - before.gold > 50000) {
+      await flagUser(context.params.userId, 'impossible_gold_gain');
+    }
+
+    // Check for tier skip
+    if (after.tier - before.tier > 1) {
+      await flagUser(context.params.userId, 'tier_skip');
+    }
+  });
 ```
 
 ---

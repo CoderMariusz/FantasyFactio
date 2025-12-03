@@ -17,8 +17,8 @@ void main() {
 
       // Create test building (level 1, upgrade cost = 100)
       testBuilding = Building(
-        id: 'lumbermill_1',
-        type: BuildingType.collector,
+        id: 'mining_1',
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 5, y: 5),
         production: const ProductionConfig(
@@ -139,8 +139,8 @@ void main() {
 
       test('updates correct building in multi-building economy', () {
         final building2 = Building(
-          id: 'mine_1',
-          type: BuildingType.collector,
+          id: 'smelter_1',
+          type: BuildingType.smelter,
           level: 3,
           gridPosition: const GridPosition(x: 10, y: 10),
           production: const ProductionConfig(
@@ -244,7 +244,7 @@ void main() {
       test('fails when building not found in economy', () {
         final buildingNotInEconomy = Building(
           id: 'nonexistent_building',
-          type: BuildingType.collector,
+          type: BuildingType.mining,
           level: 1,
           gridPosition: const GridPosition(x: 99, y: 99),
           production: const ProductionConfig(

@@ -1,9 +1,13 @@
-# Epic Technical Specification: EPIC-08 - Ethical F2P Monetization (NPD)
+# Epic 8: Ethical F2P Monetization - Technical Specification
 
-Date: 2025-11-23
-Author: Mariusz
-Epic ID: EPIC-08
-Status: Draft
+<!-- AI-INDEX: epic, tech-spec, monetization, iap, ads, ethical-f2p -->
+
+**Epic:** EPIC-08 - Ethical F2P Monetization
+**Total SP:** 23
+**Duration:** 1 week (Sprint 10)
+**Status:** 📋 Ready for Implementation
+**Date:** 2025-12-03
+**Priority:** P1 (High)
 
 ---
 

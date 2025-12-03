@@ -127,7 +127,7 @@ integration_test/
 // lib/domain/entities/building.dart
 class Building extends Equatable {
   final String id;
-  final BuildingType type;     // collector, processor, storage, conveyor, market
+  final BuildingType type;     // mining, storage, smelter, conveyor, workshop, farm
   final int level;             // 1-10
   final GridPosition gridPosition;
   final ProductionConfig production;
@@ -224,7 +224,7 @@ class GridCamera extends Component {
 |--------|---------|-------------|-------|
 | Grid size | 50×50, 32px tiles | 50×50, 64×32px isometric | Better visual, isometric projection |
 | Camera zoom | 0.5× / 1.5× | 0.75× / 1.5× | Strategic mode slightly more zoomed |
-| BuildingType enum | lumbermill, mine, etc. | collector, processor, storage, conveyor, market | Generic types instead of specific |
+| BuildingType enum | lumbermill, mine, etc. | mining, storage, smelter, conveyor, workshop, farm | 6 game-specific types |
 | Production rate | per minute | per hour | Different time unit |
 | Storage capacity | in ProductionConfig | Calculated: baseRate × 10 | Dynamic calculation |
 
