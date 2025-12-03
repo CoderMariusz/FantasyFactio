@@ -1480,7 +1480,520 @@ Can still view but can't rebuy
 
 ---
 
-## 6. Cross-Screen Navigation
+## 7. Notification & Warning System
+
+### Overview
+
+Hierarchical notification system with 4 levels: Toasts, Banners, Modals, Full-screen alerts. Designed for non-intrusive feedback with clear visual hierarchy and accessibility.
+
+### Notification Types & Hierarchy
+
+**LEVEL 1: TOAST (Non-blocking)**
+- Brief, auto-dismiss messages
+- Position: Top of screen
+- Duration: 2-3 seconds
+- Animation: Slide in from top (300ms), fade out (300ms)
+- Stacking: Max 3 visible, queue overflow
+- Interaction: Tap to dismiss early
+
+**LEVEL 2: BANNER (Persistent)**
+- Important but non-critical
+- Position: Below header (sticky)
+- Duration: Until dismissed by user
+- Must tap [×] to close
+- Multiple banners possible (up to 3)
+- Contains action buttons ([BUILD MORE], [HELP])
+
+**LEVEL 3: MODAL (Blocking)**
+- Critical or requires decision
+- Position: Center of screen
+- Overlay: Semi-transparent black (40% opacity)
+- Duration: Until action taken
+- Animation: Slide up from bottom (300ms)
+- Options: Multiple buttons ([YES], [CANCEL], [DETAILS])
+
+**LEVEL 4: FULL SCREEN (Critical)**
+- Game-stopping alerts
+- Entire viewport covered
+- Position: Center, large text
+- Duration: Until critical action
+- Sound: Alarm/warning
+- Example: Game crash recovery, critical errors
+
+### Toast Notifications (Non-blocking)
+
+**4 Toast Types:**
+
+**Type 1: SUCCESS (Green #4CAF50)**
+- Icon: ✓ Checkmark
+- Sound: Positive "ding!"
+- Duration: 2 seconds
+- Triggers: Craft complete, item collected, trade accepted, building placed, skill level up
+
+**Type 2: INFO (Blue #2196F3)**
+- Icon: ℹ Info circle
+- Sound: Neutral chime
+- Duration: 3 seconds
+- Triggers: New offer, skill level up, building unlock, discovery, milestone
+
+**Type 3: WARNING (Orange #FF9800)**
+- Icon: ⚠ Warning triangle
+- Sound: Medium beep
+- Duration: 4 seconds
+- Triggers: Storage near capacity, conveyor backed up, building waiting, event expiring, resource scarcity
+
+**Type 4: ERROR (Red #F44336)**
+- Icon: ✗ X mark
+- Sound: Error buzz
+- Duration: 4+ seconds (persistent)
+- Triggers: Can't craft (missing resources), insufficient items, action blocked, critical issue
+
+**Toast Animation Details:**
+
+```
+Entrance (300ms):
+  ├─ Slide from Y=0 to Y=370px
+  ├─ Opacity: 0 → 1 (fade in)
+  └─ Easing: ease-out
+
+Display duration:
+  ├─ 1-2 words: 2 seconds
+  ├─ 3-5 words: 3 seconds
+  ├─ 6+ words: 4 seconds
+  └─ User can dismiss: Tap anywhere
+
+Exit (300ms):
+  ├─ Fade out: 1 → 0 (opacity)
+  ├─ Slide up: -20px position
+  └─ Easing: ease-in
+
+Stacking:
+  ├─ Multiple toasts: Stack vertically
+  ├─ Max visible: 3
+  ├─ If 4th arrives: Oldest dismisses
+  └─ New enters at top
+```
+
+**Toast Examples in Gameplay:**
+
+Gathering scenario:
+```
+1. Tap gather button
+2. Toast: "Gathering węgiel..." (1s)
+3. Wait 1.25s (progress bar)
+4. Toast: "✓ +1 węgiel added!" (green, 2s)
+5. Inventory updates: 45 → 46
+```
+
+Crafting scenario:
+```
+1. Start żelazo craft
+2. Toast: "ℹ Craft started (50s)" (blue, 3s)
+3. After 50s...
+4. Toast: "✓ 1 żelazo ready!" (green, 2s)
+5. Item exits smelter
+```
+
+Trading scenario:
+```
+1. Accept Kupiec offer
+2. Toast: "Calculating..." (blue, transient)
+3. Toast: "✓ Sold 15 węgiel for 18g!" (green, 2s)
+4. Gold counter animates +18
+```
+
+### Banner Notifications (Persistent)
+
+**Visual Appearance:**
+- Height: 60px
+- Position: Below header (sticky)
+- Background: Type-specific color
+- Close button: [×] top right
+- Action buttons: Up to 2 buttons
+
+**Banner Types:**
+
+**Storage Warning Banner:**
+```
+┌──────────────────────────────────┐
+│ 📦 Storage Warning               │
+├──────────────────────────────────┤
+│ "Storage #1 is 95% full!"       │
+│ "145/200 items (95%)"           │
+│                                  │
+│ [BUILD STORAGE] [CLEAR ITEMS]   │
+│ [×] (dismiss)                   │
+└──────────────────────────────────┘
+
+Appears: Storage reaches 90% capacity
+Color: Orange (#FF9800)
+Auto-dismiss: No (user must close)
+Stacking: Can have multiple banners
+```
+
+**Bottleneck/Error Banners:**
+```
+┌──────────────────────────────────┐
+│ ⚠️ Bottleneck Detected           │
+├──────────────────────────────────┤
+│ "Conveyor backed up → Storage"   │
+│ "5 items waiting to enter!"      │
+│                                  │
+│ [GO TO PROBLEM] [HELP]           │
+└──────────────────────────────────┘
+
+Color: Orange/Red (varies by severity)
+Appears: Conveyor has 8+ items, destination full
+Duration: Until resolved + user dismisses
+```
+
+**Event Banner:**
+```
+┌──────────────────────────────────┐
+│ ⚡ Special Event!                │
+├──────────────────────────────────┤
+│ "Żyła miedzi w Górach!"         │
+│ "+2x mining speed (15s remaining)"│
+│                                  │
+│ [GO TO GÓRY] [DISMISS]          │
+└──────────────────────────────────┘
+
+Color: Gold (#FFD700)
+Auto-dismiss: When event ends
+Duration: Time-sensitive
+```
+
+**Animation:**
+```
+Slide down from top (300ms)
+Stays until user dismisses or auto-expires
+Fade out: 300ms
+Can stack: Up to 3 banners
+```
+
+### Modal Dialogs (Blocking)
+
+**Modal Components:**
+- Overlay: Semi-transparent black (40% opacity)
+- Card: White, rounded (12px), centered
+- Shadow: Strong elevation
+- Animation: Slide up from bottom (300ms)
+- Close: Tap [CANCEL] or outside
+
+**Confirmation Modal:**
+```
+┌─────────────────────────────────┐
+│ 🤔 CONFIRM ACTION              │
+├─────────────────────────────────┤
+│                                 │
+│ "Delete this building?"         │
+│ "Storage #1 (2x2)"              │
+│ "Contains: 45 items"            │
+│                                 │
+│ Refund: 4D + 8K (80%)           │
+│ Lost: 1D + 2K (20%)             │
+│ Items: Dropped on ground        │
+│                                 │
+│ Are you sure?                   │
+│                                 │
+│ [YES, DELETE] [CANCEL]         │
+└─────────────────────────────────┘
+```
+
+**Choice Modal (Resource Picker):**
+```
+Mode selector with dropdowns
+Checkboxes for resource selection
+Real-time preview of changes
+[APPLY] [CANCEL] buttons
+Scrollable if many options
+```
+
+**Information Modal (Offline Return):**
+```
+┌─────────────────────────────────┐
+│ ℹ️ OFFLINE PRODUCTION           │
+├─────────────────────────────────┤
+│ 🎉 Welcome back!               │
+│ Away for: 1 hour 23 minutes    │
+│                                 │
+│ Farm production:                │
+│ ├─ Items processed: 576/720    │
+│ ├─ Gold earned: 3,168 zł       │
+│ ├─ Efficiency: 80%             │
+│ └─ Average: 38 zł/minute       │
+│                                 │
+│ [CONTINUE] [VIEW DETAILS]      │
+└─────────────────────────────────┘
+
+Info-only (no scary decisions)
+Scrollable if content long
+Animation: Fade in (300ms)
+```
+
+### Sound Design
+
+**Success sound:** "Ding!" (800Hz, 300ms, uplifting)
+- Use: Craft complete, items added, positive events
+
+**Warning sound:** "Beep" (600Hz, 200ms, alert tone)
+- Use: Storage full, bottleneck, issues
+
+**Error sound:** "Buzz" (400Hz, 300ms, wrong tone)
+- Use: Can't craft, action blocked, errors
+
+**Info chime:** Musical "Chime" (multiple notes, 500ms)
+- Use: New offers, discoveries, milestones
+
+**Notification entrance:** Subtle "whoosh" (100ms, background)
+- Use: Toast/banner appears
+
+**All sounds:**
+- Can be muted via settings
+- Respect device sound settings
+- Optional haptic feedback (vibration)
+- No annoying loops
+
+### Accessibility
+
+**Screen readers:** All notifications announced, toast text read aloud, important info vocalized
+
+**Visual alternatives:** Colors + icons + text always combined, high contrast maintained, text 14px+
+
+**Haptic feedback:** Vibration on alerts, patterns indicate severity, can be disabled
+
+**Color-blind safe:** Icons + labels, not color only, high contrast
+
+---
+
+## 8. Building Detail Panel
+
+### Overview
+
+Detailed configuration panel for individual buildings showing status, ports, flows, optimization tips, and maintenance options.
+
+### Layout Components
+
+**Header (sticky, 40px):**
+- Back arrow [←]
+- Building name + icon (📦 STORAGE #1)
+- Settings [⚙️] and close [X] buttons
+
+**Sections (scrollable):**
+1. Basic Info (building type, location, status)
+2. Capacity/Production Details (specific to building)
+3. Port Configuration (4 ports with live status)
+4. Active Flows (real-time item movement)
+5. Optimization Tips (AI suggestions)
+6. Maintenance Options (upgrade, move, demolish)
+7. Bottom Actions (GO TO MAP, BACK, HELP)
+
+### Universal Building Details
+
+**Basic Info:**
+- Building icon (64×64px)
+- Type and size: "STORAGE (2×2 grid)"
+- Location: "Grid (15, 8)"
+- Status: Color indicator (✓ operational, ⚠ waiting, ✗ error)
+
+**Port Configuration (Per Building):**
+- Up to 4 ports (N, S, E, W)
+- Port type: INPUT or OUTPUT
+- Status light: 🟢 (active) / 🟡 (waiting) / 🔴 (blocked)
+- Filter: "WHITE-LIST [items]"
+- Destination/Source: "Storage #1"
+- Live flow: "15 items/min flowing"
+- Buttons: [EDIT], [NAVIGATE], [DISCONNECT]
+
+**Active Flows (Real-time):**
+- Input flows: Source → storage
+- Output flows: Storage → destination (per port)
+- Visual progress bar: ▓▓▓░░░░░
+- Rate: "20 items/min"
+- Status: Flowing normally / Waiting / Blocked
+
+**Optimization Tips:**
+- AI-generated suggestions based on state
+- Issue detection: "West port blocked"
+- Fix suggestions: "Clear some items" or "Build Storage #3"
+- Efficiency rating: "Good (72% usage)"
+
+**Maintenance Options:**
+- [UPGRADE] - Increase capacity/speed
+- [MOVE] - Relocate building
+- [DEMOLISH] - Remove and refund 80%
+- Future: [MONITOR], [AUTOMATE], [BACKUP]
+
+### Building-Specific Details
+
+**MINING FACILITY:**
+- Current resource: "Węgiel"
+- Base rate: "1.25 sec/item"
+- Skill bonus: "Level 3 (-15%)"
+- Actual rate: "1.06 sec/item"
+- Production: "~57 items/min"
+- Output buffer: "5/10 items"
+- Biom: Shows available resources in this location
+- Active events: "No events / Żyła miedzi upcoming"
+
+**STORAGE:**
+- Capacity: "145/200 items (72%)"
+- Progress bar: Visual fill indicator
+- Item breakdown: Bar chart per resource
+- Free space: "55 slots (39%)"
+- 4-port configuration: NORTH/SOUTH/EAST/WEST
+- Per-port filters: Mode + selected items
+- Current flows: Input + output with rates
+
+**SMELTER:**
+- Current craft: "Żelazo"
+- Progress: "▓▓▓▓▓░░░░ 50% (25s / 50s)"
+- Ingredients: "30 węgiel + 30 ruda żelaza"
+- Input ports: NORTH (fuel), EAST (ingredients)
+- Output port: SOUTH (products)
+- Available recipes: List with times
+- Skill effects: "Level 4 (-20% = 40s)"
+- Queue recipes: Next items to craft (Phase 2)
+
+**WORKSHOP:**
+- Active craft: "Młotek"
+- Status: "⏳ GATHERING INGREDIENTS"
+- Progress: "▓▓▓░░░░░ 30% (3/10 gathered)"
+- Ingredients needed: List with have/need
+- ETA: When complete (gathering + craft time)
+- Queued recipes: 5 pending items
+- Input ports: NORTH (primary), EAST (secondary)
+- Skill effects: Shows time savings per craft
+- Queue management: Add/remove/reorder recipes
+
+**FARM:**
+- Gold earned: "4,580 zł today"
+- Average rate: "48 zł/minute"
+- Current processing: "45 items in queue"
+- Item value breakdown: With skill multiplier
+- Input port: "NORTH - accepts all items"
+- Buffer: "45/50 items"
+- Optimization: "Send high-value items (miedź, sól)"
+- Offline earnings: "Estimate per hour/8 hours"
+
+### Interactions
+
+**Tap [EDIT] on port:**
+- Opens port configuration modal
+- Change mode: INPUT/OUTPUT/DISABLED
+- Change filter: WHITE-LIST / BLACK-LIST / ACCEPT ALL / SINGLE
+- Select items (checkboxes)
+- Real-time preview
+- [APPLY] updates immediately
+
+**Tap [NAVIGATE]:**
+- Pan map to destination building
+- Highlight building (glow effect)
+- Show connection line (conveyor path)
+- Allow routing optimization
+
+**Tap [DISCONNECT]:**
+- Confirmation: "Disconnect this port?"
+- Effect: Port becomes unused
+- Items back up if source still flowing
+- Can reconnect later
+
+**Tap [CHANGE RECIPE] (Smelter/Workshop):**
+- Recipe selector modal
+- Show available recipes + requirements
+- Tap to switch
+- Current craft stops (returns items)
+- New recipe starts
+
+**Tap efficiency metrics:**
+- Detailed breakdown modal
+- Bottleneck analysis
+- Improvement suggestions
+- Learning tooltips
+
+### Visual Design
+
+**Status indicators:**
+- 🟢 Green: Operational, producing
+- 🟡 Yellow: Waiting, issue, not optimal
+- 🔴 Red: Error, paused, broken
+- Size: 24×24px (clear visibility)
+
+**Progress bars:**
+- Height: 12px
+- Color: Blue (normal) → Red (full/error)
+- Animation: Smooth updates
+- Text overlay: Percentage or time
+
+**Port cards:**
+- Background: White
+- Border: 1px light gray
+- Highlight: Blue if connected
+- Icons: Directional arrows (↑ ↓ ← →)
+
+**Section headers:**
+- Font: 16px bold (#333)
+- Divider: Light gray line
+- Spacing: 12px above, 8px below
+
+### Mobile Optimization
+
+**Viewport:** 375×667px
+- Header: Fixed (40px)
+- Content: Scrollable
+- Actions: Bottom sticky (60px)
+- Usable: ~567px height
+
+**Panel width:** Full (375px), padding 16px = 343px usable
+
+**Touch targets:** All buttons 44×44px minimum
+
+**Text sizing:**
+- Headers: 16px bold
+- Details: 14px regular
+- Small text: 12px
+- Minimum: 12px (readable)
+
+**Performance:**
+- Load: <500ms
+- Animations: 60 FPS
+- Memory: <10MB per panel
+- Smooth scrolling
+
+### Advanced Features (Phase 2)
+
+**Auto-optimization:**
+- AI analyzes network
+- "Add splitter here?"
+- "Bottleneck detected"
+- Smart recommendations
+
+**Monitoring dashboard:**
+- Real-time metrics
+- Flow rate tracking
+- Efficiency scoring
+- Performance graphs
+
+**Historical data:**
+- Items processed: Lifetime
+- Gold earned: Per hour/day
+- Downtime tracking
+- Exportable reports
+
+**Custom alerts:**
+- "Alert if full > 95%"
+- "Alert if stopped > 60s"
+- Smart thresholds
+
+**Multi-building view (Phase 2):**
+- Compare buildings
+- Parallel stats
+- Overall efficiency
+- Optimization suggestions
+
+---
+
+## Cross-Screen Navigation
 
 **Navigation Map:**
 ```
