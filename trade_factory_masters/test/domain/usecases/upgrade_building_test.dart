@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trade_factory_masters/domain/entities/building.dart';
 import 'package:trade_factory_masters/domain/entities/player_economy.dart';
 import 'package:trade_factory_masters/domain/usecases/upgrade_building.dart';
-import 'package:trade_factory_masters/domain/core/result.dart';
 
 void main() {
   group('UpgradeBuildingUseCase', () {

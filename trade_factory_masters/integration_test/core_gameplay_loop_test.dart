@@ -1,16 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:trade_factory_masters/main.dart' as app;
 import 'package:trade_factory_masters/domain/entities/building.dart';
 import 'package:trade_factory_masters/domain/entities/resource.dart';
 import 'package:trade_factory_masters/domain/entities/player_economy.dart';
 import 'package:trade_factory_masters/domain/usecases/collect_resources.dart';
 import 'package:trade_factory_masters/domain/usecases/upgrade_building.dart';
-import 'package:trade_factory_masters/domain/core/result.dart';
 
 /// Integration Test: Core Gameplay Loop
 /// Tests the complete flow: Launch → Tap Building → Collect Resources → Verify Inventory → Upgrade Building

@@ -11,7 +11,6 @@ void main() {
   group('ProductionService', () {
     late ProductionService service;
     late Building miningBuilding;
-    late Building smelterBuilding;
 
     setUp(() {
       service = ProductionService();
@@ -23,18 +22,6 @@ void main() {
         gridPosition: const GridPosition(x: 0, y: 0),
         production: const ProductionConfig(baseRate: 10.0, resourceType: 'Coal'),
         upgradeConfig: const UpgradeConfig(baseCost: 100, costIncrement: 50),
-        lastCollected: DateTime.now(),
-        isActive: true,
-      );
-
-      smelterBuilding = Building(
-        id: 'smelter_1',
-        type: BuildingType.smelter,
-        level: 1,
-        gridPosition: const GridPosition(x: 5, y: 5),
-        production:
-            const ProductionConfig(baseRate: 5.0, resourceType: 'Iron Bar'),
-        upgradeConfig: const UpgradeConfig(baseCost: 200, costIncrement: 100),
         lastCollected: DateTime.now(),
         isActive: true,
       );

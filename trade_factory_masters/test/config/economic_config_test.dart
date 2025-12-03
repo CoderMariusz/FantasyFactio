@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trade_factory_masters/config/economic_config.dart';
 import 'package:trade_factory_masters/domain/entities/building.dart';
 import 'package:trade_factory_masters/domain/entities/player_economy.dart';
-import 'package:trade_factory_masters/domain/entities/resource.dart';
 import 'package:trade_factory_masters/domain/services/balance_calculator.dart';
 
 void main() {
@@ -218,28 +217,12 @@ void main() {
   group('BalanceCalculator', () {
     late BalanceCalculator calculator;
     late PlayerEconomy emptyEconomy;
-    late PlayerEconomy richEconomy;
 
     setUp(() {
       calculator = BalanceCalculator();
       emptyEconomy = PlayerEconomy(
         gold: 0,
         inventory: {},
-        buildings: [],
-        tier: 1,
-        lastSeen: DateTime.now(),
-      );
-      richEconomy = PlayerEconomy(
-        gold: 50000,
-        inventory: {
-          'Coal': Resource(
-            id: 'Coal',
-            displayName: 'Coal',
-            type: ResourceType.tier1,
-            amount: 1000,
-            iconPath: 'assets/coal.png',
-          ),
-        },
         buildings: [],
         tier: 1,
         lastSeen: DateTime.now(),
