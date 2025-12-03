@@ -3,14 +3,29 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, automation, conveyor -->
 
 **Epic:** EPIC-03 - Tier 2 Automation
+**Total Stories:** 7
 **Total SP:** 42
-**Duration:** 2-3 weeks (Sprints 3-4)
+**Sprint:** 4-5
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-03-tech-spec.md](epic-03-tech-spec.md)
 
 **Prerequisites:**
 - ✅ EPIC-01 (Core Gameplay Loop)
 - ✅ EPIC-02 (Tier 1 Economy - zasoby, budynki, grid, conveyor definition)
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-03.1 | A* Pathfinding System | 5 | P0 | 📋 Ready |
+| STORY-03.2 | Conveyor Transport Mechanics | 8 | P0 | 📋 Ready |
+| STORY-03.3 | Filtering System | 5 | P0 | 📋 Ready |
+| STORY-03.4 | Splitter System | 5 | P0 | 📋 Ready |
+| STORY-03.5 | Conveyor UI & Creation Flow | 8 | P0 | 📋 Ready |
+| STORY-03.6 | Storage Integration & Networks | 6 | P0 | 📋 Ready |
+| STORY-03.7 | Integration Testing & Performance | 5 | P1 | 📋 Ready |
 
 ---
 
@@ -843,7 +858,7 @@ This is the validation story that tests all automation components working togeth
 
 ## Implementation Order
 
-**Recommended Sprint 3-4:**
+**Recommended Sprint 4-5:**
 
 **Week 1:** Foundation
 1. STORY-03.1: A* Pathfinding (5 SP)

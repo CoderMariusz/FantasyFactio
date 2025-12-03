@@ -2,7 +2,7 @@
 
 **Epic:** EPIC-03 - Tier 2 Automation
 **Total SP:** 42
-**Duration:** 2-3 weeks (Sprints 3-4)
+**Duration:** 2-3 weeks (Sprints 4-5)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 
@@ -372,12 +372,12 @@ Recovery: Items resume flowing
 
 ┌─────────────────────────────────┐
 │ Path Found! 9 tiles             │
-│ Cost: 45 gold (5g per tile)     │
+│ Cost: 18 Drewno + 9 Żelazo      │
 │                                 │
 │ [~~~ Animated path preview ~~~] │
 │                                 │
 │ Transport: Wood                 │
-│ Travel time: 9 seconds          │
+│ Travel time: 18 seconds         │
 │                                 │
 │   [Confirm]        [Cancel]     │
 └─────────────────────────────────┘
