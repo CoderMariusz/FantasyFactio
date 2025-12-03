@@ -11,6 +11,10 @@ part 'player_economy.g.dart';
 /// Immutable - all state transitions create new instances
 @HiveType(typeId: 5)
 class PlayerEconomy extends Equatable {
+  // Domain-level constants (framework-independent)
+  static const int _defaultMaxCapacity = 1000;
+  static const int _defaultStartingGold = 1000;
+  static const int _defaultStartingTier = 1;
   /// Player's gold currency
   @HiveField(0)
   final int gold;
@@ -34,10 +38,10 @@ class PlayerEconomy extends Equatable {
   final DateTime lastSeen;
 
   const PlayerEconomy({
-    this.gold = 1000, // Starting gold
+    this.gold = _defaultStartingGold,
     this.inventory = const {},
     this.buildings = const [],
-    this.tier = 1, // Start at Tier 1
+    this.tier = _defaultStartingTier,
     required this.lastSeen,
   });
 
@@ -58,8 +62,8 @@ class PlayerEconomy extends Equatable {
         id: resourceId,
         displayName: _capitalizeResourceName(resourceId),
         type: ResourceType.tier1,
-        amount: min(amountToAdd, 1000), // Default maxCapacity is 1000
-        maxCapacity: 1000,
+        amount: min(amountToAdd, _defaultMaxCapacity),
+        maxCapacity: _defaultMaxCapacity,
         iconPath: 'assets/images/resources/$resourceId.png',
       );
       updatedInventory[resourceId] = newResource;

@@ -11,6 +11,20 @@ import 'grid_component.dart';
 /// Building sprite component for Trade Factory Masters
 /// Renders buildings on the isometric grid with tap detection and animations
 class BuildingComponent extends PositionComponent with TapCallbacks {
+  // Visual constants
+  static const double _pulseMinAlpha = 0.5;
+  static const double _pulseAmplitude = 0.5;
+  static const double _pulseDuration = 2.0;
+  static const double _indicatorOffsetX = 5.0;
+  static const double _indicatorOffsetY = 5.0;
+  static const double _indicatorRadius = 4.0;
+  static const double _widthMultiplier = 0.8;
+  static const double _heightMultiplier = 1.5;
+  static const double _levelScaleIncrement = 0.01;
+  static const double _pulseScaleMax = 1.2;
+  static const double _pulseScaleDuration = 0.15;
+  static const double _pulseInterpolationSpeed = 5.0;
+
   final Building building;
   final GridConfig gridConfig;
   final Function(Building, CollectResourcesResult)? onResourcesCollected;
@@ -52,11 +66,11 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
   /// Calculate building size based on type and level
   Vector2 _calculateBuildingSize() {
     // Base size is tile size
-    final baseWidth = gridConfig.tileWidth * 0.8;
-    final baseHeight = gridConfig.tileHeight * 1.5;
+    final baseWidth = gridConfig.tileWidth * _widthMultiplier;
+    final baseHeight = gridConfig.tileHeight * _heightMultiplier;
 
     // Scale slightly with level (10% increase at max level)
-    final levelScale = 1.0 + (building.level - 1) * 0.01;
+    final levelScale = 1.0 + (building.level - 1) * _levelScaleIncrement;
 
     return Vector2(baseWidth * levelScale, baseHeight * levelScale);
   }
@@ -179,15 +193,15 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
   /// Render activity indicator (pulsing dot)
   void _renderActivityIndicator(Canvas canvas) {
     final now = DateTime.now().millisecondsSinceEpoch / 1000.0;
-    final pulseAlpha = (0.5 + 0.5 * (now % 2.0 / 2.0));
+    final pulseAlpha = (_pulseMinAlpha + _pulseAmplitude * (now % _pulseDuration / _pulseDuration));
 
     final indicatorPaint = Paint()
       ..color = Colors.green.withOpacity(pulseAlpha)
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(
-      Offset(size.x / 2 - 5, -size.y / 2 + 5),
-      4,
+      Offset(size.x / 2 - _indicatorOffsetX, -size.y / 2 + _indicatorOffsetY),
+      _indicatorRadius,
       indicatorPaint,
     );
   }
@@ -233,14 +247,17 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
     debugPrint('🔨 Building tapped: ${building.type} L${building.level}');
 
     // Trigger resource collection
-    _collectResources();
+    final success = _collectResources();
 
-    // Play pulse animation
-    _playPulseAnimation();
+    // Play pulse animation only if collection was successful
+    if (success) {
+      _playPulseAnimation();
+    }
   }
 
   /// Collect resources from this building
-  void _collectResources() {
+  /// Returns true if collection was successful, false if too soon
+  bool _collectResources() {
     _isCollecting = true;
 
     final useCase = CollectResourcesUseCase();
@@ -249,27 +266,38 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
       building: building,
     );
 
+    // Handle too soon case
+    if (result.tooSoon) {
+      debugPrint(
+        '⏳ Too soon to collect! Wait ${result.secondsUntilNextCollection}s',
+      );
+      _showCooldownText(result.secondsUntilNextCollection ?? 0);
+      _isCollecting = false;
+      return false;
+    }
+
     debugPrint(
       '💰 Resources collected: ${result.resourcesCollected} ${building.production.resourceType} (capped: ${result.wasCapped})',
     );
 
     // Show floating text animation
-    _showFloatingText(result.resourcesCollected, building.production.resourceType);
+    _showFloatingText(result.resourcesCollected.toDouble(), building.production.resourceType);
 
     // Notify callback
     onResourcesCollected?.call(building, result);
 
     _isCollecting = false;
+    return true;
   }
 
   /// Play pulse animation on tap
   void _playPulseAnimation() {
     // Scale effect: grow to 1.2x then back to 1.0x
     final scaleEffect = ScaleEffect.by(
-      Vector2.all(1.2),
+      Vector2.all(_pulseScaleMax),
       EffectController(
-        duration: 0.15,
-        reverseDuration: 0.15,
+        duration: _pulseScaleDuration,
+        reverseDuration: _pulseScaleDuration,
         curve: Curves.easeInOut,
       ),
     );
@@ -280,8 +308,19 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
   /// Show floating text animation ("+X Resource")
   void _showFloatingText(double amount, String resourceType) {
     final floatingText = FloatingTextComponent(
-      text: '+${amount.toStringAsFixed(1)} $resourceType',
+      text: '+${amount.toStringAsFixed(0)} $resourceType',
       startPosition: position + Vector2(0, -size.y / 2),
+    );
+
+    parent?.add(floatingText);
+  }
+
+  /// Show cooldown text when collection is attempted too soon
+  void _showCooldownText(int secondsRemaining) {
+    final floatingText = FloatingTextComponent(
+      text: 'Wait ${secondsRemaining}s',
+      startPosition: position + Vector2(0, -size.y / 2),
+      color: const Color(0xFFFF9800), // Orange color for cooldown
     );
 
     parent?.add(floatingText);
@@ -293,7 +332,7 @@ class BuildingComponent extends PositionComponent with TapCallbacks {
 
     // Update pulse scale (smooth interpolation)
     if (_pulseScale != 1.0) {
-      _pulseScale += (1.0 - _pulseScale) * dt * 5;
+      _pulseScale += (1.0 - _pulseScale) * dt * _pulseInterpolationSpeed;
       if ((_pulseScale - 1.0).abs() < 0.01) {
         _pulseScale = 1.0;
       }
@@ -309,16 +348,17 @@ class FloatingTextComponent extends TextComponent {
   FloatingTextComponent({
     required String text,
     required Vector2 startPosition,
+    Color color = Colors.greenAccent,
   }) : super(
           text: text,
           position: startPosition,
           anchor: Anchor.center,
           textRenderer: TextPaint(
-            style: const TextStyle(
-              color: Colors.greenAccent,
+            style: TextStyle(
+              color: color,
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              shadows: [
+              shadows: const [
                 Shadow(
                   color: Colors.black,
                   offset: Offset(1, 1),

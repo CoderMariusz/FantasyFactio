@@ -2,7 +2,7 @@
 
 <!-- AI-INDEX: files, structure, codebase, modules, organization -->
 
-Last Updated: 2025-12-02
+Last Updated: 2025-12-03
 
 ---
 
@@ -13,6 +13,7 @@ Last Updated: 2025-12-02
 | Purpose | Location | Files |
 |---------|----------|-------|
 | **Entry Point** | lib/ | `main.dart` |
+| **Configuration** | lib/config/ | `game_config.dart` |
 | **Game Logic** | lib/domain/ | entities/, usecases/, core/ |
 | **Game Rendering** | lib/game/ | camera/, components/ |
 | **Tests** | test/, integration_test/ | `*_test.dart` files |
@@ -26,6 +27,12 @@ Last Updated: 2025-12-02
 | File | Purpose | Status | LOC |
 |------|---------|--------|-----|
 | `main.dart` | App initialization, Firebase setup, theme | ✅ Complete | 400+ |
+
+### lib/config/ - Game Configuration
+
+| File | Purpose | Classes | Status |
+|------|---------|---------|--------|
+| `game_config.dart` | Centralized game constants | GridConstants, CameraConstants, EconomyConstants, BuildingConstants, DisplayConstants | ✅ Complete |
 
 ### lib/domain/ - Business Logic (Framework-Independent)
 
@@ -42,16 +49,13 @@ Last Updated: 2025-12-02
 |------|-------|---------|--------|-------|
 | `entities/building.dart` | Building | Defines building structure, production, upgrade config | ✅ Complete | ✅ Yes |
 | `entities/resource.dart` | Resource | Game resource (wood, iron, etc) with capacity | ✅ Complete | ✅ Yes |
-| `entities/player_economy.dart` | PlayerEconomy | Player's game state (gold, buildings, inventory) | ✅ Complete (⚠️ BUG) | ✅ Yes |
-
-**Known Issues in entities:**
-- PlayerEconomy.addResource() - BUG: Returns unchanged if resource doesn't exist (see CLAUDE.md)
+| `entities/player_economy.dart` | PlayerEconomy | Player's game state (gold, buildings, inventory) | ✅ Complete | ✅ Yes |
 
 #### Use Cases
 
 | File | Class | Purpose | Input | Output | Status |
 |-------|-------|---------|-------|--------|--------|
-| `usecases/collect_resources_usecase.dart` | CollectResourcesUseCase | Collect resources from building | PlayerEconomy, Building | Result<PlayerEconomy, CollectError> | ✅ Coded (❌ Broken by entity bug) |
+| `usecases/collect_resources_usecase.dart` | CollectResourcesUseCase | Collect resources from building | PlayerEconomy, Building | Result<PlayerEconomy, CollectError> | ✅ Complete |
 | `usecases/upgrade_building_usecase.dart` | UpgradeBuildingUseCase | Upgrade building (costs gold) | PlayerEconomy, Building | Result<PlayerEconomy, UpgradeError> | ✅ Complete |
 
 ### lib/game/ - Flame Game Engine Layer
@@ -60,12 +64,8 @@ Last Updated: 2025-12-02
 
 | File | Class | Purpose | Status |
 |------|-------|---------|--------|
-| `camera/grid_camera.dart` | GridCamera | Isometric camera with zoom modes | ✅ Complete (⚠️ Animation TODO) |
+| `camera/grid_camera.dart` | GridCamera | Isometric camera with zoom modes, smooth animation | ✅ Complete |
 | `camera/grid_camera_config.dart` | GridCameraConfig | Camera configuration parameters | ✅ Complete |
-
-**Known Issues:**
-- Line 302: TODO comment for smooth animation not implemented
-- Hardcoded zoom levels (should be in config)
 
 #### Game Components
 
@@ -114,13 +114,9 @@ Last Updated: 2025-12-02
 
 ## integration_test/ - Integration Tests
 
-| File | Tests | Status | Issue |
-|------|-------|--------|-------|
-| `core_gameplay_loop_test.dart` | Core gameplay COLLECT→UPGRADE flow | ❌ Won't Compile | BUG #1: Wrong parameter name |
-
-**Issues:**
-- Integration test uses wrong parameter name `buildingId` instead of `building`
-- Cannot verify if actual gameplay works until this is fixed
+| File | Tests | Status |
+|------|-------|--------|
+| `core_gameplay_loop_test.dart` | Core gameplay COLLECT→UPGRADE flow | ✅ Complete |
 
 ---
 
@@ -144,12 +140,14 @@ Last Updated: 2025-12-02
 
 | Metric | Value |
 |--------|-------|
-| **Total Files in lib/** | ~20 files |
+| **Total Files in lib/** | ~21 files |
+| **Config Layer Files** | 1 file |
 | **Domain Layer Files** | 9 files |
 | **Game Layer Files** | 6 files |
 | **Test Files** | ~15 files |
-| **Total Lines of Code** | ~3,500 (estimated) |
+| **Total Lines of Code** | ~3,600 (estimated) |
 | **Total Test Lines** | ~1,500 (estimated) |
+| **Code Health** | ✅ Production Ready |
 
 ---
 

@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
+import 'config/game_config.dart';
 import 'domain/entities/resource.dart';
 import 'domain/entities/building.dart';
 import 'domain/entities/player_economy.dart';
@@ -31,17 +32,25 @@ Future<void> main() async {
 
   debugPrint('✅ Hive initialized with 8 adapters registered');
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  // Test Firebase Auth (Anonymous Sign-In)
+  // Initialize Firebase (optional - app works in offline mode if Firebase unavailable)
+  bool firebaseInitialized = false;
   try {
-    final userCredential = await FirebaseAuth.instance.signInAnonymously();
-    debugPrint('✅ Firebase Auth Success! User ID: ${userCredential.user?.uid}');
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    firebaseInitialized = true;
+    debugPrint('✅ Firebase initialized successfully');
+
+    // Test Firebase Auth (Anonymous Sign-In)
+    try {
+      final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      debugPrint('✅ Firebase Auth Success! User ID: ${userCredential.user?.uid}');
+    } catch (e) {
+      debugPrint('⚠️ Firebase Auth Error (continuing in offline mode): $e');
+    }
   } catch (e) {
-    debugPrint('❌ Firebase Auth Error: $e');
+    debugPrint('⚠️ Firebase initialization failed (continuing in offline mode): $e');
+    debugPrint('ℹ️ App will run with local storage only (Hive)');
   }
 
   runApp(
@@ -66,11 +75,11 @@ class TradeFactoryGame extends FlameGame {
 
     // Configure camera for isometric world
     final gridConfig = const GridConfig(
-      gridWidth: 50,
-      gridHeight: 50,
-      tileWidth: 64.0,
-      tileHeight: 32.0,
-      showGridLines: true,
+      gridWidth: GridConstants.gridWidth,
+      gridHeight: GridConstants.gridHeight,
+      tileWidth: GridConstants.tileWidth,
+      tileHeight: GridConstants.tileHeight,
+      showGridLines: GridConstants.showGridLines,
     );
 
     // Calculate world bounds
@@ -79,12 +88,12 @@ class TradeFactoryGame extends FlameGame {
     // Setup camera configuration
     final cameraConfig = GridCameraConfig(
       worldSize: Vector2(worldBounds.width, worldBounds.height),
-      minZoom: 0.3,
-      maxZoom: 2.0,
-      zoomTransitionDuration: 0.3,
-      panSpeed: 1.0,
+      minZoom: CameraConstants.minZoom,
+      maxZoom: CameraConstants.maxZoom,
+      zoomTransitionDuration: CameraConstants.zoomTransitionDuration,
+      panSpeed: CameraConstants.panSpeed,
       enableBounds: true,
-      boundsPadding: 300.0,
+      boundsPadding: CameraConstants.boundsPadding,
     );
 
     // Create grid component
@@ -105,13 +114,13 @@ class TradeFactoryGame extends FlameGame {
     // Add FPS counter
     camera.viewport.add(
       FpsTextComponent(
-        position: Vector2(10, 10),
+        position: Vector2(DisplayConstants.fpsCounterX, DisplayConstants.fpsCounterY),
       ),
     );
 
     // Add camera info display
     cameraInfoDisplay = CameraInfoDisplay(
-      position: Vector2(10, 40),
+      position: Vector2(DisplayConstants.cameraInfoX, DisplayConstants.cameraInfoY),
       gridCamera: gridCamera,
       gridComponent: gridComponent,
     );
@@ -136,10 +145,10 @@ class TradeFactoryGame extends FlameGame {
 
     // Initialize player economy with starting resources
     playerEconomy = PlayerEconomy(
-      gold: 1000,
+      gold: EconomyConstants.startingGold,
       inventory: {},
       buildings: [],
-      tier: 1,
+      tier: EconomyConstants.startingTier,
       lastSeen: DateTime.now(),
     );
 
@@ -160,7 +169,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 10, y: 10),
         production: const ProductionConfig(
           baseRate: 5.0,
-          resourceType: 'Wood',
+          resourceType: ResourceIds.wood,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 100,
@@ -178,7 +187,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 15, y: 10),
         production: const ProductionConfig(
           baseRate: 3.0,
-          resourceType: 'Iron Bar',
+          resourceType: ResourceIds.ironBar,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 150,
@@ -196,7 +205,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 20, y: 10),
         production: const ProductionConfig(
           baseRate: 0.0,
-          resourceType: 'None',
+          resourceType: 'None', // Storage doesn't produce
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 200,
@@ -214,7 +223,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 10, y: 15),
         production: const ProductionConfig(
           baseRate: 4.0,
-          resourceType: 'Stone',
+          resourceType: ResourceIds.stone,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 100,
@@ -232,7 +241,7 @@ class TradeFactoryGame extends FlameGame {
         gridPosition: const GridPosition(x: 25, y: 25),
         production: const ProductionConfig(
           baseRate: 2.0,
-          resourceType: 'Gold',
+          resourceType: ResourceIds.gold,
         ),
         upgradeConfig: const UpgradeConfig(
           baseCost: 500,

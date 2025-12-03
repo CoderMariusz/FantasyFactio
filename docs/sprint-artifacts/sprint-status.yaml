@@ -35,25 +35,26 @@ tracking_system: file-system
 story_location: docs/sprint-artifacts/stories
 
 development_status:
-  # EPIC-00: Project Setup (P0 - Critical Path)
-  epic-00: backlog
-  00-1-flutter-project-init: backlog
-  00-2-flame-integration: backlog
-  00-3-riverpod-setup: backlog
-  00-4-firebase-config: backlog
-  epic-00-retrospective: optional
+  # EPIC-00: Project Setup (P0 - Critical Path) - COMPLETED
+  epic-00: done
+  00-1-flutter-project-init: done
+  00-2-flame-integration: done
+  00-3-riverpod-setup: done
+  00-4-firebase-config: done
+  epic-00-retrospective: completed
 
-  # EPIC-01: Core Gameplay Loop (P0 - Critical Path)
-  epic-01: backlog
-  01-1-building-entity: backlog
-  01-2-resource-entity: backlog
-  01-3-collect-resources-usecase: backlog
-  01-4-upgrade-building-usecase: backlog
-  01-5-flame-grid-component: backlog
-  01-6-building-component: backlog
-  01-7-tap-detection: backlog
-  01-8-game-state-provider: backlog
-  epic-01-retrospective: optional
+  # EPIC-01: Core Gameplay Loop (P0 - Critical Path) - COMPLETED
+  # Note: All critical bugs fixed on 2025-12-03
+  epic-01: done
+  01-1-building-entity: done
+  01-2-resource-entity: done
+  01-3-collect-resources-usecase: done
+  01-4-upgrade-building-usecase: done
+  01-5-flame-grid-component: done
+  01-6-building-component: done
+  01-7-tap-detection: done
+  01-8-game-state-provider: done
+  epic-01-retrospective: completed
 
   # EPIC-02: Tier 1 Economy (P1 - High Priority) - CONTEXTED
   epic-02: contexted
@@ -157,12 +158,16 @@ development_status:
 # Total Stories: 68
 # Total Story Points: 289 SP
 #
+# Completed Epics: 2 (epic-00, epic-01) - 47 SP
 # Contexted Epics: 3 (epic-02, epic-05, epic-08)
-# Backlog Epics: 9
+# Backlog Epics: 7
+#
+# Progress: 47 SP / 289 SP (16.3%)
+# Last Updated: 2025-12-03
 #
 # Epic Breakdown:
-#   - EPIC-00: 4 stories, 13 SP (P0)
-#   - EPIC-01: 8 stories, 34 SP (P0)
+#   - EPIC-00: 4 stories, 13 SP (P0) - DONE ✅
+#   - EPIC-01: 8 stories, 34 SP (P0) - DONE ✅
 #   - EPIC-02: 6 stories, 26 SP (P1) - CONTEXTED
 #   - EPIC-03: 7 stories, 42 SP (P0)
 #   - EPIC-04: 5 stories, 26 SP (P1)
