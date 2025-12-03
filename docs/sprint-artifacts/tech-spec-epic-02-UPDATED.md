@@ -698,6 +698,699 @@ Scenario 2: Mine → Craft → Sell (Profitable)
 
 ---
 
+---
+
+## 9. OFFLINE PRODUCTION SYSTEM
+
+### Overview
+When player goes offline, the Farm building continues to operate at 80% efficiency as a core monetization feature. This encourages passive income while still rewarding active play.
+
+### Offline Mechanics
+
+#### What Happens When Player Offline
+
+**Mining Facilities:** PAUSED
+- Status: Stopped (doesn't make sense to generate items that overflow)
+- Reason: Storage could be full, items would waste
+- Resume: When player returns
+
+**Smelters & Workshops:** PAUSED
+- Status: Stopped (complex logic with queues and inputs)
+- Reason: Can't automatically manage production chains
+- Resume: When player returns
+
+**Farm - 80% Efficiency Mode:** ACTIVE
+- Status: Continues processing
+- Efficiency: 80% of normal rate (20% penalty for being offline)
+- Psychology: Encourages playing, but passive income still valuable
+
+### Farm Offline Production Calculation
+
+**Example Scenario:**
+```
+Setup:
+├─ Farm input buffer: 50 miedź (1 item every 5s normally)
+├─ Farm base rate: 0.2 items/second
+├─ Resource value: 5g per miedź (base)
+├─ Trading skill: Level 2 (+10%) = 5.5g per miedź
+├─ Offline duration: 1 hour (3600 seconds)
+├─ Normal rate: 3600s / 5s per item = 720 items → 720 * 5.5g = 3,960g
+
+OFFLINE AT 80% EFFICIENCY:
+├─ Items processed: 720 * 0.8 = 576 items (not 720!)
+├─ Gold earned: 576 * 5.5g = 3,168g (not 3,960g)
+├─ Penalty: 792g not earned (20% loss)
+└─ Result: Passive income works, but active play is better
+```
+
+**Why 80% efficiency?**
+- Fair balance: Incentivizes staying active
+- Not 100%: Players encouraged to play actively for better rewards
+- Not 50%: Still worthwhile to leave farm running
+- Sweet spot: "I earn while offline, but less" psychology
+- Player motivation: "If I set it up better, could earn more!"
+
+### Storage State During Offline
+
+**Input Buffer Capacity:**
+```
+Scenario:
+├─ Farm offline with 50 items in buffer
+├─ Farm consumption: 0.2 items/s (5s per item)
+├─ Time to process all: 50 * 5s = 250 seconds
+├─ If offline 1 hour: 250s processing → waits remaining time
+└─ Next batch can enter after first completes
+
+Multiple batches:
+├─ Conveyor feeding items while farm processes
+├─ Items queue behind farm (max 50 at once)
+├─ Each batch takes 250s to process
+├─ Optimization: Set up multiple conveyors to build queue
+└─ Advanced strategy: "Prepare queue before going offline!"
+```
+
+**Maximum Offline Earnings Cap:**
+```
+Bottleneck analysis:
+├─ Conveyor speed: 0.5 items/second
+├─ Farm consumption: 0.2 items/second (5s per item)
+├─ Farm is slower than conveyor
+├─ Result: Backed up after ~5 minutes
+├─ Farm processes what's queued
+├─ Each hour: ~0.2 items/s * 3600s * avg_value
+├─ Max: ~3,960g/hour (capped by farm consumption rate)
+
+Optimization strategy:
+├─ Player wants maximum offline earnings
+├─ Must feed farm LOTS of items before leaving
+├─ Setup: 5+ conveyors feeding farm
+├─ Result: Queue builds up (100-200+ items!)
+├─ Offline: Farm processes queue for hours
+└─ Reward: Strategic planning pays off!
+```
+
+### Return Notification System
+
+**Welcome Back Screen (upon opening app):**
+```
+⏰ TIME OFFLINE: 1 hour 23 minutes
+💰 FARM EARNINGS:
+• Items processed: 576/720 (80% efficiency)
+• Gold earned: 3,168g
+• Average: 38g/minute
+📊 STATUS:
+✓ All systems intact
+✓ No buildings broke
+⚠ Storage #1 at 95% capacity (needs attention)
+✓ Farm input queue: Empty
+[CONTINUE] [VIEW DETAILS]
+```
+
+**Detailed Breakdown (if player taps VIEW DETAILS):**
+```
+OFFLINE EARNINGS BREAKDOWN
+Processed items by type:
+├─ miedź: 400 items → 2,200g (from 5g base)
+├─ sól: 176 items → 528g (from 3g base)
+└─ węgiel: 0 items → 0g
+
+Production comparison:
+├─ Active earnings: 3,960g (100% efficiency)
+├─ Offline penalty: -792g (20%)
+├─ Actual earned: 3,168g ✓
+
+Motivation:
+"If I set up better, I could earn 3,960g next time!"
+```
+
+**Gold Animation:**
+- Counter animates: +3,168g
+- Visual: Gold particles floating up
+- Sound: "Cha-ching!" repeated 5 times
+- Duration: ~2 seconds (satisfying!)
+- Feeling: "Wow! Passive income works!"
+
+### Implementation Requirements
+
+**Game State Persistence:**
+```
+Before going offline, save:
+├─ Farm.inputBuffer[] (items queued)
+├─ Farm.consumptionRate (0.2 items/s)
+├─ PlayerEconomy.tradingLevel (for value multiplier)
+├─ System.timeLastOnline (for duration calculation)
+├─ All storage contents (preserved as-is)
+└─ All building states (preserved)
+```
+
+**Offline Calculation Formula:**
+```dart
+offlineEarnings = calculateOfflineProduction() {
+  timeOffline = currentTime - lastOnlineTime;
+
+  // Calculate production (80% efficiency)
+  itemsProcessed = Math.min(
+    farm.inputBuffer.length,
+    (timeOffline / itemCycleTime) * 0.8
+  );
+
+  // Calculate gold earned
+  goldPerItem = baseValue * (1.0 + tradingSkillBonus);
+  totalGold = itemsProcessed * goldPerItem;
+
+  return totalGold;
+}
+```
+
+**No Decay/Loss for Storage Items:**
+- Items in storage: Preserved (no decay)
+- Items on conveyors: Frozen mid-transport (safe, no loss)
+- Farm queue: Partially processed (some items used)
+- Result: Safe environment for offline play
+
+### Phase 2 Premium Features (Out of Scope)
+
+These are future monetization options:
+
+**Premium Option 1: Increased Offline Efficiency**
+- Normal: 80% efficiency offline
+- Premium: 150% efficiency (1.5x multiplier!)
+- Cost: ~$0.99-2.99/month
+- Value: Significant passive income boost
+
+**Premium Option 2: Full Offline Production**
+- Normal: Only farm works offline
+- Premium: All buildings work offline (mining, smelters, workshops)
+- Cost: ~$4.99/month
+- Value: True idle game experience
+
+---
+
+## 10. GRID EXPANSION SYSTEM
+
+### Overview
+Grid starts at 20×20 and expands to 30×30, then 40×40 as player progresses. Expansion is motivated by building capacity constraints and resource scarcity, providing natural progression gates.
+
+### Grid Sizes & Timeline
+
+**Start (Tier 1):** 20×20 Grid
+```
+Size: 20x20 cells
+Dimensions: 1,280px x 1,280px (64px per cell)
+Capacity: ~20-25 buildings fit comfortably
+Mobile viewport: ~10x10 cells visible (perfect for mobile)
+Status: Game start
+```
+
+**Expansion 1 (Early mid-game):** 30×30 Grid
+```
+Size: 30x30 cells (225% larger: 400→900 cells)
+Timeline: ~35-40 minutes in
+Capacity: ~15-20 additional buildings
+Cost: 50 beton (requires ~2800s crafting)
+Feeling: "First big milestone!"
+```
+
+**Expansion 2 (Late mid-game):** 40×40 Grid
+```
+Size: 40x40 cells (78% larger: 900→1600 cells)
+Timeline: ~70-80 minutes in
+Capacity: ~50-70 buildings total possible!
+Cost: 100 beton (requires ~5600s crafting)
+Feeling: "Ready for mega-factory!"
+```
+
+### Expansion Triggers
+
+**Trigger for 20×20 → 30×30:**
+
+Condition A: Building Capacity Constraint
+```
+Available space: 20×20 grid ~100 practical cells
+Average building: 2×2 = 4 cells
+Practical capacity: ~25 buildings max
+50% capacity: ~6-7 buildings
+
+Trigger: When (placedBuildings.count ≥ 6) OR (storage == full)
+├─ After 6th building placed, OR
+├─ When storage overflows
+└─ Motivation: "I've outgrown my starter base!"
+```
+
+Condition B: Resource Scarcity
+```
+Alternative trigger: Biom resources depleted
+
+Mechanism:
+├─ Each biom has "natural" resource limit
+├─ After harvesting local supply → Output drops 30%
+├─ Mining facility yields decrease
+├─ Motivation: "Need more land to find more resources!"
+└─ Gate: Encourages expansion even without buildings
+
+Combined: (buildingCount ≥ 6) OR (storage full) OR (local_resources_depleted)
+└─ Players motivated to expand when any condition met
+```
+
+**UI Unlock Notification:**
+```
+🎉 GRID EXPANSION AVAILABLE!
+You've built enough!
+
+Current: 20x20 grid
+New: 30x30 grid (225% more space!)
+
+Cost: Craft 50 beton
+Time: 50 seconds
+Benefit: Build 10+ more buildings
+
+[CRAFT EXPANSION] [MAYBE LATER]
+```
+
+**Expansion Process:**
+```
+1. Player taps [CRAFT EXPANSION]
+2. Validation: Do they have 50 beton?
+   └─ If not: "Gather/craft more beton first"
+       └─ Suggestion: "Build 2 more Smelters for beton"
+3. Craft time: 50s (blocking action)
+   ├─ Progress bar in UI
+   ├─ Status: "Expanding grid..."
+   └─ Can't do anything else
+4. When complete:
+   ├─ Animation: Grid expands smoothly (1-2s)
+   ├─ New cells appear around edges
+   ├─ New space opens up (satisfying!)
+   ├─ Sound: "Whoosh!" expansion sound + chime
+   └─ Result: 30×30 grid active
+```
+
+### Trigger for 30×30 → 40×40
+
+Condition A: Advanced Building Setup
+```
+Requirement: 4+ Smelters AND 2+ Workshops AND Farm built
+
+Represents:
+├─ Advanced mid-game progression
+├─ Significant production infrastructure
+└─ ~10-12 major buildings placed
+```
+
+Condition B: Skill Progression
+```
+Requirement: Mining skill level ≥ 8
+
+Represents:
+├─ Player expertise (~200 items gathered)
+├─ Timeline: Usually 45-50 minutes in
+└─ Gate: Encourages skill progression alongside building
+```
+
+Combined:
+```
+if (smelterCount ≥ 4 AND workshopCount ≥ 2 AND farmBuilt) AND (miningLevel ≥ 8):
+└─ UNLOCK: 40×40 expansion
+```
+
+**UI Unlock Notification:**
+```
+🚀 MEGA GRID EXPANSION!
+You've mastered production!
+
+Current: 30x30 grid
+New: 40x40 grid (78% more space!)
+
+Cost: Craft 100 beton
+Time: 90 seconds
+Benefit: Build mega-factory!
+
+[CRAFT MEGA EXPANSION] [MAYBE LATER]
+```
+
+### Expansion Mechanics
+
+**Cost Balance:**
+```
+Beton production cost:
+├─ Recipe: 15 Drewno + 10 Kamień + 5 Wata → 1 beton (56s)
+├─ For 50 beton (Exp 1):
+│  ├─ Total time: 50 * 56s = 2,800s (46+ minutes!)
+│  ├─ Resources: 750D + 500K + 250W
+│  └─ Gathering time: ~15-20 minutes
+├─ For 100 beton (Exp 2):
+│  ├─ Total time: 100 * 56s = 5,600s (93+ minutes!)
+│  ├─ Resources: 1,500D + 1,000K + 500W
+│  └─ Gathering time: ~30-40 minutes total
+└─ Philosophy: Expansion is significant investment (not trivial)
+```
+
+**Pacing Strategy:**
+```
+Timeline:
+├─ 0 min: Start 20×20 grid
+├─ 6-10 min: Place first 6 buildings
+├─ 15 min: Hit capacity (need expansion)
+├─ 15-30 min: Craft 50 beton (parallel with other production)
+├─ 35-40 min: Expand to 30×30
+├─ 40-60 min: Continue building, setup advanced chains
+├─ 50-70 min: Craft 100 beton for Exp 2
+├─ 70-80 min: Expand to 40×40
+└─ 80-120 min: Build mega-factory
+```
+
+### Visual Feedback
+
+**Pre-expansion Visual State:**
+```
+Grid appearance:
+├─ Color: Standard grid lines (gray/blue)
+├─ Beyond boundary: Darker/grayed out
+├─ Visual: Clear "this is the limit"
+└─ UI: "EXPAND GRID" button visible when condition met
+```
+
+**During Expansion Animation:**
+```
+Animation sequence (1-2 seconds):
+├─ New grid cells fade in (blue glow)
+├─ Boundary expands outward (smooth animation)
+├─ Particles: Sparkles/light effects
+└─ Sound: Expansion whoosh + chime
+```
+
+**Post-expansion State:**
+```
+Result:
+├─ New area: Bright, ready for buildings
+├─ Old area: Unchanged, all buildings intact
+├─ Seamless: Everything preserved
+└─ Freedom: Player explores new space
+```
+
+---
+
+## 11. STORAGE ITEM FILTERING SYSTEM
+
+### Overview
+Players can configure Storage buildings with global acceptance rules and per-port output filters. This enables advanced routing and automation without cluttering the grid with extra conveyors.
+
+### Storage Configuration
+
+**Storage Structure:**
+```
+Each Storage building has:
+├─ Name: "Main Storage" (editable by player)
+├─ Capacity: 200 items (upgradeable to 300+)
+├─ Port configuration: 4 ports (North, South, East, West)
+├─ Item filtering:
+│  ├─ Global accept/reject list (all items)
+│  └─ Per-port white/black-list (per output direction)
+└─ Item sorting: Separate by type internally (auto-organized)
+```
+
+### Global Filtering
+
+**Storage accepts/rejects items globally:**
+
+```
+Configuration UI:
+📦 STORAGE #1 CONFIGURATION
+ACCEPTED ITEMS:
+☑ Węgiel (30/50 slots)
+☑ Ruda żelaza (20/50 slots)
+☑ Drewno (15/50 slots)
+☑ Kamień (12/50 slots)
+☐ Miedź (not accepted)
+☐ Sól (not accepted)
+☐ Glina (not accepted)
+
+TOTAL USAGE: 77/200 slots (38%)
+[EDIT] [CLEAR ALL] [ACCEPT ALL]
+```
+
+**Global Filter Behavior:**
+```
+Item arrives at storage input:
+├─ Check: Is this type in global accepted list?
+│  ├─ YES → Can enter storage
+│  └─ NO → Item blocked (backs up on conveyor, red warning)
+└─ Example: Sól arrives → Storage rejects → Conveyor backs up
+```
+
+**Edit Mode:**
+```
+Player taps [EDIT]:
+├─ Shows toggle for each item type
+├─ Tap to toggle ON/OFF
+├─ Preview shows effect:
+│  └─ "Won't accept węgiel anymore"
+│  └─ "Keep existing 30 węgiel stored"
+│  └─ "New węgiel will be rejected"
+├─ Tap [CONFIRM] to apply
+└─ Effect: Immediate (next item checks filter)
+```
+
+### Per-Port Filtering
+
+**Each port has independent filter:**
+
+```
+Storage 4 ports (N, S, E, W):
+├─ Each port: INPUT or OUTPUT direction
+├─ Each output port: Own filter mode
+└─ Input ports: Typically ACCEPT ALL (receive from mining)
+
+Example setup:
+├─ Port N (OUTPUT): WHITE-LIST [węgiel, ruda]
+│  └─ Sends ONLY węgiel + ruda to smelter #1
+├─ Port S (OUTPUT): WHITE-LIST [miedź]
+│  └─ Sends ONLY miedź to smelter #2
+├─ Port E (INPUT): ACCEPT ALL
+│  └─ Takes items from mining (east)
+└─ Port W (OUTPUT): BLACK-LIST [węgiel]
+   └─ Sends everything EXCEPT węgiel to farm
+```
+
+### Filtering Modes (per port)
+
+**Mode 1: ACCEPT ALL**
+```
+Icon: Green circle (open)
+Sends: Everything
+Config: No whitelist needed
+Use case: "Overflow port to farm"
+```
+
+**Mode 2: WHITE-LIST (approved only)**
+```
+Icon: Green checkmark
+Sends: ONLY selected types
+Example: [węgiel, ruda żelaza]
+Config: Select from 7 types
+Use case: "Dedicated feed to smelter"
+```
+
+**Mode 3: BLACK-LIST (everything except)**
+```
+Icon: Red X
+Sends: Everything EXCEPT selected
+Example: [sól, piasek] (block junk)
+Config: Select from 7 types
+Use case: "Send valuable items only"
+```
+
+**Mode 4: SINGLE TYPE (strict mode)**
+```
+Icon: Single item icon
+Sends: ONLY one specific type
+Example: [miedź only]
+Config: Choose 1 type
+Use case: "100% pure feed"
+```
+
+**Port Configuration UI:**
+```
+⚙️ PORT NORTH CONFIGURATION
+MODE: [WHITE-LIST ▼]
+
+Selected items:
+☑ Węgiel
+☑ Ruda żelaza
+☐ Drewno
+☐ Kamień
+☐ Miedź
+☐ Sól
+☐ Glina
+
+Items sent: All selected types
+Items blocked: Everything else
+
+[APPLY] [CANCEL]
+```
+
+### Filtering Logic Flow
+
+**When item arrives at storage:**
+```
+1. Global acceptance check:
+   ├─ Is this type in storage's accepted list?
+   │  ├─ YES → Proceed
+   │  └─ NO → BLOCKED (item backs up, red warning)
+   └─ Example: Storage accepts [węgiel, ruda, drewno, kamień]
+
+2. If accepted, item enters storage
+   └─ Organized internally by type
+
+3. When item leaves storage:
+   ├─ Check each output port's filter
+   ├─ If item matches port's white-list:
+   │  └─ Send through that port
+   ├─ If item blocked by port's black-list:
+   │  └─ Try next port
+   ├─ If no port accepts item:
+   │  └─ Item stays in storage (priority)
+   └─ Example: węgiel on port with [miedź only]
+      └─ Blocked → tries next port
+```
+
+### Advanced Filtering Example
+
+**3-Storage Network Setup:**
+
+```
+Storage #1 (Main - center base)
+├─ Accepts: węgiel, ruda, drewno, kamień
+├─ Rejects: miedź, sól, glina
+├─ Role: Primary gathering point
+└─ Ports:
+   ├─ N: FEED Smelter #1 (white-list: węgiel+ruda)
+   ├─ S: FEED Smelter #2 (white-list: drewno+kamień)
+   ├─ E: INPUT from Mining
+   └─ W: FEED to Storage #2 (accept all)
+
+Storage #2 (Smelter outputs)
+├─ Accepts: żelazo, miedź rafinowana
+├─ Rejects: all raw materials
+├─ Role: Receive smelter outputs
+└─ Ports:
+   ├─ N: FEED Workshop (white-list: żelazo)
+   ├─ S: INPUT from Smelters
+   ├─ E: INPUT from Storage #1 (overflow)
+   └─ W: FEED Farm (black-list: żelazo, keep for workshop)
+
+Storage #3 (Farm feed - junk collector)
+├─ Accepts: all types
+├─ Rejects: none
+├─ Role: Gather junk → monetize
+└─ Ports:
+   ├─ N: INPUT from Storage #1 + #2 overflow
+   ├─ S: FEED Farm (accept all)
+   ├─ E: (disabled)
+   └─ W: (disabled)
+
+Flow result:
+├─ Raw materials: Storage #1 → Smelters
+├─ Smelter outputs: Storage #2 → Workshop
+├─ Junk/overflow: Storage #3 → Farm
+├─ Clean separation: No mixing!
+└─ Automation: Works perfectly!
+```
+
+### Visual Feedback for Filtering
+
+**Port Status Indicators:**
+```
+Port icons show filter status:
+├─ Green arrow ↑: INPUT port
+├─ Green arrow ↓: OUTPUT port
+├─ Filter badge:
+│  ├─ Green ✓: Accepts this item
+│  ├─ Red ✗: Rejects this item
+│  └─ Yellow ⚠: Almost full (90%)
+└─ Item flow:
+   ├─ Green items: Flowing through
+   ├─ Red items: Backing up (blocked)
+   └─ Yellow items: Queued (waiting)
+```
+
+**Port Tooltip (on tap):**
+```
+PORT NORTH
+Status: INPUT
+Accepts: All items
+Items queued: 5
+Next 5: węgiel, ruda, węgiel, drewno, ruda
+[TAP TO CONFIGURE FILTER]
+```
+
+**Storage Detail Screen:**
+```
+Shows breakdown by item type:
+├─ Węgiel: 30/50 slots (60%)
+├─ Ruda: 20/50 slots (40%)
+├─ Drewno: 15/50 slots (30%)
+└─ Free: 105/200 slots (52%)
+
+Visual: Progress bars per type
+Action: [FILTER ITEMS] button
+```
+
+### Error Handling & Recovery
+
+**Common Mistake Scenario:**
+```
+Gracz blocks węgiel in Storage #1:
+├─ Mining continues producing węgiel
+├─ Conveyor backs up (red warning)
+├─ Mining pauses (stops gathering)
+└─ Gracz: "Oh no! What happened?"
+
+Recovery UI:
+├─ Diagnosis shows: "Port blocked!"
+├─ Suggests: "White-list węgiel in storage?"
+├─ Gracz taps [FIX]
+├─ Filter updated: węgiel now accepted
+├─ Mining resumes (green state)
+└─ Teaching moment: "Filter impact!"
+
+Psychology:
+├─ System doesn't punish (just pauses)
+├─ Clear indication of cause
+├─ Easy fix (few taps)
+└─ Learning: Filtering is powerful!
+```
+
+### Difficulty Progression
+
+**Early Game (0-15 min):**
+```
+Gracz doesn't need filtering:
+├─ Storage #1 accepts all
+├─ Simple routing
+└─ Learning: "Storage is hub"
+```
+
+**Mid Game (15-50 min):**
+```
+Filtering becomes important:
+├─ Multiple storages needed
+├─ Gracz learns: "Filter saves routing belts"
+├─ Optimization: Separate material types
+└─ Challenge: Build efficient network
+```
+
+**Late Game (50+ min):**
+```
+Advanced filtering mastery:
+├─ Complex multi-storage networks
+├─ Load balancing via filtering
+├─ Challenge: Optimize for elegance
+└─ Mastery: Perfect production network
+```
+
+---
+
 ## Dependencies
 
 **EPIC-01 (Must be complete):**
