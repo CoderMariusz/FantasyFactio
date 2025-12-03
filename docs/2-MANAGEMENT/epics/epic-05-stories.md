@@ -3,8 +3,9 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, mobile, ux, performance -->
 
 **Epic:** EPIC-05 - Mobile-First UX
+**Total Stories:** 7
 **Total SP:** 29
-**Duration:** 2 weeks (Sprints 6-7)
+**Sprint:** 8 (shared with EPIC-08)
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-05-tech-spec.md](epic-05-tech-spec.md)
 
@@ -14,6 +15,20 @@
 - ✅ EPIC-02 (Tier 1 Economy - UI foundations)
 
 **Design Philosophy:** "Touch-first, not touch-adapted" - gra zaprojektowana od podstaw dla mobile.
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-05.1 | Touch Controls System | 5 | P0 | 📋 Ready |
+| STORY-05.2 | Camera System | 5 | P0 | 📋 Ready |
+| STORY-05.3 | Haptic Feedback System | 2 | P1 | 📋 Ready |
+| STORY-05.4 | Performance Optimization | 6 | P0 | 📋 Ready |
+| STORY-05.5 | One-Handed UI Layout | 4 | P0 | 📋 Ready |
+| STORY-05.6 | Animation System | 4 | P1 | 📋 Ready |
+| STORY-05.7 | Accessibility Features | 3 | P1 | 📋 Ready |
 
 ---
 
@@ -857,7 +872,7 @@ class AccessibilityService {
 
 ## Implementation Order
 
-**Recommended Sprint 6-7:**
+**Recommended Sprint 8:**
 
 **Week 1:** Core Systems
 1. STORY-05.1: Touch Controls (5 SP)

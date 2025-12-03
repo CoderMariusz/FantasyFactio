@@ -2,7 +2,7 @@
 
 **Epic:** EPIC-05 - Mobile-First UX
 **Total SP:** 29
-**Duration:** 2 weeks (Sprints 6-7)
+**Duration:** 1-2 weeks (Sprint 8, shared with EPIC-08)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 **Author:** Mariusz (updated)
