@@ -108,15 +108,16 @@ enum BuildingType {
 ### Resource Types (EPIC-02, 03, 04)
 
 ```dart
-// 7 Tier 1 Resources
+// 8 Tier 1 Resources (see EPIC-02 STORY-02.1 for full details)
 final tier1Resources = [
-  'coal',      // Węgiel
-  'iron_ore',  // Ruda żelaza
-  'wood',      // Drewno
-  'stone',     // Kamień
-  'copper',    // Miedź
-  'salt',      // Sól
-  'clay',      // Glina
+  'coal',      // Węgiel - 1.25s, Koppalnia, 1g
+  'iron_ore',  // Ruda żelaza - 1.25s, Koppalnia, 1g
+  'wood',      // Drewno - 1.88s, Las, 1.5g
+  'stone',     // Kamień - 2.5s, Góry, 1g
+  'copper',    // Miedź - 5.0s, Góry, 5g
+  'cotton',    // Wata - 1.88s, Jezioro, 2g
+  'salt',      // Sól - 3.75s, Jezioro, 3g
+  'clay',      // Glina - 3.13s, Jezioro, 1.5g
 ];
 ```
 

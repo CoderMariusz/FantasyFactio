@@ -73,7 +73,7 @@ Szczegółowa specyfikacja techniczna Epic 2 jest podzielona na **4 dokumenty** 
 
 | Component | Details |
 |-----------|---------|
-| **Resources** | 7 types: Węgiel, Ruda Żelaza, Drewno, Kamień, Miedź, Wata, Sól, Glina |
+| **Resources** | 8 types: Węgiel, Ruda Żelaza, Drewno, Kamień, Miedź, Wata, Sól, Glina |
 | **Buildings** | 6 types: Mining, Storage, Smelter, Conveyor (def only), Workshop, Farm |
 | **NPCs** | 3 traders: Kupiec, Inżynier, Nomada |
 | **Grid** | 20×20 start, expand to 30×30, 40×40 |
@@ -93,7 +93,7 @@ Szczegółowa specyfikacja techniczna Epic 2 jest podzielona na **4 dokumenty** 
 
 ## Key Specs at a Glance
 
-### Resources (7 Total)
+### Resources (8 Total)
 
 | Resource | Speed | Biom | Value |
 |----------|-------|------|-------|
@@ -102,8 +102,8 @@ Szczegółowa specyfikacja techniczna Epic 2 jest podzielona na **4 dokumenty** 
 | Drewno (Wood) | 1.88s | Las | 1.5g |
 | Kamień (Stone) | 2.5s | Góry | 1g |
 | Miedź (Copper) | 5.0s | Góry | 5g |
-| Wata (Salt) | 1.88s | Jezioro | 2g |
-| Sól (Brine) | 3.75s | Jezioro | 3g |
+| Wata (Cotton) | 1.88s | Jezioro | 2g |
+| Sól (Salt) | 3.75s | Jezioro | 3g |
 | Glina (Clay) | 3.13s | Jezioro | 1.5g |
 
 ### Buildings (6 Total)

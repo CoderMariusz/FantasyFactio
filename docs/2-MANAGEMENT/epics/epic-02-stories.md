@@ -3,8 +3,9 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, implementation -->
 
 **Epic:** EPIC-02 - Tier 1 Economy
+**Total Stories:** 6
 **Total SP:** 26
-**Duration:** 2-3 weeks (Sprints 2-3)
+**Sprint:** 2-3
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-02-tech-spec.md](epic-02-tech-spec.md)
 **Detailed Specs:**
@@ -15,13 +16,28 @@
 
 ---
 
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-02.1 | Resource Definitions | 2 | P0 | 📋 Ready |
+| STORY-02.2 | Building Definitions | 3 | P0 | 📋 Ready |
+| STORY-02.3 | NPC Trading System | 5 | P0 | 📋 Ready |
+| STORY-02.4 | Grid & Building Placement | 8 | P0 | 📋 Ready |
+| STORY-02.5 | Production & Inventory | 5 | P0 | 📋 Ready |
+| STORY-02.6 | Economic Balance & Testing | 3 | P1 | 📋 Ready |
+
+---
+
 ## STORY-02.1: Resource Definitions (2 SP)
 
 ### Objective
-Implement all 7 game resources with their properties, gather speeds, market values, and biome associations. Create entity models and repositories for resource storage and retrieval.
+Implement all 8 Tier 1 game resources with their properties, gather speeds, market values, and biome associations. Create entity models and repositories for resource storage and retrieval.
+
+> **Note:** 8 resources per AC2 below. Cross-Epic Integration Guide shows 7 (simplified, without Wata).
 
 ### User Story
-As a game developer, I need to define all 7 resources with their game properties so that the gathering and economy systems have concrete data to work with.
+As a game developer, I need to define all 8 Tier 1 resources with their game properties so that the gathering and economy systems have concrete data to work with.
 
 ### Description
 This story implements the foundational resource system. All resources are gathered from specific biomes, have different gather speeds, and different base market values. This creates resource differentiation and strategy depth.
@@ -40,7 +56,7 @@ This story implements the foundational resource system. All resources are gather
   - maxStackSize: int (how many stack in 1 inventory slot)
 ```
 
-#### AC2: All 7 Resources Defined
+#### AC2: All 8 Tier 1 Resources Defined
 ```
 ✅ Węgiel (Coal):
    - gatherSpeed: 1.25s
@@ -67,12 +83,12 @@ This story implements the foundational resource system. All resources are gather
    - biome: Góry
    - baseValue: 5 gold
 
-✅ Wata (Salt):
+✅ Wata (Cotton):
    - gatherSpeed: 1.88s
    - biome: Jezioro (Lake)
    - baseValue: 2 gold
 
-✅ Sól (Brine/Saltwater):
+✅ Sól (Salt):
    - gatherSpeed: 3.75s
    - biome: Jezioro
    - baseValue: 3 gold
@@ -500,6 +516,8 @@ basePrice * (0.8 + Random().nextDouble() * 0.4) // ±20% variation
 
 ### Objective
 Implement the grid system (20×20 expandable to 30×30→40×40) and building placement mechanics with biom validation, layering support, and visual feedback.
+
+> **Note:** This extends the 50×50 isometric grid from EPIC-01. The "factory area" starts at 20×20 tiles in the center and expands to max 40×40. EPIC-01's grid provides rendering/camera, this story adds placement mechanics.
 
 ### User Story
 As a game developer, I need a complete grid and placement system so players can place buildings with clear validation and visual feedback.
