@@ -52,8 +52,8 @@ void main() {
         },
         buildings: [
           Building(
-            id: 'collector_1',
-            type: BuildingType.collector,
+            id: 'mining_1',
+            type: BuildingType.mining,
             level: 2,
             gridPosition: const GridPosition(x: 5, y: 10),
             production: const ProductionConfig(
@@ -85,7 +85,7 @@ void main() {
       expect(loaded.inventory['wood']!.displayName, equals('Wood'));
       expect(loaded.inventory['wood']!.amount, equals(100));
       expect(loaded.buildings.length, equals(1));
-      expect(loaded.buildings[0].type, equals(BuildingType.collector));
+      expect(loaded.buildings[0].type, equals(BuildingType.mining));
       expect(loaded.buildings[0].level, equals(2));
 
       // Clean up

@@ -47,12 +47,23 @@ class PlayerEconomy extends Equatable {
 
   /// Add resources to inventory (respects maxCapacity)
   /// Returns new PlayerEconomy instance with updated inventory
-  /// If resource doesn't exist in inventory, creates it
+  /// If resource doesn't exist in inventory, creates it with default values
   /// If adding would exceed maxCapacity, clamps to max
   PlayerEconomy addResource(String resourceId, int amountToAdd) {
+    final updatedInventory = Map<String, Resource>.from(inventory);
+
     if (!inventory.containsKey(resourceId)) {
-      // Resource not in inventory yet, can't add
-      return this;
+      // Resource not in inventory yet - create new one with defaults
+      final newResource = Resource(
+        id: resourceId,
+        displayName: _capitalizeResourceName(resourceId),
+        type: ResourceType.tier1,
+        amount: min(amountToAdd, 1000), // Default maxCapacity is 1000
+        maxCapacity: 1000,
+        iconPath: 'assets/images/resources/$resourceId.png',
+      );
+      updatedInventory[resourceId] = newResource;
+      return copyWith(inventory: updatedInventory);
     }
 
     final resource = inventory[resourceId]!;
@@ -62,10 +73,20 @@ class PlayerEconomy extends Equatable {
     );
 
     final updatedResource = resource.copyWith(amount: newAmount);
-    final updatedInventory = Map<String, Resource>.from(inventory);
     updatedInventory[resourceId] = updatedResource;
 
     return copyWith(inventory: updatedInventory);
+  }
+
+  /// Helper to capitalize resource name for display
+  /// e.g., "wood" -> "Wood", "iron_ore" -> "Iron Ore"
+  static String _capitalizeResourceName(String resourceId) {
+    return resourceId
+        .split('_')
+        .map((word) => word.isNotEmpty
+            ? '${word[0].toUpperCase()}${word.substring(1)}'
+            : '')
+        .join(' ');
   }
 
   /// Deduct gold from player's balance

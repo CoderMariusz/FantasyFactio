@@ -94,7 +94,7 @@ void main() {
 
       final testBuilding = Building(
         id: 'test_building_1',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 10, y: 10),
         production: const ProductionConfig(
@@ -162,9 +162,13 @@ void main() {
           reason: 'Should have enough gold to upgrade');
 
       final upgradeUseCase = UpgradeBuildingUseCase();
+      // Add building to economy before upgrading
+      final economyWithBuilding = updatedEconomy.copyWith(
+        buildings: [testBuilding],
+      );
       final upgradeResult = upgradeUseCase.execute(
-        economy: updatedEconomy,
-        buildingId: testBuilding.id,
+        economy: economyWithBuilding,
+        building: testBuilding,
       );
 
       expect(upgradeResult.isSuccess, isTrue,
@@ -192,12 +196,12 @@ void main() {
       // ========================================
       debugPrint('💵 TEST: Verifying gold deduction...');
 
-      final expectedGold = updatedEconomy.gold - upgradeCost;
+      final expectedGold = economyWithBuilding.gold - upgradeCost;
       expect(upgradedEconomy.gold, equals(expectedGold),
           reason: 'Gold should be deducted by upgrade cost');
 
       debugPrint(
-          '✅ TEST: Gold deducted: ${updatedEconomy.gold} → ${upgradedEconomy.gold} (-$upgradeCost)');
+          '✅ TEST: Gold deducted: ${economyWithBuilding.gold} → ${upgradedEconomy.gold} (-$upgradeCost)');
 
       // ========================================
       // STEP 8: Verify Production Rate Increase
@@ -252,7 +256,7 @@ void main() {
 
       final expensiveBuilding = Building(
         id: 'expensive_building',
-        type: BuildingType.processor,
+        type: BuildingType.smelter,
         level: 1,
         gridPosition: const GridPosition(x: 5, y: 5),
         production: const ProductionConfig(
@@ -275,7 +279,7 @@ void main() {
       final upgradeUseCase = UpgradeBuildingUseCase();
       final result = upgradeUseCase.execute(
         economy: economyWithBuilding,
-        buildingId: expensiveBuilding.id,
+        building: expensiveBuilding,
       );
 
       expect(result.isFailure, isTrue,
@@ -300,7 +304,7 @@ void main() {
 
       final maxLevelBuilding = Building(
         id: 'max_level_building',
-        type: BuildingType.storage,
+        type: BuildingType.workshop,
         level: 10, // Already at max level
         gridPosition: const GridPosition(x: 15, y: 15),
         production: const ProductionConfig(
@@ -323,7 +327,7 @@ void main() {
       final upgradeUseCase = UpgradeBuildingUseCase();
       final result = upgradeUseCase.execute(
         economy: economyWithBuilding,
-        buildingId: maxLevelBuilding.id,
+        building: maxLevelBuilding,
       );
 
       expect(result.isFailure, isTrue,
@@ -351,7 +355,7 @@ void main() {
 
       final building = Building(
         id: 'perf_test_building',
-        type: BuildingType.collector,
+        type: BuildingType.mining,
         level: 1,
         gridPosition: const GridPosition(x: 20, y: 20),
         production: const ProductionConfig(
@@ -385,7 +389,7 @@ void main() {
             currentEconomy.buildings.first.upgradeConfig.maxLevel) {
           final upgradeResult = upgradeUseCase.execute(
             economy: currentEconomy,
-            buildingId: currentEconomy.buildings.first.id,
+            building: currentEconomy.buildings.first,
           );
 
           if (upgradeResult.isSuccess) {

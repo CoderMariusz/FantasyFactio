@@ -3,20 +3,41 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, implementation -->
 
 **Epic:** EPIC-02 - Tier 1 Economy
+**Total Stories:** 6
 **Total SP:** 26
-**Duration:** 2-3 weeks (Sprints 2-3)
+**Sprint:** 2-3
 **Status:** 📋 Ready for Implementation
-**Baseline:** [tech-spec-epic-02-UPDATED.md](../../sprint-artifacts/tech-spec-epic-02-UPDATED.md)
+**Tech-Spec:** [epic-02-tech-spec.md](epic-02-tech-spec.md)
+**Detailed Specs:**
+- [tech-spec-epic-02-INDEX.md](../../sprint-artifacts/tech-spec-epic-02-INDEX.md)
+- [tech-spec-epic-02-CORE.md](../../sprint-artifacts/tech-spec-epic-02-CORE.md)
+- [tech-spec-epic-02-SYSTEMS.md](../../sprint-artifacts/tech-spec-epic-02-SYSTEMS.md)
+- [tech-spec-epic-02-UI.md](../../sprint-artifacts/tech-spec-epic-02-UI.md)
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-02.1 | Resource Definitions | 2 | P0 | 📋 Ready |
+| STORY-02.2 | Building Definitions | 3 | P0 | 📋 Ready |
+| STORY-02.3 | NPC Trading System | 5 | P0 | 📋 Ready |
+| STORY-02.4 | Grid & Building Placement | 8 | P0 | 📋 Ready |
+| STORY-02.5 | Production & Inventory | 5 | P0 | 📋 Ready |
+| STORY-02.6 | Economic Balance & Testing | 3 | P1 | 📋 Ready |
 
 ---
 
 ## STORY-02.1: Resource Definitions (2 SP)
 
 ### Objective
-Implement all 7 game resources with their properties, gather speeds, market values, and biome associations. Create entity models and repositories for resource storage and retrieval.
+Implement all 8 Tier 1 game resources with their properties, gather speeds, market values, and biome associations. Create entity models and repositories for resource storage and retrieval.
+
+> **Note:** 8 resources per AC2 below. Cross-Epic Integration Guide shows 7 (simplified, without Wata).
 
 ### User Story
-As a game developer, I need to define all 7 resources with their game properties so that the gathering and economy systems have concrete data to work with.
+As a game developer, I need to define all 8 Tier 1 resources with their game properties so that the gathering and economy systems have concrete data to work with.
 
 ### Description
 This story implements the foundational resource system. All resources are gathered from specific biomes, have different gather speeds, and different base market values. This creates resource differentiation and strategy depth.
@@ -35,7 +56,7 @@ This story implements the foundational resource system. All resources are gather
   - maxStackSize: int (how many stack in 1 inventory slot)
 ```
 
-#### AC2: All 7 Resources Defined
+#### AC2: All 8 Tier 1 Resources Defined
 ```
 ✅ Węgiel (Coal):
    - gatherSpeed: 1.25s
@@ -62,12 +83,12 @@ This story implements the foundational resource system. All resources are gather
    - biome: Góry
    - baseValue: 5 gold
 
-✅ Wata (Salt):
+✅ Wata (Cotton):
    - gatherSpeed: 1.88s
    - biome: Jezioro (Lake)
    - baseValue: 2 gold
 
-✅ Sól (Brine/Saltwater):
+✅ Sól (Salt):
    - gatherSpeed: 3.75s
    - biome: Jezioro
    - baseValue: 3 gold
@@ -496,6 +517,8 @@ basePrice * (0.8 + Random().nextDouble() * 0.4) // ±20% variation
 ### Objective
 Implement the grid system (20×20 expandable to 30×30→40×40) and building placement mechanics with biom validation, layering support, and visual feedback.
 
+> **Note:** This extends the 50×50 isometric grid from EPIC-01. The "factory area" starts at 20×20 tiles in the center and expands to max 40×40. EPIC-01's grid provides rendering/camera, this story adds placement mechanics.
+
 ### User Story
 As a game developer, I need a complete grid and placement system so players can place buildings with clear validation and visual feedback.
 
@@ -789,37 +812,27 @@ This story brings buildings to life:
    - Encourages item production
 ```
 
-#### AC6: Conveyor Transport System ✅
+#### AC6: Conveyor Building Definition (Definition Only)
 ```
-✅ Conveyor mechanics:
-   - Transport rate: 0.5 items/second (1 item per 2s per tile)
-   - Capacity: 10 items max per tile
-   - Direction: 4-directional (N, S, E, W)
-   - Visual: Arrow shows direction, items animate along belt
+✅ Conveyor Building (Tier 1):
+   - Size: 1×1 per tile
+   - Cost: 2 Drewno + 1 Żelazo
+   - Build time: 5s/tile
+   - Unlock: After smelting 1st Żelazo
 
-✅ Pathfinding:
-   - Items follow conveyor network from source to destination
-   - Must handle direction changes
-   - Dead ends: Items pile up (max 10)
-   - Loops: Items cycle indefinitely (for storage)
+✅ Basic placement rules:
+   - Can place anywhere on grid
+   - Max 2 layers per tile
+   - Visual feedback: valid/invalid placement
 
-✅ Filtering system:
-   1. Accept All - Route everything
-   2. White-list - Accept specific resources only
-   3. Black-list - Reject specific resources
-   4. Priority - Route resources by priority order (A first, then B, then C)
+⚠️ NOTE: Full Conveyor Transport System (pathfinding, filtering,
+   splitter, item movement) is implemented in EPIC-03.
 
-✅ Splitter:
-   - Takes 1 input, splits to 2-4 outputs
-   - Modes: Equal split, Priority, Roundrobin
-   - Visual: Rotating arrow shows distribution mode
-   - Example: 10 items/sec input → 5 each output (equal) or 7-2-1 (priority)
-
-✅ Bottleneck handling:
-   - When destination full: Items back up on belt (red visual)
-   - Source building pauses when backed up
-   - Red X indicator on source
-   - Resolution: Add storage, reroute, or use splitter
+   See: [epic-03-tech-spec.md](epic-03-tech-spec.md) for:
+   - A* Pathfinding algorithm
+   - 4-mode filtering system
+   - Splitter mechanics
+   - Transport rate and bottleneck handling
 ```
 
 #### AC7: Inventory System ✅
@@ -867,25 +880,27 @@ This story brings buildings to life:
 ✅ Test: Smelter produces correct output
 ✅ Test: Skill bonuses apply to cycle times
 ✅ Test: Synergy bonus applies when active
-✅ Test: Conveyor transports items correctly
-✅ Test: Conveyor respects layer limits
-✅ Test: Filtering works (all 4 modes)
-✅ Test: Splitter splits correctly (equal/priority/roundrobin)
+✅ Test: Conveyor building can be placed (definition only)
+✅ Test: Conveyor respects 2-layer limit
 ✅ Test: Farm outputs correct gold for skill level
 ✅ Test: Inventory persists to Hive
+
+⚠️ Full conveyor transport tests are in EPIC-03:
+   - Pathfinding, filtering, splitter tests
 ```
 
 ### Implementation Notes
 
 **Files to Create/Modify:**
 - `lib/domain/entities/production_cycle.dart` - Production state
-- `lib/domain/entities/conveyor_network.dart` - Transport graph
+- `lib/domain/entities/conveyor.dart` - Conveyor building definition only
 - `lib/domain/usecases/run_production_cycle_usecase.dart` - Main loop
-- `lib/domain/usecases/transport_items_usecase.dart` - Conveyor logic
 - `lib/domain/usecases/apply_skill_bonus_usecase.dart` - Skill system
 - `lib/game/components/production_component.dart` - Game loop integration
-- `lib/game/components/conveyor_animation_component.dart` - Visual transport
 - `test/domain/usecases/run_production_cycle_usecase_test.dart` - Tests
+
+**Note:** Conveyor transport logic (conveyor_network.dart, transport_items_usecase.dart,
+conveyor_animation_component.dart) moved to EPIC-03.
 
 **Main Game Loop Integration:**
 ```dart
@@ -899,12 +914,10 @@ for each building {
   }
 }
 
-// Transport items on conveyors
-conveyorNetwork.moveItems(deltaTime);
-
 // Update visuals
 updateProductionBars();
-updateConveyorAnimations();
+
+// Note: Conveyor transport moved to EPIC-03
 ```
 
 **Dependencies:**
@@ -1126,10 +1139,10 @@ simulate(duration: 120 minutes) {
 | Story | SP | Focus | Dependencies |
 |-------|----|----|------|
 | **STORY-02.1** | 2 | Resource definitions | None |
-| **STORY-02.2** | 3 | Building definitions | 02.1 |
+| **STORY-02.2** | 3 | Building definitions (incl. Conveyor) | 02.1 |
 | **STORY-02.3** | 5 | NPC trading system | 02.1 |
 | **STORY-02.4** | 8 | Grid & placement | 02.1, 02.2 |
-| **STORY-02.5** | 5 | Production & conveyors | 02.1, 02.2, 02.4 |
+| **STORY-02.5** | 5 | Production & inventory | 02.1, 02.2, 02.4 |
 | **STORY-02.6** | 3 | Balance & testing | 02.1-02.5 |
 | **TOTAL** | **26 SP** | Tier 1 Economy MVP | - |
 
@@ -1154,14 +1167,16 @@ simulate(duration: 120 minutes) {
 
 **After EPIC-02 Complete:**
 - ✅ All 7 resources fully implemented
-- ✅ All 6 buildings producing items
+- ✅ All 6 buildings defined (including Conveyor as building type)
 - ✅ 3 NPCs trading with players
 - ✅ Grid system with expansion (20×20 → 40×40)
-- ✅ Conveyor system with filtering
+- ✅ Basic production chains working (manual transport)
 - ✅ 1000g achievable in 120 minutes
 - ✅ Game progression feels satisfying
 - ✅ All tests passing
 - ✅ Performance: 60 FPS minimum
+
+**Note:** Full conveyor automation (transport, filtering, splitter) → EPIC-03
 
 **When EPIC-02 Complete:**
 - Overall Progress: ~26% (73/289 SP)
@@ -1172,5 +1187,6 @@ simulate(duration: 120 minutes) {
 ---
 
 **Document Status:** 📋 Ready for Development
-**Last Updated:** 2025-12-02
+**Last Updated:** 2025-12-03
+**Version:** 2.0 (Conveyor transport moved to EPIC-03)
 **Next Review:** After STORY-02.1 complete

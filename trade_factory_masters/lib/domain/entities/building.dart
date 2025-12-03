@@ -166,28 +166,40 @@ class Building extends Equatable {
 }
 
 /// Building type enum
-/// Defines different types of buildings in the factory
+/// Defines 6 building types for Trade Factory Masters (Tier 1)
+/// See: docs/2-MANAGEMENT/epics/epic-02-tech-spec.md
 @HiveType(typeId: 3)
 enum BuildingType {
-  /// Collects raw resources from the grid
+  /// Mining building - extracts raw resources (+50% gather bonus)
+  /// Size: 2×2, Cost: FREE (tutorial)
   @HiveField(0)
-  collector,
+  mining,
 
-  /// Processes raw resources into refined materials
+  /// Storage building - stores resources (200 items capacity)
+  /// Size: 2×2, Cost: 5 Wood + 10 Stone
   @HiveField(1)
-  processor,
-
-  /// Stores resources for later use
-  @HiveField(2)
   storage,
 
-  /// Transports resources between buildings
+  /// Smelter building - auto-crafts refined materials
+  /// Size: 2×3, Cost: 15 Wood + 10 Stone + 5 Copper
+  @HiveField(2)
+  smelter,
+
+  /// Conveyor building - transports resources between buildings
+  /// Size: 1×1, Cost: 2 Wood + 1 Iron
+  /// Note: Transport mechanics in EPIC-03
   @HiveField(3)
   conveyor,
 
-  /// Trades resources with NPC market
+  /// Workshop building - auto-crafts advanced items
+  /// Size: 2×2, Cost: 20 Wood + 15 Stone + 5 Iron
   @HiveField(4)
-  market,
+  workshop,
+
+  /// Farm building - converts items to gold
+  /// Size: 3×3, Cost: 25 Coal + 12 Iron + 15 Wood
+  @HiveField(5)
+  farm,
 }
 
 /// Grid position for building placement
