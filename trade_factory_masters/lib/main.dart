@@ -40,11 +40,76 @@ Future<void> main() async {
     debugPrint('❌ Firebase Auth Error: $e');
   }
 
-  runApp(
-    GameWidget(
-      game: TradeFactoryGame(),
-    ),
-  );
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Trade Factory Masters',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Trade Factory Masters'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Welcome to Trade Factory Masters!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const GameScreen(),
+                  ),
+                );
+              },
+              child: const Text('Start Game'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GameScreen extends StatelessWidget {
+  const GameScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Game Screen'),
+      ),
+      body: Center(
+        child: GameWidget(
+          game: TradeFactoryGame(),
+        ),
+      ),
+    );
+  }
 }
 
 /// HelloWorld Flame game for testing 60 FPS rendering
