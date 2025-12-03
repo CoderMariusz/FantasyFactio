@@ -5,7 +5,7 @@
 **Epic:** EPIC-11 - Testing & Quality
 **Total Stories:** 8
 **Total SP:** 20
-**Sprint:** 8
+**Sprint:** 11 (post-MVP)
 **Status:** 📋 Ready for Implementation
 
 ---

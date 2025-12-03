@@ -4,7 +4,7 @@
 
 **Epic:** EPIC-07 - Discovery Tutorial
 **Total SP:** 21
-**Duration:** 1-2 weeks (Sprint 7)
+**Duration:** 1-2 weeks (Sprint 10, post-MVP)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 **Priority:** P2 (Medium - improves onboarding)

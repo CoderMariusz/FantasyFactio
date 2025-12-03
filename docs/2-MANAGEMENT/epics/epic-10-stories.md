@@ -5,7 +5,7 @@
 **Epic:** EPIC-10 - Analytics & Metrics
 **Total Stories:** 4
 **Total SP:** 13
-**Sprint:** 8
+**Sprint:** 11 (post-MVP)
 **Status:** 📋 Ready for Implementation
 
 ---

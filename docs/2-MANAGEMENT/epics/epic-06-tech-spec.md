@@ -4,7 +4,7 @@
 
 **Epic:** EPIC-06 - Progression & Quality System
 **Total SP:** 28
-**Duration:** 2 weeks (Sprints 5-6)
+**Duration:** 2 weeks (Sprint 9, post-MVP)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 

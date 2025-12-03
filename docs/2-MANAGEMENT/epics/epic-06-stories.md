@@ -3,8 +3,9 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, progression, skills -->
 
 **Epic:** EPIC-06 - Progression & Quality System
+**Total Stories:** 6
 **Total SP:** 28
-**Duration:** 2 weeks (Sprints 5-6)
+**Sprint:** 9 (post-MVP, blocks EPIC-03 Tier 2)
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-06-tech-spec.md](epic-06-tech-spec.md)
 
@@ -13,6 +14,21 @@
 - ✅ EPIC-02 (Gold tracking, basic skills)
 
 **Design Philosophy:** "Clear goals drive engagement" - jasne cele = lepsza retencja.
+
+> **Note:** This epic defines Tier 2 unlock requirements which gate EPIC-03 content. Review sprint assignment.
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-06.1 | Tier 2 Unlock Requirements System | 5 | P0 | 📋 Ready |
+| STORY-06.2 | Progression Tracker UI | 4 | P0 | 📋 Ready |
+| STORY-06.3 | Tier 2 Unlock Celebration | 5 | P1 | 📋 Ready |
+| STORY-06.4 | Achievement System | 5 | P1 | 📋 Ready |
+| STORY-06.5 | Extended Skill System | 6 | P1 | 📋 Ready |
+| STORY-06.6 | Achievements Screen | 3 | P2 | 📋 Ready |
 
 ---
 
@@ -674,7 +690,7 @@ A scrollable screen showing all achievements in a grid or list. Unlocked achieve
 
 ## Implementation Order
 
-**Recommended Sprint 5-6:**
+**Recommended Sprint 9:**
 
 **Week 1:** Core Systems
 1. STORY-06.1: Tier 2 Requirements (5 SP)

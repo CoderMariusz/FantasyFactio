@@ -4,7 +4,7 @@
 
 **Epic:** EPIC-10 - Analytics & Metrics
 **Total SP:** 13
-**Duration:** 1 week (Sprint 8)
+**Duration:** 1 week (Sprint 11, post-MVP)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 **Priority:** P0 (Critical - success measurement)

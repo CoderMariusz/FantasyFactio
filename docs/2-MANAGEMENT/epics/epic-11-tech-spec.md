@@ -4,7 +4,7 @@
 
 **Epic:** EPIC-11 - Testing & Quality
 **Total SP:** 20
-**Duration:** 1-2 weeks (Sprint 8)
+**Duration:** 1-2 weeks (Sprint 11, post-MVP)
 **Status:** 📋 Ready for Implementation
 **Date:** 2025-12-03
 **Priority:** P1 (High - quality gate)

@@ -3,8 +3,9 @@
 <!-- AI-INDEX: epic, stories, acceptance-criteria, tutorial, onboarding -->
 
 **Epic:** EPIC-07 - Discovery Tutorial
+**Total Stories:** 5
 **Total SP:** 21
-**Duration:** 1-2 weeks (Sprint 7)
+**Sprint:** 10 (post-MVP, after EPIC-06)
 **Status:** 📋 Ready for Implementation
 **Tech-Spec:** [epic-07-tech-spec.md](epic-07-tech-spec.md)
 
@@ -14,6 +15,18 @@
 - ⚠️ EPIC-06 (Progression tracker for Tier 2 step)
 
 **Design Philosophy:** "Show don't tell" - gracze uczą się przez działanie.
+
+---
+
+## Story Overview
+
+| Story ID | Title | SP | Priority | Implementation Status |
+|----------|-------|-----|----------|----------------------|
+| STORY-07.1 | Tutorial State Machine | 5 | P0 | 📋 Ready |
+| STORY-07.2 | Tooltip System | 5 | P0 | 📋 Ready |
+| STORY-07.3 | First-Time User Experience (FTUE) | 5 | P0 | 📋 Ready |
+| STORY-07.4 | Tutorial Analytics Tracking | 3 | P1 | 📋 Ready |
+| STORY-07.5 | Skip Tutorial Option | 3 | P1 | 📋 Ready |
 
 ---
 
@@ -626,7 +639,7 @@ void showSkipConfirmation(BuildContext context) {
 
 ## Implementation Order
 
-**Recommended Sprint 7:**
+**Recommended Sprint 10:**
 
 **Week 1:** Core System
 1. STORY-07.1: Tutorial State Machine (5 SP)
