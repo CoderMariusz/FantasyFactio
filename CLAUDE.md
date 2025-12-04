@@ -17,7 +17,7 @@
 | **Target Platform** | Mobile (Android primary, iOS secondary), Desktop planned Month 6-7 |
 | **Performance Target** | 60 FPS on budget Android (Snapdragon 660) |
 | **Current Status** | Epic 0-2 Complete, Epic 3 In Progress |
-| **Overall Progress** | ~26% (73 SP / 289 SP MVP scope) |
+| **Overall Progress** | ~27% (78 SP / 289 SP MVP scope) |
 | **Current Branch** | `claude/flutter-project-analysis-018Le4yJtb81F5xz1TiMjGLE` |
 
 ---
@@ -112,14 +112,14 @@ integration_test/                      ← Integration tests
 ## Implementation Summary (Epic 0-3)
 
 **✅ EPIC 0-2 COMPLETE & PRODUCTION READY** (2025-12-04)
-**🔄 EPIC 3 IN PROGRESS** (~50% complete, conveyor system + pathfinding)
+**🔄 EPIC 3 IN PROGRESS** (~60% complete, conveyor + filtering + pathfinding)
 
 | Epic | Status | Completion | Key Implementation |
 |------|--------|-----------|-------------------|
 | **Epic 0** | ✅ Done | 100% | Project setup, Flutter/Flame/Firebase configured |
 | **Epic 1** | ✅ Done | 100% | Grid system (50×50), buildings, camera, all tests passing |
 | **Epic 2** | ✅ Done | 100% | Economy (recipes, production, balance), NPCs, trading system |
-| **Epic 3** | 🔄 In Progress | ~50% | Conveyor system, pathfinding, automation logic |
+| **Epic 3** | 🔄 In Progress | ~60% | Conveyor, transport, filtering, pathfinding, automation logic |
 
 **All Critical Issues Resolved:** No blockers, all code production-ready.
 
@@ -136,7 +136,14 @@ integration_test/                      ← Integration tests
 - **Epic 2 (Tier 1 Economy):** 26 SP - All entities, services, recipes, NPCs, trading system
 
 ### 🔄 IN PROGRESS
-- **Epic 3 (Automation):** 42 SP - Conveyor system, pathfinding, item transport (~50% complete)
+- **Epic 3 (Automation):** 42 SP - Conveyor system, pathfinding, item transport, filtering (~60% complete)
+  - ✅ STORY-03.1: A* Pathfinding (5 SP)
+  - ✅ STORY-03.2: Conveyor Transport (8 SP)
+  - ✅ STORY-03.3: Filtering System (5 SP) - NEW!
+  - ⏳ STORY-03.4: Splitter System (5 SP)
+  - ⏳ STORY-03.5: UI & Creation Flow (8 SP)
+  - ⏳ STORY-03.6: Storage Integration (6 SP)
+  - ⏳ STORY-03.7: Integration Testing (5 SP)
 
 ### ⏳ READY TO START
 - **Epic 5 (Mobile-First UX):** 29 SP, tech context complete
@@ -318,8 +325,9 @@ If using different Claude models:
 
 ## Last Updated
 
-- **Date:** 2025-12-04
-- **Status:** Epic 0-2 Complete (73 SP), Epic 3 In Progress (50%), 26% Overall Progress
+- **Date:** 2025-12-04 (Story 03.3 complete)
+- **Status:** Epic 0-2 Complete (73 SP), Epic 3 In Progress (60%, 78 SP total), 27% Overall Progress
+- **Latest Story:** STORY-03.3 Filtering System (5 SP) ✅ COMPLETE
 - **Documentation Synchronized:** YES ✅ - All docs now match actual code state
-- **Next Update:** After Epic 3 completion or critical changes
+- **Next Update:** After next story completion
 - **By:** Claude (Code Quality Agent)
