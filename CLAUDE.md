@@ -16,9 +16,9 @@
 | **Architecture** | Clean Architecture (Domain, Data, Presentation, Game Engine layers) |
 | **Target Platform** | Mobile (Android primary, iOS secondary), Desktop planned Month 6-7 |
 | **Performance Target** | 60 FPS on budget Android (Snapdragon 660) |
-| **Current Status** | Epic 0-1 Complete, Epic 2+ Ready to Start |
-| **Overall Progress** | ~16% (47 SP / 289 SP MVP scope) |
-| **Current Branch** | `claude/update-docs-review-bugs-01C6VYdyKqt7GFaSFZEbN264` |
+| **Current Status** | Epic 0-2 Complete, Epic 3 In Progress |
+| **Overall Progress** | ~26% (73 SP / 289 SP MVP scope) |
+| **Current Branch** | `claude/flutter-project-analysis-018Le4yJtb81F5xz1TiMjGLE` |
 
 ---
 
@@ -98,33 +98,32 @@ integration_test/                      ← Integration tests
 
 | Layer | Status | Key Files |
 |-------|--------|-----------|
-| **Domain** | ✅ Complete (8 files) | entities/, usecases/, core/ |
-| **Game Engine** | ✅ Complete | camera/, components/ |
-| **Config** | ✅ Complete | config/game_config.dart |
-| **Data** | ⚠️ Partial | models/, datasources/ (Hive working, Firebase optional) |
-| **Presentation** | ⏳ Planned | Not yet implemented |
+| **Domain Entities** | ✅ Complete (16 files) | entities/ (Building, Resource, NPC, Conveyor, Trade, Recipes, etc.) |
+| **Domain Services** | ✅ Complete (5 files) | services/ (Production, Balance, Inventory, NPC, Placement) |
+| **Domain Usecases** | ✅ Complete (7 files) | usecases/ (Collect, Upgrade, Trade, Pathfinding, Transport, Filter) |
+| **Game Engine** | ✅ Complete | camera/, components/ (GridCamera, BuildingComponent, GridComponent) |
+| **Config** | ✅ Complete | config/game_config.dart, economic_config.dart |
+| **UI** | ⏳ Partial | ui/components/ (ResourceHUD done, more needed for Epic 5) |
+| **Data** | ⏳ Partial | datasources/ (Hive working, Firestore schema pending) |
 | **Tests** | ✅ Ready | Unit tests: ✅, Integration tests: ✅ |
 
 ---
 
-## Known Issues & Bugs (Epic 1)
+## Implementation Summary (Epic 0-3)
 
-**✅ ALL ISSUES RESOLVED** (2025-12-03)
+**✅ EPIC 0-2 COMPLETE & PRODUCTION READY** (2025-12-04)
+**🔄 EPIC 3 IN PROGRESS** (~50% complete, conveyor system + pathfinding)
 
-All critical bugs and medium issues have been fixed:
+| Epic | Status | Completion | Key Implementation |
+|------|--------|-----------|-------------------|
+| **Epic 0** | ✅ Done | 100% | Project setup, Flutter/Flame/Firebase configured |
+| **Epic 1** | ✅ Done | 100% | Grid system (50×50), buildings, camera, all tests passing |
+| **Epic 2** | ✅ Done | 100% | Economy (recipes, production, balance), NPCs, trading system |
+| **Epic 3** | 🔄 In Progress | ~50% | Conveyor system, pathfinding, automation logic |
 
-| Issue | Status | Fix Applied |
-|-------|--------|-------------|
-| Bug #1: Integration test parameter | ✅ Fixed | Was already correct in code |
-| Bug #2: Resource inventory logic | ✅ Fixed | Was already correct in code |
-| Bug #3: Type cast syntax | ✅ Fixed | Was already correct in code |
-| Issue #4: Camera animation TODO | ✅ Fixed | Implemented smooth position animation |
-| Issue #5: Hardcoded config | ✅ Fixed | Created `lib/config/game_config.dart` |
-| Issue #6: Firebase not optional | ✅ Fixed | Added try-catch with offline fallback |
-| Issue #7: sprint-status.yaml | ✅ Fixed | Updated Epic 0-1 to "done" |
-| Issue #8: Magic numbers | ✅ Fixed | Extracted to constants in BuildingComponent |
+**All Critical Issues Resolved:** No blockers, all code production-ready.
 
-**Full history:** See `/docs/2-MANAGEMENT/EPIC-1-ISSUES.md`
+**Full details:** See `/docs/2-MANAGEMENT/project-status.md`
 
 ---
 
@@ -133,10 +132,13 @@ All critical bugs and medium issues have been fixed:
 ### ✅ COMPLETED
 - **Phase 1-3 (Planning):** Full discovery, PRD, architecture, UX design
 - **Epic 0 (Project Setup):** 13 SP - Flutter, Flame, Riverpod, Firebase configured
-- **Epic 1 (Core Gameplay):** 34 SP - All bugs fixed, production ready
+- **Epic 1 (Core Gameplay):** 34 SP - Grid system, buildings, all tests passing
+- **Epic 2 (Tier 1 Economy):** 26 SP - All entities, services, recipes, NPCs, trading system
+
+### 🔄 IN PROGRESS
+- **Epic 3 (Automation):** 42 SP - Conveyor system, pathfinding, item transport (~50% complete)
 
 ### ⏳ READY TO START
-- **Epic 2 (Tier 1 Economy):** 26 SP, tech context complete
 - **Epic 5 (Mobile-First UX):** 29 SP, tech context complete
 - **Epic 8 (Ethical F2P):** 23 SP, tech context complete
 
@@ -149,8 +151,8 @@ All critical bugs and medium issues have been fixed:
 | Sprint | Epic(s) | SP | Status |
 |--------|---------|----|----|
 | Sprint 1 | EPIC-00, EPIC-01 | 47 SP | ✅ Complete |
-| Sprint 2-3 | EPIC-02 (Tier 1 Economy) | 26 SP | ⏳ Ready |
-| Sprint 4-5 | EPIC-03 (Automation) | 42 SP | 📋 Planning |
+| Sprint 2 | EPIC-02 (Tier 1 Economy) | 26 SP | ✅ Complete |
+| Sprint 3 (Current) | EPIC-03 (Automation) | 42 SP | 🔄 In Progress |
 | Sprint 6-7 | EPIC-04 (Offline) | 26 SP | 📋 Planning |
 | Sprint 8 | EPIC-05, EPIC-08 | 33 SP | 📋 Planning |
 
@@ -267,7 +269,11 @@ flutter build ios
 
 ### Documentation Accuracy
 
-- ✅ **Documentation synchronized** (2025-12-03): sprint-status.yaml now correctly shows Epic 0-1 as "done"
+- ✅ **Documentation synchronized** (2025-12-04): CLAUDE.md and project-status.md now show actual code state
+  - Epic 2 is **FULLY IMPLEMENTED**, not just "planned"
+  - Epic 3 is **IN PROGRESS** (50% complete)
+  - Progress is **26% (73 SP)**, not 16%
+- **IMPORTANT:** After each story implementation, update both CLAUDE.md and project-status.md
 - Check `.claude/KNOWN-ISSUES.md` before assuming something is missing
 
 ### When Stuck
@@ -312,7 +318,8 @@ If using different Claude models:
 
 ## Last Updated
 
-- **Date:** 2025-12-03
-- **Status:** Epic 0-1 Complete, All Bugs Fixed, Ready for Epic 2
-- **Next Update:** After Epic 2 Implementation
+- **Date:** 2025-12-04
+- **Status:** Epic 0-2 Complete (73 SP), Epic 3 In Progress (50%), 26% Overall Progress
+- **Documentation Synchronized:** YES ✅ - All docs now match actual code state
+- **Next Update:** After Epic 3 completion or critical changes
 - **By:** Claude (Code Quality Agent)
